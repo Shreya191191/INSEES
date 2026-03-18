@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "252364371588",
+    "project_id": "insees-c7b7c",
+    "storage_bucket": "insees-c7b7c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:252364371588:android:a85cc9283c73467888b4d1",
+        "android_client_info": {
+          "package_name": "com.example.insees"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUX48KexuaQjyu8MnKrka0XzM_EzlMxS4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
