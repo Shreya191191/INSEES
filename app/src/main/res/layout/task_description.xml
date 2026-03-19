@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardElevation="5sp"
+    app:cardCornerRadius="25sp"
+    android:layout_margin="9sp">
+    <LinearLayout
+        android:background="#D5353535"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:textColor="@color/white"
+            android:id="@+id/taskTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10sp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginLeft="25dp"
+            android:text="Task 1"/>
+
+        <TextView
+            android:id="@+id/taskDesciption"
+            android:padding="5sp"
+            android:textColor="#FFFFFF"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:text="HBVBBKBKBKSKSBKFSKKFFNNFN"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_margin="15sp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/taskDay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:text="Today"/>
+
+            <TextView
+                android:id="@+id/taskTime"
+                android:layout_marginLeft="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:text="9:00"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
