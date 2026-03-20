@@ -67,4 +67,5 @@ dependencies {
 
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    implementation("androidx.gridlayout:gridlayout:1.0.0")
 }
