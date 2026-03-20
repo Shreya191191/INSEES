@@ -1,0 +1,1272 @@
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\">\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:dataExtractionRules=\"@xml/data_extraction_rules\"\r\n        android:fullBackupContent=\"@xml/backup_rules\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/Theme.INSEES\">\r\n        <activity\r\n            android:name=\".MainActivity\"\r\n            android:exported=\"true\"\r\n            android:label=\"@string/app_name\"\r\n            android:theme=\"@style/Theme.INSEES\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+--- a/app/src/main/AndroidManifest.xml	(revision ca92c0899c63c69b503413a568f1c4819a338cc7)
++++ b/app/src/main/AndroidManifest.xml	(date 1774036235533)
+@@ -1,6 +1,17 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:tools="http://schemas.android.com/tools">
++    <uses-feature
++        android:name="android.hardware.camera"
++        android:required="false" />
++
++    <uses-permission android:name="android.permission.INTERNET"/>
++    <uses-permission android:name="android.permission.CAMERA"/>
++    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
++        android:maxSdkVersion="32" />
++    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
++        android:maxSdkVersion="32" />
++
+ 
+     <application
+         android:allowBackup="true"
+Index: app/src/main/java/com/example/insees/SignUpFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.insees\r\n\r\nimport android.os.Bundle\r\nimport android.util.Patterns\r\nimport androidx.fragment.app.Fragment\r\nimport android.view.LayoutInflater\r\nimport android.view.View\r\nimport android.view.ViewGroup\r\nimport androidx.navigation.NavController\r\nimport androidx.navigation.Navigation\r\nimport com.example.insees.databinding.FragmentSignUpBinding\r\nimport com.google.firebase.auth.FirebaseAuth\r\n\r\nclass SignUpFragment : Fragment() {\r\n\r\n    private lateinit var auth: FirebaseAuth\r\n    private lateinit var binding: FragmentSignUpBinding\r\n    private lateinit var navController: NavController\r\n\r\n    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {\r\n        super.onViewCreated(view, savedInstanceState)\r\n        navController = Navigation.findNavController(view)\r\n\r\n        binding.btnNextSignUp.setOnClickListener {\r\n            if (checkAllFields()) {\r\n                navController.navigate(R.id.action_signUpFragment_to_completeProfileFragment)\r\n            }\r\n        }\r\n\r\n        binding.tvLogin.setOnClickListener {\r\n            navController.navigate(R.id.action_signUpFragment_to_loginFragment)\r\n        }\r\n    }\r\n\r\n    override fun onCreateView(\r\n        inflater: LayoutInflater, container: ViewGroup?,\r\n        savedInstanceState: Bundle?\r\n    ): View {\r\n        binding = FragmentSignUpBinding.inflate(inflater, container, false)\r\n        return binding.root\r\n    }\r\n\r\n    private fun checkAllFields(): Boolean {\r\n        val email = binding.etEmailSignup.text.toString()\r\n        if (email == \"\") {\r\n            binding.etEmailSignup.error = \"This is required field\"\r\n            return false\r\n        }\r\n\r\n        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {\r\n            binding.etEmailSignup.error = \"Please enter a valid Email\"\r\n            return false\r\n        }\r\n\r\n        if (binding.etPassword.text.toString() == \"\") {\r\n            binding.etPassword.error = \"This is required field\"\r\n            return false\r\n        }\r\n\r\n        if (binding.etConfirmPassword.text.toString() == \"\") {\r\n            binding.etConfirmPassword.error = \"This is required field\"\r\n            return false\r\n        }\r\n\r\n        if (binding.etPassword.text.toString() != binding.etConfirmPassword.text.toString()) {\r\n            binding.etPassword.error = \"Password do not match\"\r\n            return false\r\n        }\r\n\r\n        return true\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/insees/SignUpFragment.kt b/app/src/main/java/com/example/insees/SignUpFragment.kt
+--- a/app/src/main/java/com/example/insees/SignUpFragment.kt	(revision ca92c0899c63c69b503413a568f1c4819a338cc7)
++++ b/app/src/main/java/com/example/insees/SignUpFragment.kt	(date 1774036405946)
+@@ -6,10 +6,14 @@
+ import android.view.LayoutInflater
+ import android.view.View
+ import android.view.ViewGroup
++import android.widget.Toast
+ import androidx.navigation.NavController
+ import androidx.navigation.Navigation
+ import com.example.insees.databinding.FragmentSignUpBinding
++import com.google.firebase.Firebase
+ import com.google.firebase.auth.FirebaseAuth
++import com.google.firebase.auth.FirebaseUser
++import com.google.firebase.auth.auth
+ 
+ class SignUpFragment : Fragment() {
+ 
+@@ -20,53 +24,71 @@
+     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+         super.onViewCreated(view, savedInstanceState)
+         navController = Navigation.findNavController(view)
+-
+-        binding.btnNextSignUp.setOnClickListener {
+-            if (checkAllFields()) {
+-                navController.navigate(R.id.action_signUpFragment_to_completeProfileFragment)
+-            }
+-        }
+-
+-        binding.tvLogin.setOnClickListener {
+-            navController.navigate(R.id.action_signUpFragment_to_loginFragment)
+-        }
+     }
+ 
+     override fun onCreateView(
+         inflater: LayoutInflater, container: ViewGroup?,
+         savedInstanceState: Bundle?
+-    ): View {
+-        binding = FragmentSignUpBinding.inflate(inflater, container, false)
++    ): View? {
++        // Inflate the layout for this fragment
++        binding = FragmentSignUpBinding.inflate(inflater,container,false)
++
++        auth = FirebaseAuth.getInstance()
++
++        binding.btnNextSignUp.setOnClickListener {
++            if (checkAllFields()) {
++                signUp(binding.etEmailSignup.text.toString(),binding.etPasswordSignup.text.toString())
++            }
++        }
++
++        binding.tvLogin.setOnClickListener{
++            navController.navigate(R.id.action_signUpFragment_to_loginFragment)
++        }
++
+         return binding.root
+     }
+ 
+-    private fun checkAllFields(): Boolean {
++    private fun checkAllFields(): Boolean{
+         val email = binding.etEmailSignup.text.toString()
+-        if (email == "") {
+-            binding.etEmailSignup.error = "This is required field"
++        if (email == ""){
++            binding.etEmailSignupLayout.error = "This is required field"
+             return false
+         }
+ 
+-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+-            binding.etEmailSignup.error = "Please enter a valid Email"
++        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
++            binding.etEmailSignupLayout.error = "Please enter a valid Email"
+             return false
+         }
+ 
+-        if (binding.etPassword.text.toString() == "") {
+-            binding.etPassword.error = "This is required field"
++        if(binding.etPasswordSignup.text.toString() == ""){
++            binding.etPasswordSignupLayout.error = "This is required field"
+             return false
+         }
+ 
+-        if (binding.etConfirmPassword.text.toString() == "") {
+-            binding.etConfirmPassword.error = "This is required field"
++        if(binding.etConfirmPassword.text.toString() == ""){
++            binding.etConfirmPasswordLayout.error = "This is required field"
+             return false
+         }
+ 
+-        if (binding.etPassword.text.toString() != binding.etConfirmPassword.text.toString()) {
+-            binding.etPassword.error = "Password do not match"
++        if(binding.etPasswordSignup.text.toString() != binding.etConfirmPassword.text.toString()){
++            binding.etPasswordSignupLayout.error = "Password do not match"
+             return false
+         }
+-
+         return true
+     }
++
++    private fun signUp(email: String, password:String){
++        auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener{task->
++            if(task.isSuccessful){
++                navController.navigate(R.id.action_signUpFragment_to_completeProfileFragment)
++            }else{
++                Toast.makeText(
++                    context,
++                    "SignUp failed.",
++                    Toast.LENGTH_SHORT,
++                ).show()
++            }
++        }
++    }
++
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/insees/CompleteProfileFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.insees\r\n\r\nimport android.os.Bundle\r\nimport androidx.fragment.app.Fragment\r\nimport android.view.LayoutInflater\r\nimport android.view.View\r\nimport android.view.ViewGroup\r\nimport androidx.navigation.NavController\r\nimport androidx.navigation.Navigation\r\nimport com.example.insees.databinding.FragmentCompleteProfileBinding\r\n\r\nclass CompleteProfileFragment : Fragment() {\r\n\r\n    private lateinit var binding: FragmentCompleteProfileBinding\r\n    private lateinit var navController: NavController\r\n\r\n    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {\r\n        super.onViewCreated(view, savedInstanceState)\r\n        navController = Navigation.findNavController(view)\r\n    }\r\n    override fun onCreateView(\r\n        inflater: LayoutInflater, container: ViewGroup?,\r\n        savedInstanceState: Bundle?\r\n    ): View? {\r\n        // Inflate the layout for this fragment\r\n        binding = FragmentCompleteProfileBinding.inflate(inflater,container, false)\r\n\r\n        binding.openCamera.setOnClickListener{\r\n\r\n        }\r\n\r\n        binding.uploadImage.setOnClickListener{\r\n\r\n        }\r\n\r\n        binding.btnNextCompleteProfile.setOnClickListener {\r\n\r\n        }\r\n\r\n        return binding.root\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/insees/CompleteProfileFragment.kt b/app/src/main/java/com/example/insees/CompleteProfileFragment.kt
+--- a/app/src/main/java/com/example/insees/CompleteProfileFragment.kt	(revision ca92c0899c63c69b503413a568f1c4819a338cc7)
++++ b/app/src/main/java/com/example/insees/CompleteProfileFragment.kt	(date 1774036235521)
+@@ -1,43 +1,164 @@
+ package com.example.insees
+ 
++import android.Manifest
++import android.app.Activity
++import android.content.Intent
++import android.content.pm.PackageManager
++import android.graphics.Bitmap
+ import android.os.Bundle
+-import androidx.fragment.app.Fragment
++import android.provider.MediaStore
++import android.util.Log
+ import android.view.LayoutInflater
+ import android.view.View
+ import android.view.ViewGroup
++import androidx.activity.result.ActivityResultLauncher
++import androidx.activity.result.contract.ActivityResultContracts
++import androidx.core.app.ActivityCompat
++import androidx.fragment.app.Fragment
+ import androidx.navigation.NavController
+ import androidx.navigation.Navigation
+ import com.example.insees.databinding.FragmentCompleteProfileBinding
++import com.google.firebase.auth.FirebaseAuth
++import com.google.firebase.firestore.ktx.firestore
++import com.google.firebase.ktx.Firebase
+ 
+ class CompleteProfileFragment : Fragment() {
+ 
+     private lateinit var binding: FragmentCompleteProfileBinding
+     private lateinit var navController: NavController
++    private lateinit var auth: FirebaseAuth
++    private lateinit var cameraLauncher: ActivityResultLauncher<Intent>
++    private lateinit var galleryLauncher: ActivityResultLauncher<String>
+ 
+     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+         super.onViewCreated(view, savedInstanceState)
+         navController = Navigation.findNavController(view)
+     }
++
+     override fun onCreateView(
+         inflater: LayoutInflater, container: ViewGroup?,
+         savedInstanceState: Bundle?
+-    ): View? {
+-        // Inflate the layout for this fragment
+-        binding = FragmentCompleteProfileBinding.inflate(inflater,container, false)
++    ): View {
++        binding = FragmentCompleteProfileBinding.inflate(inflater, container, false)
+ 
+-        binding.openCamera.setOnClickListener{
+-
++        auth = FirebaseAuth.getInstance()
++
++        val db = Firebase.firestore
++
++        initActivityResultLaunchers()
++
++        binding.openCamera.setOnClickListener {
++            requestPermissions()
++            openCamera()
+         }
+ 
+-        binding.uploadImage.setOnClickListener{
++        binding.uploadImage.setOnClickListener {
++            galleryLauncher.launch("image/*")
+ 
+         }
+ 
+         binding.btnNextCompleteProfile.setOnClickListener {
++            if (validateField()) {
++                val name = binding.etNameCompleteProfile.toString()
++                val profilePhoto = binding.profilePhoto.toString()
++                val user = hashMapOf(
++                    "name" to name,
++                    "profile_photo" to profilePhoto
++                )
+ 
++                db.collection("users")
++                    .add(user)
++            }
+         }
+ 
+         return binding.root
+     }
+ 
++    private fun initActivityResultLaunchers() {
++        cameraLauncher =
++            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
++                if (result.resultCode == Activity.RESULT_OK) {
++                    val selectedImageBitmap =
++                        result.data?.extras?.get("data") as Bitmap
++                    // Handle the captured image bitmap
++                    binding.profilePhoto.apply {
++                        visibility= View.VISIBLE
++                        setImageBitmap(selectedImageBitmap)
++                    }
++                }
++            }
++
++
++        galleryLauncher =
++            registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
++                binding.profilePhoto.apply {
++                    visibility= View.VISIBLE
++                    setImageURI(uri)
++                }
++            }
++    }
++
++    private fun openCamera() {
++        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
++        if (takePictureIntent.resolveActivity(requireActivity().packageManager) != null) {
++            cameraLauncher.launch(takePictureIntent)
++        }
++    }
++
++
++    private fun validateField(): Boolean {
++        if (binding.etNameCompleteProfile.toString() == "") {
++            binding.etNameCompleteProfileLayout.error = "This is required field"
++            return false
++        }
++        return true
++    }
++
++
++    private fun requestPermissions() {
++        val permissionToRequest = mutableListOf<String>()
++
++        if (!hasCameraPermissions()) {
++            permissionToRequest.add(Manifest.permission.CAMERA)
++        }
++        if (!hasReadStoragePermissions()) {
++            permissionToRequest.add(Manifest.permission.READ_EXTERNAL_STORAGE)
++        }
++        if (!hasWriteStoragePermissions()) {
++            permissionToRequest.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
++        }
++        if(permissionToRequest.isNotEmpty()){
++            ActivityCompat.requestPermissions(requireContext() as Activity, permissionToRequest.toTypedArray(),0)
++        }
++    }
++
++    private fun hasCameraPermissions() =
++        ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
++
++    private fun hasReadStoragePermissions() =
++        ActivityCompat.checkSelfPermission(
++            requireContext(),
++            Manifest.permission.READ_EXTERNAL_STORAGE
++        ) == PackageManager.PERMISSION_GRANTED
++
++    private fun hasWriteStoragePermissions() =
++        ActivityCompat.checkSelfPermission(
++            requireContext(),
++            Manifest.permission.WRITE_EXTERNAL_STORAGE
++        ) == PackageManager.PERMISSION_GRANTED
++
++    override fun onRequestPermissionsResult(
++        requestCode: Int,
++        permissions: Array<out String>,
++        grantResults: IntArray
++    ) {
++        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
++        if(grantResults.isNotEmpty() && requestCode==0){
++            for(i in grantResults.indices){
++                if(grantResults[i]== PackageManager.PERMISSION_GRANTED){
++                    Log.d("permission", "${permissions[i]} granted")
++                }
++            }
++        }
++    }
+ }
+\ No newline at end of file
+Index: app/google-services.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\r\n  \"project_info\": {\r\n    \"project_number\": \"252364371588\",\r\n    \"project_id\": \"insees-c7b7c\",\r\n    \"storage_bucket\": \"insees-c7b7c.appspot.com\"\r\n  },\r\n  \"client\": [\r\n    {\r\n      \"client_info\": {\r\n        \"mobilesdk_app_id\": \"1:252364371588:android:a85cc9283c73467888b4d1\",\r\n        \"android_client_info\": {\r\n          \"package_name\": \"com.example.insees\"\r\n        }\r\n      },\r\n      \"oauth_client\": [],\r\n      \"api_key\": [\r\n        {\r\n          \"current_key\": \"AIzaSyBUX48KexuaQjyu8MnKrka0XzM_EzlMxS4\"\r\n        }\r\n      ],\r\n      \"services\": {\r\n        \"appinvite_service\": {\r\n          \"other_platform_oauth_client\": []\r\n        }\r\n      }\r\n    }\r\n  ],\r\n  \"configuration_version\": \"1\"\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/google-services.json b/app/google-services.json
+--- a/app/google-services.json	(revision ca92c0899c63c69b503413a568f1c4819a338cc7)
++++ b/app/google-services.json	(date 1774036152907)
+@@ -1,13 +1,13 @@
+ {
+   "project_info": {
+-    "project_number": "252364371588",
+-    "project_id": "insees-c7b7c",
+-    "storage_bucket": "insees-c7b7c.appspot.com"
++    "project_number": "261003272689",
++    "project_id": "insees-45081",
++    "storage_bucket": "insees-45081.appspot.com"
+   },
+   "client": [
+     {
+       "client_info": {
+-        "mobilesdk_app_id": "1:252364371588:android:a85cc9283c73467888b4d1",
++        "mobilesdk_app_id": "1:261003272689:android:d2e7b10cb7b661b5d66450",
+         "android_client_info": {
+           "package_name": "com.example.insees"
+         }
+@@ -15,7 +15,7 @@
+       "oauth_client": [],
+       "api_key": [
+         {
+-          "current_key": "AIzaSyBUX48KexuaQjyu8MnKrka0XzM_EzlMxS4"
++          "current_key": "AIzaSyD0QWxb3K1fis49qviyrd8LtldF80U19lw"
+         }
+       ],
+       "services": {
+Index: app/build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n    alias(libs.plugins.android.application)\r\n    alias(libs.plugins.kotlin.compose)\r\n    id(\"com.google.gms.google-services\")\r\n}\r\n\r\nandroid {\r\n    namespace = \"com.example.insees\"\r\n    compileSdk {\r\n        version = release(36)\r\n    }\r\n\r\n    defaultConfig {\r\n        applicationId = \"com.example.insees\"\r\n        minSdk = 24\r\n        targetSdk = 36\r\n        versionCode = 1\r\n        versionName = \"1.0\"\r\n\r\n        testInstrumentationRunner = \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            isMinifyEnabled = false\r\n            proguardFiles(\r\n                getDefaultProguardFile(\"proguard-android-optimize.txt\"),\r\n                \"proguard-rules.pro\"\r\n            )\r\n        }\r\n    }\r\n    compileOptions {\r\n        sourceCompatibility = JavaVersion.VERSION_17\r\n        targetCompatibility = JavaVersion.VERSION_17\r\n    }\r\n    buildFeatures {\r\n        compose = true\r\n        viewBinding = true\r\n    }\r\n}\r\n\r\ndependencies {\r\n    implementation(libs.androidx.core.ktx)\r\n    implementation(libs.androidx.lifecycle.runtime.ktx)\r\n    implementation(libs.androidx.activity.compose)\r\n\r\n    implementation(platform(libs.androidx.compose.bom))\r\n    implementation(libs.androidx.compose.ui)\r\n    implementation(libs.androidx.compose.ui.graphics)\r\n    implementation(libs.androidx.compose.ui.tooling.preview)\r\n    implementation(libs.androidx.compose.material3)\r\n\r\n    implementation(\"androidx.appcompat:appcompat:1.6.1\")\r\n    implementation(\"com.google.android.material:material:1.11.0\")\r\n    implementation(\"androidx.constraintlayout:constraintlayout:2.1.4\")\r\n    implementation(\"com.google.firebase:firebase-auth:21.1.0\")\r\n\r\n    implementation(\"androidx.navigation:navigation-fragment-ktx:2.6.0\")\r\n    implementation(\"androidx.navigation:navigation-ui-ktx:2.6.0\")\r\n\r\n    testImplementation(libs.junit)\r\n    androidTestImplementation(libs.androidx.junit)\r\n    androidTestImplementation(libs.androidx.espresso.core)\r\n\r\n    androidTestImplementation(platform(libs.androidx.compose.bom))\r\n    androidTestImplementation(libs.androidx.compose.ui.test.junit4)\r\n\r\n    debugImplementation(libs.androidx.compose.ui.tooling)\r\n    debugImplementation(libs.androidx.compose.ui.test.manifest)\r\n    implementation(\"androidx.gridlayout:gridlayout:1.0.0\")\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle.kts b/app/build.gradle.kts
+--- a/app/build.gradle.kts	(revision ca92c0899c63c69b503413a568f1c4819a338cc7)
++++ b/app/build.gradle.kts	(date 1774036136362)
+@@ -68,4 +68,7 @@
+     debugImplementation(libs.androidx.compose.ui.tooling)
+     debugImplementation(libs.androidx.compose.ui.test.manifest)
+     implementation("androidx.gridlayout:gridlayout:1.0.0")
++
++    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
++    implementation("com.google.firebase:firebase-firestore")
+ }
+Index: app/src/main/res/layout/fragment_sign_up.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<FrameLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".SignUpFragment\"\r\n    android:background=\"@color/background\">\r\n\r\n    <RelativeLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:layout_marginTop=\"50sp\"\r\n        android:layout_marginHorizontal=\"12dp\">\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:id=\"@+id/signup_text\"\r\n            android:orientation=\"vertical\">\r\n\r\n            <TextView\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"SignUp Now\"\r\n                android:textStyle=\"bold\"\r\n                android:textSize=\"16sp\"\r\n                android:textColor=\"@color/primaryText\"/>\r\n\r\n            <TextView\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"\"\r\n                android:textSize=\"12sp\"\r\n                android:alpha=\"0.75\"\r\n                android:textColor=\"@color/primaryText\"/>\r\n\r\n        </LinearLayout>\r\n\r\n        <ImageView\r\n            android:layout_width=\"240dp\"\r\n            android:layout_height=\"240dp\"\r\n            android:layout_centerHorizontal=\"true\"\r\n            android:layout_marginVertical=\"32dp\"\r\n            android:id=\"@+id/signup_icon\"\r\n            android:src=\"@drawable/signup\"\r\n            android:layout_below=\"@id/signup_text\"/>\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_below=\"@id/signup_icon\"\r\n            android:orientation=\"vertical\">\r\n\r\n            <TextView\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"Email ID\"\r\n                android:textStyle=\"bold\"\r\n                android:textSize=\"12sp\"\r\n                android:textColor=\"@color/primaryText\"/>\r\n\r\n            <EditText\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"40dp\"\r\n                android:id=\"@+id/et_email_signup\"\r\n                android:inputType=\"textEmailAddress\"\r\n                android:background=\"@drawable/rounded_edit_text\"\r\n                android:layout_marginTop=\"5dp\"\r\n                android:alpha=\"0.75\"\r\n                />\r\n\r\n            <TextView\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"Password\"\r\n                android:textStyle=\"bold\"\r\n                android:textSize=\"12sp\"\r\n                android:textColor=\"@color/primaryText\"\r\n                android:layout_marginTop=\"20dp\"/>\r\n\r\n\r\n            <EditText\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"40dp\"\r\n                android:id=\"@+id/et_password\"\r\n                android:inputType=\"textPassword\"\r\n                android:background=\"@drawable/rounded_edit_text\"\r\n                android:layout_marginTop=\"5dp\"\r\n                android:alpha=\"0.75\"\r\n                />\r\n\r\n            <TextView\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"Confirm Password\"\r\n                android:textStyle=\"bold\"\r\n                android:textSize=\"12sp\"\r\n                android:textColor=\"@color/primaryText\"\r\n                android:layout_marginTop=\"20dp\"/>\r\n\r\n\r\n            <EditText\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"40dp\"\r\n                android:id=\"@+id/et_confirm_password\"\r\n                android:inputType=\"textPassword\"\r\n                android:background=\"@drawable/rounded_edit_text\"\r\n                android:layout_marginTop=\"5dp\"\r\n                android:alpha=\"0.75\"\r\n                />\r\n\r\n\r\n            <Button\r\n                android:layout_width=\"match_parent\"\r\n                android:id=\"@+id/btn_next_sign_up\"\r\n                android:background=\"@drawable/rounded_button\"\r\n                android:layout_height=\"40dp\"\r\n                android:text=\"Next\"\r\n                android:layout_marginTop=\"25dp\"\r\n                android:textSize=\"12sp\"\r\n                />\r\n\r\n            <LinearLayout\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:orientation=\"horizontal\"\r\n                android:gravity=\"center\"\r\n                android:layout_marginTop=\"5dp\">\r\n\r\n                <TextView\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:text=\"Already have an account?\"\r\n                    android:textColor=\"@color/primaryText\"\r\n                    android:textSize=\"12sp\"/>\r\n                <TextView\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:textStyle=\"bold\"\r\n                    android:textColor=\"@color/primaryText\"\r\n                    android:id=\"@+id/tv_login\"\r\n                    android:text=\"Login Now\"\r\n                    android:textSize=\"12sp\"/>\r\n\r\n            </LinearLayout>\r\n\r\n        </LinearLayout>\r\n\r\n    </RelativeLayout>\r\n\r\n</FrameLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_sign_up.xml b/app/src/main/res/layout/fragment_sign_up.xml
+--- a/app/src/main/res/layout/fragment_sign_up.xml	(revision ca92c0899c63c69b503413a568f1c4819a338cc7)
++++ b/app/src/main/res/layout/fragment_sign_up.xml	(date 1774036515646)
+@@ -3,149 +3,176 @@
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
+     tools:context=".SignUpFragment"
+     android:background="@color/background">
+-
+-    <RelativeLayout
+-        android:layout_width="match_parent"
+-        android:layout_height="match_parent"
+-        android:layout_marginTop="50sp"
+-        android:layout_marginHorizontal="12dp">
++    <ScrollView
++        android:layout_width="match_parent"
++        android:layout_height="match_parent">
++        <RelativeLayout
++            android:layout_width="match_parent"
++            android:layout_height="match_parent"
++            android:layout_marginTop="50sp"
++            android:layout_marginHorizontal="12dp">
+ 
+-        <LinearLayout
+-            android:layout_width="match_parent"
+-            android:layout_height="wrap_content"
+-            android:id="@+id/signup_text"
+-            android:orientation="vertical">
++            <LinearLayout
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:id="@+id/signup_text"
++                android:orientation="vertical">
+ 
+-            <TextView
+-                android:layout_width="match_parent"
+-                android:layout_height="wrap_content"
+-                android:text="SignUp Now"
+-                android:textStyle="bold"
+-                android:textSize="16sp"
+-                android:textColor="@color/primaryText"/>
++                <TextView
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:text="SignUp Now"
++                    android:textStyle="bold"
++                    android:textSize="16sp"
++                    android:textColor="@color/primaryText"/>
+ 
+-            <TextView
+-                android:layout_width="match_parent"
+-                android:layout_height="wrap_content"
+-                android:text=""
+-                android:textSize="12sp"
+-                android:alpha="0.75"
+-                android:textColor="@color/primaryText"/>
++                <TextView
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:text=""
++                    android:textSize="12sp"
++                    android:alpha="0.75"
++                    android:textColor="@color/primaryText"/>
+ 
+-        </LinearLayout>
++            </LinearLayout>
+ 
+-        <ImageView
+-            android:layout_width="240dp"
+-            android:layout_height="240dp"
+-            android:layout_centerHorizontal="true"
+-            android:layout_marginVertical="32dp"
+-            android:id="@+id/signup_icon"
+-            android:src="@drawable/signup"
+-            android:layout_below="@id/signup_text"/>
++            <ImageView
++                android:layout_width="240dp"
++                android:layout_height="240dp"
++                android:layout_centerHorizontal="true"
++                android:layout_marginVertical="32dp"
++                android:id="@+id/signup_icon"
++                android:src="@drawable/signup"
++                android:layout_below="@id/signup_text"/>
+ 
+-        <LinearLayout
+-            android:layout_width="match_parent"
+-            android:layout_height="wrap_content"
+-            android:layout_below="@id/signup_icon"
+-            android:orientation="vertical">
++            <LinearLayout
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_below="@id/signup_icon"
++                android:orientation="vertical">
+ 
+-            <TextView
+-                android:layout_width="match_parent"
+-                android:layout_height="wrap_content"
+-                android:text="Email ID"
+-                android:textStyle="bold"
+-                android:textSize="12sp"
+-                android:textColor="@color/primaryText"/>
++                <TextView
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:text="Email ID"
++                    android:textStyle="bold"
++                    android:textSize="12sp"
++                    android:textColor="@color/primaryText"
++                    android:layout_marginBottom="5dp"/>
+ 
+-            <EditText
+-                android:layout_width="match_parent"
+-                android:layout_height="40dp"
+-                android:id="@+id/et_email_signup"
+-                android:inputType="textEmailAddress"
+-                android:background="@drawable/rounded_edit_text"
+-                android:layout_marginTop="5dp"
+-                android:alpha="0.75"
+-                />
++                <com.google.android.material.textfield.TextInputLayout
++                    android:id="@+id/et_email_signup_layout"
++                    android:layout_width="match_parent"
++                    android:layout_height="40dp"
++                    android:background="@drawable/rounded_edit_text"
++                    >
++                    <com.google.android.material.textfield.TextInputEditText
++                        android:id="@+id/et_email_signup"
++                        android:layout_width="match_parent"
++                        android:layout_height="match_parent"
++                        android:inputType="textEmailAddress"
++                        android:background="#00000000"
++                        android:padding="4dp"
++                        android:ems="15"/>
++                </com.google.android.material.textfield.TextInputLayout>
+ 
+-            <TextView
+-                android:layout_width="match_parent"
+-                android:layout_height="wrap_content"
+-                android:text="Password"
+-                android:textStyle="bold"
+-                android:textSize="12sp"
+-                android:textColor="@color/primaryText"
+-                android:layout_marginTop="20dp"/>
++                <TextView
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:text="Password"
++                    android:textStyle="bold"
++                    android:textSize="12sp"
++                    android:textColor="@color/primaryText"
++                    android:layout_marginTop="20dp"
++                    android:layout_marginBottom="5dp"/>
+ 
+ 
+-            <EditText
+-                android:layout_width="match_parent"
+-                android:layout_height="40dp"
+-                android:id="@+id/et_password"
+-                android:inputType="textPassword"
+-                android:background="@drawable/rounded_edit_text"
+-                android:layout_marginTop="5dp"
+-                android:alpha="0.75"
+-                />
++                <com.google.android.material.textfield.TextInputLayout
++                    android:id="@+id/et_password_signup_layout"
++                    android:layout_width="match_parent"
++                    android:layout_height="40dp"
++                    app:passwordToggleEnabled="true"
++                    android:background="@drawable/rounded_edit_text"
++                    >
++                    <com.google.android.material.textfield.TextInputEditText
++                        android:id="@+id/et_password_signup"
++                        android:layout_width="match_parent"
++                        android:layout_height="match_parent"
++                        android:inputType="textPassword"
++                        android:background="#00000000"
++                        android:padding="4dp"
++                        android:ems="15"/>
++                </com.google.android.material.textfield.TextInputLayout>
+ 
+-            <TextView
+-                android:layout_width="match_parent"
+-                android:layout_height="wrap_content"
+-                android:text="Confirm Password"
+-                android:textStyle="bold"
+-                android:textSize="12sp"
+-                android:textColor="@color/primaryText"
+-                android:layout_marginTop="20dp"/>
++                <TextView
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:text="Confirm Password"
++                    android:textStyle="bold"
++                    android:textSize="12sp"
++                    android:textColor="@color/primaryText"
++                    android:layout_marginTop="20dp"
++                    android:layout_marginBottom="5dp"/>
+ 
+ 
+-            <EditText
+-                android:layout_width="match_parent"
+-                android:layout_height="40dp"
+-                android:id="@+id/et_confirm_password"
+-                android:inputType="textPassword"
+-                android:background="@drawable/rounded_edit_text"
+-                android:layout_marginTop="5dp"
+-                android:alpha="0.75"
+-                />
++                <com.google.android.material.textfield.TextInputLayout
++                    android:id="@+id/et_confirm_password_layout"
++                    android:layout_width="match_parent"
++                    android:layout_height="40dp"
++                    android:background="@drawable/rounded_edit_text"
++                    app:passwordToggleEnabled="true"
++                    >
++                    <com.google.android.material.textfield.TextInputEditText
++                        android:id="@+id/et_confirm_password"
++                        android:layout_width="match_parent"
++                        android:layout_height="match_parent"
++                        android:inputType="textPassword"
++                        android:background="#00000000"
++                        android:padding="4dp"
++                        android:ems="15"/>
++                </com.google.android.material.textfield.TextInputLayout>
+ 
+ 
+-            <Button
+-                android:layout_width="match_parent"
+-                android:id="@+id/btn_next_sign_up"
+-                android:background="@drawable/rounded_button"
+-                android:layout_height="40dp"
+-                android:text="Next"
+-                android:layout_marginTop="25dp"
+-                android:textSize="12sp"
+-                />
++                <Button
++                    android:layout_width="match_parent"
++                    android:id="@+id/btn_next_sign_up"
++                    android:background="@drawable/rounded_button"
++                    android:layout_height="40dp"
++                    android:text="Next"
++                    android:layout_marginTop="25dp"
++                    android:textSize="12sp"
++                    />
+ 
+-            <LinearLayout
+-                android:layout_width="match_parent"
+-                android:layout_height="wrap_content"
+-                android:orientation="horizontal"
+-                android:gravity="center"
+-                android:layout_marginTop="5dp">
++                <LinearLayout
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:orientation="horizontal"
++                    android:gravity="center"
++                    android:layout_marginTop="5dp">
+ 
+-                <TextView
+-                    android:layout_width="wrap_content"
+-                    android:layout_height="wrap_content"
+-                    android:text="Already have an account?"
+-                    android:textColor="@color/primaryText"
+-                    android:textSize="12sp"/>
+-                <TextView
+-                    android:layout_width="wrap_content"
+-                    android:layout_height="wrap_content"
+-                    android:textStyle="bold"
+-                    android:textColor="@color/primaryText"
+-                    android:id="@+id/tv_login"
+-                    android:text="Login Now"
+-                    android:textSize="12sp"/>
++                    <TextView
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:text="Already have an account?"
++                        android:textColor="@color/primaryText"
++                        android:textSize="12sp"/>
++                    <TextView
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:textStyle="bold"
++                        android:textColor="@color/primaryText"
++                        android:id="@+id/tv_login"
++                        android:text="Login Now"
++                        android:textSize="12sp"/>
+ 
+-            </LinearLayout>
++                </LinearLayout>
+ 
+-        </LinearLayout>
++            </LinearLayout>
+ 
+-    </RelativeLayout>
++        </RelativeLayout>
++    </ScrollView>
+ 
+ </FrameLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/fragment_login.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<FrameLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    tools:context=\".LoginFragment\"\r\n    android:background=\"@color/background\">\r\n\r\n    <RelativeLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:layout_marginTop=\"50sp\"\r\n        android:layout_marginHorizontal=\"12dp\">\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:id=\"@+id/login_text\"\r\n            android:orientation=\"vertical\">\r\n\r\n            <TextView\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"Login\"\r\n                android:textStyle=\"bold\"\r\n                android:textSize=\"16sp\"\r\n                android:textColor=\"@color/primaryText\"/>\r\n\r\n            <TextView\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"Welcome Back\"\r\n                android:textSize=\"12sp\"\r\n                android:alpha=\"0.75\"\r\n                android:textColor=\"@color/primaryText\"/>\r\n\r\n        </LinearLayout>\r\n\r\n        <ImageView\r\n            android:layout_width=\"290dp\"\r\n            android:layout_height=\"280dp\"\r\n            android:layout_centerHorizontal=\"true\"\r\n            android:layout_marginVertical=\"32dp\"\r\n            android:id=\"@+id/login_icon\"\r\n            android:src=\"@drawable/login\"\r\n            android:layout_below=\"@id/login_text\"\r\n            />\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_below=\"@id/login_icon\"\r\n            android:orientation=\"vertical\">\r\n\r\n            <TextView\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"Email ID\"\r\n                android:textStyle=\"bold\"\r\n                android:textSize=\"12sp\"\r\n                android:textColor=\"@color/primaryText\"/>\r\n\r\n            <EditText\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"40dp\"\r\n                android:id=\"@+id/et_email_login\"\r\n                android:inputType=\"textEmailAddress\"\r\n                android:background=\"@drawable/rounded_edit_text\"\r\n                android:layout_marginTop=\"5dp\"\r\n                android:padding=\"4dp\"\r\n                />\r\n\r\n            <TextView\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"Password\"\r\n                android:textStyle=\"bold\"\r\n                android:textSize=\"12sp\"\r\n                android:textColor=\"@color/primaryText\"\r\n                android:layout_marginTop=\"20dp\"\r\n                android:layout_marginBottom=\"5dp\"\r\n                />\r\n\r\n            <com.google.android.material.textfield.TextInputLayout\r\n                android:id=\"@+id/et_password_login_layout\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"40dp\"\r\n                app:passwordToggleEnabled=\"true\"\r\n                android:background=\"@drawable/rounded_edit_text\"\r\n                >\r\n                <com.google.android.material.textfield.TextInputEditText\r\n                    android:id=\"@+id/et_password_login\"\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"match_parent\"\r\n                    android:inputType=\"textPassword\"\r\n                    android:background=\"#00000000\"\r\n                    android:padding=\"4dp\"\r\n                    android:ems=\"15\"/>\r\n            </com.google.android.material.textfield.TextInputLayout>\r\n\r\n\r\n            <Button\r\n                android:layout_width=\"match_parent\"\r\n                android:id=\"@+id/btn_login\"\r\n                android:background=\"@drawable/rounded_button\"\r\n                android:layout_height=\"40dp\"\r\n                android:text=\"Login\"\r\n                android:layout_marginTop=\"25dp\"\r\n                android:textSize=\"12sp\"\r\n                />\r\n\r\n            <LinearLayout\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:orientation=\"horizontal\"\r\n                android:gravity=\"center\"\r\n                android:layout_marginTop=\"5dp\">\r\n\r\n                <TextView\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:text=\"New User?\"\r\n                    android:textColor=\"@color/primaryText\"\r\n                    android:textSize=\"12sp\"/>\r\n                <TextView\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:textStyle=\"bold\"\r\n                    android:textColor=\"@color/primaryText\"\r\n                    android:id=\"@+id/tv_create_new_account\"\r\n                    android:text=\"Create a new account\"\r\n                    android:textSize=\"12sp\"/>\r\n\r\n            </LinearLayout>\r\n\r\n        </LinearLayout>\r\n\r\n    </RelativeLayout>\r\n\r\n</FrameLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_login.xml b/app/src/main/res/layout/fragment_login.xml
+--- a/app/src/main/res/layout/fragment_login.xml	(revision ca92c0899c63c69b503413a568f1c4819a338cc7)
++++ b/app/src/main/res/layout/fragment_login.xml	(date 1774036471317)
+@@ -6,136 +6,140 @@
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     tools:context=".LoginFragment"
+     android:background="@color/background">
+-
+-    <RelativeLayout
+-        android:layout_width="match_parent"
+-        android:layout_height="match_parent"
+-        android:layout_marginTop="50sp"
+-        android:layout_marginHorizontal="12dp">
++    <ScrollView
++        android:layout_width="match_parent"
++        android:layout_height="match_parent">
++        <RelativeLayout
++            android:layout_width="match_parent"
++            android:layout_height="match_parent"
++            android:layout_marginTop="50sp"
++            android:layout_marginHorizontal="12dp">
+ 
+-        <LinearLayout
+-            android:layout_width="match_parent"
+-            android:layout_height="wrap_content"
+-            android:id="@+id/login_text"
+-            android:orientation="vertical">
++            <LinearLayout
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:id="@+id/login_text"
++                android:orientation="vertical">
+ 
+-            <TextView
+-                android:layout_width="match_parent"
+-                android:layout_height="wrap_content"
+-                android:text="Login"
+-                android:textStyle="bold"
+-                android:textSize="16sp"
+-                android:textColor="@color/primaryText"/>
++                <TextView
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:text="Login"
++                    android:textStyle="bold"
++                    android:textSize="16sp"
++                    android:textColor="@color/primaryText"/>
+ 
+-            <TextView
+-                android:layout_width="match_parent"
+-                android:layout_height="wrap_content"
+-                android:text="Welcome Back"
+-                android:textSize="12sp"
+-                android:alpha="0.75"
+-                android:textColor="@color/primaryText"/>
++                <TextView
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:text="Welcome Back"
++                    android:textSize="12sp"
++                    android:alpha="0.75"
++                    android:textColor="@color/primaryText"/>
+ 
+-        </LinearLayout>
++            </LinearLayout>
+ 
+-        <ImageView
+-            android:layout_width="290dp"
+-            android:layout_height="280dp"
+-            android:layout_centerHorizontal="true"
+-            android:layout_marginVertical="32dp"
+-            android:id="@+id/login_icon"
+-            android:src="@drawable/login"
+-            android:layout_below="@id/login_text"
+-            />
++            <ImageView
++                android:layout_width="290dp"
++                android:layout_height="280dp"
++                android:layout_centerHorizontal="true"
++                android:layout_marginVertical="32dp"
++                android:id="@+id/login_icon"
++                android:src="@drawable/login"
++                android:layout_below="@id/login_text"
++                />
+ 
+-        <LinearLayout
+-            android:layout_width="match_parent"
+-            android:layout_height="wrap_content"
+-            android:layout_below="@id/login_icon"
+-            android:orientation="vertical">
++            <LinearLayout
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_below="@id/login_icon"
++                android:orientation="vertical">
+ 
+-            <TextView
+-                android:layout_width="match_parent"
+-                android:layout_height="wrap_content"
+-                android:text="Email ID"
+-                android:textStyle="bold"
+-                android:textSize="12sp"
+-                android:textColor="@color/primaryText"/>
++                <TextView
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:text="Email ID"
++                    android:textStyle="bold"
++                    android:textSize="12sp"
++                    android:textColor="@color/primaryText"/>
+ 
+-            <EditText
+-                android:layout_width="match_parent"
+-                android:layout_height="40dp"
+-                android:id="@+id/et_email_login"
+-                android:inputType="textEmailAddress"
+-                android:background="@drawable/rounded_edit_text"
+-                android:layout_marginTop="5dp"
+-                android:padding="4dp"
+-                />
++                <EditText
++                    android:layout_width="match_parent"
++                    android:layout_height="40dp"
++                    android:id="@+id/et_email_login"
++                    android:inputType="textEmailAddress"
++                    android:background="@drawable/rounded_edit_text"
++                    android:layout_marginTop="5dp"
++                    android:padding="4dp"
++                    />
+ 
+-            <TextView
+-                android:layout_width="match_parent"
+-                android:layout_height="wrap_content"
+-                android:text="Password"
+-                android:textStyle="bold"
+-                android:textSize="12sp"
+-                android:textColor="@color/primaryText"
+-                android:layout_marginTop="20dp"
+-                android:layout_marginBottom="5dp"
+-                />
++                <TextView
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:text="Password"
++                    android:textStyle="bold"
++                    android:textSize="12sp"
++                    android:textColor="@color/primaryText"
++                    android:layout_marginTop="20dp"
++                    android:layout_marginBottom="5dp"
++                    />
+ 
+-            <com.google.android.material.textfield.TextInputLayout
+-                android:id="@+id/et_password_login_layout"
+-                android:layout_width="match_parent"
+-                android:layout_height="40dp"
+-                app:passwordToggleEnabled="true"
+-                android:background="@drawable/rounded_edit_text"
+-                >
+-                <com.google.android.material.textfield.TextInputEditText
+-                    android:id="@+id/et_password_login"
+-                    android:layout_width="match_parent"
+-                    android:layout_height="match_parent"
+-                    android:inputType="textPassword"
+-                    android:background="#00000000"
+-                    android:padding="4dp"
+-                    android:ems="15"/>
+-            </com.google.android.material.textfield.TextInputLayout>
++                <com.google.android.material.textfield.TextInputLayout
++                    android:id="@+id/et_password_login_layout"
++                    android:layout_width="match_parent"
++                    android:layout_height="40dp"
++                    app:passwordToggleEnabled="true"
++                    android:background="@drawable/rounded_edit_text"
++                    >
++                    <com.google.android.material.textfield.TextInputEditText
++                        android:id="@+id/et_password_login"
++                        android:layout_width="match_parent"
++                        android:layout_height="match_parent"
++                        android:inputType="textPassword"
++                        android:background="#00000000"
++                        android:padding="4dp"
++                        android:ems="15"/>
++                </com.google.android.material.textfield.TextInputLayout>
+ 
+ 
+-            <Button
+-                android:layout_width="match_parent"
+-                android:id="@+id/btn_login"
+-                android:background="@drawable/rounded_button"
+-                android:layout_height="40dp"
+-                android:text="Login"
+-                android:layout_marginTop="25dp"
+-                android:textSize="12sp"
+-                />
++                <Button
++                    android:layout_width="match_parent"
++                    android:id="@+id/btn_login"
++                    android:background="@drawable/rounded_button"
++                    android:layout_height="40dp"
++                    android:text="Login"
++                    android:layout_marginTop="25dp"
++                    android:textSize="12sp"
++                    />
+ 
+-            <LinearLayout
+-                android:layout_width="match_parent"
+-                android:layout_height="wrap_content"
+-                android:orientation="horizontal"
+-                android:gravity="center"
+-                android:layout_marginTop="5dp">
++                <LinearLayout
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:orientation="horizontal"
++                    android:gravity="center"
++                    android:layout_marginTop="5dp">
+ 
+-                <TextView
+-                    android:layout_width="wrap_content"
+-                    android:layout_height="wrap_content"
+-                    android:text="New User?"
+-                    android:textColor="@color/primaryText"
+-                    android:textSize="12sp"/>
+-                <TextView
+-                    android:layout_width="wrap_content"
+-                    android:layout_height="wrap_content"
+-                    android:textStyle="bold"
+-                    android:textColor="@color/primaryText"
+-                    android:id="@+id/tv_create_new_account"
+-                    android:text="Create a new account"
+-                    android:textSize="12sp"/>
++                    <TextView
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:text="New User?"
++                        android:textColor="@color/primaryText"
++                        android:textSize="12sp"/>
++                    <TextView
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:textStyle="bold"
++                        android:textColor="@color/primaryText"
++                        android:id="@+id/tv_create_new_account"
++                        android:text="Create a new account"
++                        android:textSize="12sp"/>
+ 
+-            </LinearLayout>
++                </LinearLayout>
+ 
+-        </LinearLayout>
++            </LinearLayout>
+ 
+-    </RelativeLayout>
++        </RelativeLayout>
+ 
++    </ScrollView>
++
+ </FrameLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/fragment_complete_profile.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<FrameLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    tools:context=\".CompleteProfileFragment\"\r\n    android:background=\"@color/background\">\r\n\r\n    <RelativeLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:layout_marginTop=\"50sp\"\r\n        android:layout_marginHorizontal=\"12dp\">\r\n\r\n        <ImageView\r\n            android:layout_width=\"240dp\"\r\n            android:layout_height=\"240dp\"\r\n            android:layout_centerHorizontal=\"true\"\r\n            android:layout_marginVertical=\"32dp\"\r\n            android:id=\"@+id/complete_profile_icon\"\r\n            android:src=\"@drawable/complete_profile\"\r\n            />\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:id=\"@+id/complete_profile_text\"\r\n            android:orientation=\"vertical\"\r\n            android:layout_below=\"@id/complete_profile_icon\">\r\n\r\n            <TextView\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"Complete Your Profile.\"\r\n                android:textStyle=\"bold\"\r\n                android:textSize=\"16sp\"\r\n                android:textColor=\"@color/primaryText\"/>\r\n\r\n            <TextView\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"\"\r\n                android:textSize=\"12sp\"\r\n                android:alpha=\"0.75\"\r\n                android:textColor=\"@color/primaryText\"/>\r\n\r\n        </LinearLayout>\r\n\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_below=\"@id/complete_profile_text\"\r\n            android:orientation=\"vertical\">\r\n\r\n            <TextView\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"Name\"\r\n                android:textStyle=\"bold\"\r\n                android:textSize=\"12sp\"\r\n                android:textColor=\"@color/primaryText\"\r\n                android:layout_marginBottom=\"5dp\"/>\r\n\r\n            <com.google.android.material.textfield.TextInputLayout\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"40dp\"\r\n                android:background=\"@drawable/rounded_edit_text\"\r\n                >\r\n                <com.google.android.material.textfield.TextInputEditText\r\n                    android:id=\"@+id/et_name_complete_profile\"\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"match_parent\"\r\n                    android:inputType=\"text\"\r\n                    android:background=\"#00000000\"\r\n                    android:padding=\"4dp\"\r\n                    android:ems=\"15\"/>\r\n            </com.google.android.material.textfield.TextInputLayout>\r\n\r\n            <TextView\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"Upload Your Profile Photo\"\r\n                android:textStyle=\"bold\"\r\n                android:textSize=\"12sp\"\r\n                android:textColor=\"@color/primaryText\"\r\n                android:layout_marginTop=\"20dp\"/>\r\n\r\n            <androidx.cardview.widget.CardView\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"120dp\"\r\n                app:cardBackgroundColor=\"#70434343\"\r\n                android:layout_marginTop=\"5dp\"\r\n                app:cardCornerRadius=\"6dp\">\r\n\r\n                <LinearLayout\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"match_parent\"\r\n                    android:orientation=\"vertical\"\r\n                    >\r\n\r\n                    <LinearLayout\r\n                        android:layout_width=\"match_parent\"\r\n                        android:layout_height=\"67dp\"\r\n                        android:orientation=\"vertical\"\r\n                        android:id=\"@+id/upload_image\"\r\n                        >\r\n\r\n                        <ImageView\r\n                            android:layout_width=\"28dp\"\r\n                            android:layout_height=\"28dp\"\r\n                            android:src=\"@drawable/upload\"\r\n                            android:layout_gravity=\"center_horizontal\"\r\n                            android:layout_marginTop=\"25dp\"/>\r\n\r\n                        <TextView\r\n                            android:layout_width=\"wrap_content\"\r\n                            android:layout_height=\"wrap_content\"\r\n                            android:text=\"Click here to upload\"\r\n                            android:textSize=\"10sp\"\r\n                            android:textColor=\"@color/primaryText\"\r\n                            android:layout_gravity=\"center_horizontal\"/>\r\n\r\n                    </LinearLayout>\r\n                    <TextView\r\n                        android:layout_width=\"wrap_content\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:text=\"OR\"\r\n                        android:textSize=\"10sp\"\r\n                        android:textColor=\"@color/primaryText\"\r\n                        android:layout_gravity=\"center_horizontal\"/>\r\n                    <TextView\r\n                        android:id=\"@+id/open_camera\"\r\n                        android:layout_width=\"wrap_content\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:text=\"Open Camera\"\r\n                        android:textSize=\"10sp\"\r\n                        android:textColor=\"@color/primaryText\"\r\n                        android:layout_gravity=\"center_horizontal\"/>\r\n                </LinearLayout>\r\n\r\n            </androidx.cardview.widget.CardView>\r\n\r\n\r\n            <Button\r\n                android:layout_width=\"match_parent\"\r\n                android:id=\"@+id/btn_next_complete_profile\"\r\n                android:background=\"@drawable/rounded_button\"\r\n                android:layout_height=\"40dp\"\r\n                android:text=\"Next\"\r\n                android:layout_marginTop=\"25dp\"\r\n                android:textSize=\"12sp\"\r\n                />\r\n\r\n        </LinearLayout>\r\n\r\n    </RelativeLayout>\r\n\r\n\r\n</FrameLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_complete_profile.xml b/app/src/main/res/layout/fragment_complete_profile.xml
+--- a/app/src/main/res/layout/fragment_complete_profile.xml	(revision ca92c0899c63c69b503413a568f1c4819a338cc7)
++++ b/app/src/main/res/layout/fragment_complete_profile.xml	(date 1774036445977)
+@@ -7,155 +7,169 @@
+     tools:context=".CompleteProfileFragment"
+     android:background="@color/background">
+ 
+-    <RelativeLayout
+-        android:layout_width="match_parent"
+-        android:layout_height="match_parent"
+-        android:layout_marginTop="50sp"
+-        android:layout_marginHorizontal="12dp">
++    <ScrollView
++        android:layout_width="match_parent"
++        android:layout_height="match_parent">
++
++        <RelativeLayout
++            android:layout_width="match_parent"
++            android:layout_height="match_parent"
++            android:layout_marginTop="50sp"
++            android:layout_marginHorizontal="12dp">
+ 
+-        <ImageView
+-            android:layout_width="240dp"
+-            android:layout_height="240dp"
+-            android:layout_centerHorizontal="true"
+-            android:layout_marginVertical="32dp"
+-            android:id="@+id/complete_profile_icon"
+-            android:src="@drawable/complete_profile"
+-            />
++            <ImageView
++                android:layout_width="240dp"
++                android:layout_height="240dp"
++                android:layout_centerHorizontal="true"
++                android:layout_marginVertical="32dp"
++                android:id="@+id/complete_profile_icon"
++                android:src="@drawable/complete_profile"
++                />
+ 
+-        <LinearLayout
+-            android:layout_width="match_parent"
+-            android:layout_height="wrap_content"
+-            android:id="@+id/complete_profile_text"
+-            android:orientation="vertical"
+-            android:layout_below="@id/complete_profile_icon">
++            <LinearLayout
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:id="@+id/complete_profile_text"
++                android:orientation="vertical"
++                android:layout_below="@id/complete_profile_icon">
+ 
+-            <TextView
+-                android:layout_width="match_parent"
+-                android:layout_height="wrap_content"
+-                android:text="Complete Your Profile."
+-                android:textStyle="bold"
+-                android:textSize="16sp"
+-                android:textColor="@color/primaryText"/>
++                <TextView
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:text="Complete Your Profile."
++                    android:textStyle="bold"
++                    android:textSize="16sp"
++                    android:textColor="@color/primaryText"/>
+ 
+-            <TextView
+-                android:layout_width="match_parent"
+-                android:layout_height="wrap_content"
+-                android:text=""
+-                android:textSize="12sp"
+-                android:alpha="0.75"
+-                android:textColor="@color/primaryText"/>
++                <TextView
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:text=""
++                    android:textSize="12sp"
++                    android:alpha="0.75"
++                    android:textColor="@color/primaryText"/>
+ 
+-        </LinearLayout>
++            </LinearLayout>
+ 
+ 
+-        <LinearLayout
+-            android:layout_width="match_parent"
+-            android:layout_height="wrap_content"
+-            android:layout_below="@id/complete_profile_text"
+-            android:orientation="vertical">
++            <LinearLayout
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_below="@id/complete_profile_text"
++                android:orientation="vertical">
+ 
+-            <TextView
+-                android:layout_width="match_parent"
+-                android:layout_height="wrap_content"
+-                android:text="Name"
+-                android:textStyle="bold"
+-                android:textSize="12sp"
+-                android:textColor="@color/primaryText"
+-                android:layout_marginBottom="5dp"/>
++                <TextView
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:text="Name"
++                    android:textStyle="bold"
++                    android:textSize="12sp"
++                    android:textColor="@color/primaryText"
++                    android:layout_marginBottom="5dp"/>
+ 
+-            <com.google.android.material.textfield.TextInputLayout
+-                android:layout_width="match_parent"
+-                android:layout_height="40dp"
+-                android:background="@drawable/rounded_edit_text"
+-                >
+-                <com.google.android.material.textfield.TextInputEditText
+-                    android:id="@+id/et_name_complete_profile"
+-                    android:layout_width="match_parent"
+-                    android:layout_height="match_parent"
+-                    android:inputType="text"
+-                    android:background="#00000000"
+-                    android:padding="4dp"
+-                    android:ems="15"/>
+-            </com.google.android.material.textfield.TextInputLayout>
++                <com.google.android.material.textfield.TextInputLayout
++                    android:layout_width="match_parent"
++                    android:layout_height="40dp"
++                    android:background="@drawable/rounded_edit_text"
++                    android:id="@+id/et_name_complete_profile_layout"
++                    >
++                    <com.google.android.material.textfield.TextInputEditText
++                        android:id="@+id/et_name_complete_profile"
++                        android:layout_width="match_parent"
++                        android:layout_height="match_parent"
++                        android:inputType="text"
++                        android:background="#00000000"
++                        android:padding="4dp"
++                        android:ems="15"/>
++                </com.google.android.material.textfield.TextInputLayout>
+ 
+-            <TextView
+-                android:layout_width="match_parent"
+-                android:layout_height="wrap_content"
+-                android:text="Upload Your Profile Photo"
+-                android:textStyle="bold"
+-                android:textSize="12sp"
+-                android:textColor="@color/primaryText"
+-                android:layout_marginTop="20dp"/>
++                <TextView
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:text="Upload Your Profile Photo"
++                    android:textStyle="bold"
++                    android:textSize="12sp"
++                    android:textColor="@color/primaryText"
++                    android:layout_marginTop="20dp"/>
+ 
+-            <androidx.cardview.widget.CardView
+-                android:layout_width="match_parent"
+-                android:layout_height="120dp"
+-                app:cardBackgroundColor="#70434343"
+-                android:layout_marginTop="5dp"
+-                app:cardCornerRadius="6dp">
++                <androidx.cardview.widget.CardView
++                    android:layout_width="match_parent"
++                    android:layout_height="120dp"
++                    app:cardBackgroundColor="#70434343"
++                    android:layout_marginTop="5dp"
++                    app:cardCornerRadius="6dp">
+ 
+-                <LinearLayout
+-                    android:layout_width="match_parent"
+-                    android:layout_height="match_parent"
+-                    android:orientation="vertical"
+-                    >
++                    <ImageView
++                        android:id="@+id/profile_photo"
++                        android:layout_width="match_parent"
++                        android:layout_height="match_parent"
++                        android:visibility="gone"
++                        android:contentDescription="profile photo" />
++
++                    <LinearLayout
++                        android:id="@+id/profile_layout"
++                        android:layout_width="match_parent"
++                        android:layout_height="match_parent"
++                        android:orientation="vertical">
+ 
+-                    <LinearLayout
+-                        android:layout_width="match_parent"
+-                        android:layout_height="67dp"
+-                        android:orientation="vertical"
+-                        android:id="@+id/upload_image"
+-                        >
++                        <LinearLayout
++                            android:layout_width="match_parent"
++                            android:layout_height="67dp"
++                            android:orientation="vertical"
++                            >
+ 
+-                        <ImageView
+-                            android:layout_width="28dp"
+-                            android:layout_height="28dp"
+-                            android:src="@drawable/upload"
+-                            android:layout_gravity="center_horizontal"
+-                            android:layout_marginTop="25dp"/>
++                            <ImageView
++                                android:layout_width="28dp"
++                                android:layout_height="28dp"
++                                android:src="@drawable/upload"
++                                android:layout_gravity="center_horizontal"
++                                android:layout_marginTop="25dp"/>
+ 
+-                        <TextView
+-                            android:layout_width="wrap_content"
+-                            android:layout_height="wrap_content"
+-                            android:text="Click here to upload"
+-                            android:textSize="10sp"
+-                            android:textColor="@color/primaryText"
+-                            android:layout_gravity="center_horizontal"/>
++                            <TextView
++                                android:id="@+id/upload_image"
++                                android:layout_width="wrap_content"
++                                android:layout_height="wrap_content"
++                                android:text="Click here to upload"
++                                android:textSize="10sp"
++                                android:textColor="@color/primaryText"
++                                android:layout_gravity="center_horizontal"/>
+ 
+-                    </LinearLayout>
+-                    <TextView
+-                        android:layout_width="wrap_content"
+-                        android:layout_height="wrap_content"
+-                        android:text="OR"
+-                        android:textSize="10sp"
+-                        android:textColor="@color/primaryText"
+-                        android:layout_gravity="center_horizontal"/>
+-                    <TextView
+-                        android:id="@+id/open_camera"
+-                        android:layout_width="wrap_content"
+-                        android:layout_height="wrap_content"
+-                        android:text="Open Camera"
+-                        android:textSize="10sp"
+-                        android:textColor="@color/primaryText"
+-                        android:layout_gravity="center_horizontal"/>
+-                </LinearLayout>
++                        </LinearLayout>
++                        <TextView
++                            android:layout_width="wrap_content"
++                            android:layout_height="wrap_content"
++                            android:text="OR"
++                            android:textSize="10sp"
++                            android:textColor="@color/primaryText"
++                            android:layout_gravity="center_horizontal"/>
++                        <TextView
++                            android:id="@+id/open_camera"
++                            android:layout_width="wrap_content"
++                            android:layout_height="wrap_content"
++                            android:text="Open Camera"
++                            android:textSize="10sp"
++                            android:textColor="@color/primaryText"
++                            android:layout_gravity="center_horizontal"/>
++                    </LinearLayout>
+ 
+-            </androidx.cardview.widget.CardView>
++                </androidx.cardview.widget.CardView>
+ 
+ 
+-            <Button
+-                android:layout_width="match_parent"
+-                android:id="@+id/btn_next_complete_profile"
+-                android:background="@drawable/rounded_button"
+-                android:layout_height="40dp"
+-                android:text="Next"
+-                android:layout_marginTop="25dp"
+-                android:textSize="12sp"
+-                />
++                <Button
++                    android:layout_width="match_parent"
++                    android:id="@+id/btn_next_complete_profile"
++                    android:background="@drawable/rounded_button"
++                    android:layout_height="40dp"
++                    android:text="Next"
++                    android:layout_marginTop="25dp"
++                    android:textSize="12sp"
++                    />
+ 
+-        </LinearLayout>
++            </LinearLayout>
+ 
+-    </RelativeLayout>
++        </RelativeLayout>
+ 
++    </ScrollView>
++
+ 
+ </FrameLayout>
+\ No newline at end of file
