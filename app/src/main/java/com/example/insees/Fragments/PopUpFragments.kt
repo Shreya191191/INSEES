@@ -1,61 +1,98 @@
 package com.example.insees.Fragments
 
+import android.annotation.SuppressLint
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.DatePicker
+import android.widget.TimePicker
+import androidx.fragment.app.DialogFragment
 import com.example.insees.R
+import com.example.insees.databinding.FragmentPopUpBinding
+import java.util.Calendar
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [PopUpFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class PopUpFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class PopUpFragment : DialogFragment(),DatePickerDialog.OnDateSetListener,TimePickerDialog.OnTimeSetListener {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var binding:FragmentPopUpBinding
+
+    var day=0
+    var month=0
+    var year=0
+    var hour=0
+    var minute=0
+
+    var savedDay=0
+    var savedMonth=0
+    var savedYear=0
+    var savedHour=0
+    var savedMinute=0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pop_up, container, false)
+        binding=FragmentPopUpBinding.inflate(inflater,container,false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PopUpFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PopUpFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        pickDate()
+        pickTime()
+        binding.cancelPopUpButton.setOnClickListener {
+            dismiss()
+        }
     }
+
+    private fun getDateTimeCalendar(){
+
+        val cal=Calendar.getInstance()
+        day=cal.get(Calendar.DAY_OF_MONTH)
+        month=cal.get(Calendar.MONTH)
+        year=cal.get(Calendar.YEAR)
+        hour=cal.get(Calendar.HOUR)
+        minute=cal.get(Calendar.MINUTE)
+
+    }
+
+    private fun pickDate(){
+        binding.etPopUpTaskDate.setOnClickListener {
+            getDateTimeCalendar()
+            DatePickerDialog(requireContext(),this,year,month,day).show()
+        }
+    }
+
+    private fun pickTime() {
+        binding.etPopUpTaskTime.setOnClickListener {
+            getDateTimeCalendar()
+            TimePickerDialog(requireContext(),this,hour,minute,true).show()
+        }
+    }
+    @SuppressLint("SetTextI18n")
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+
+        savedDay=dayOfMonth
+        savedMonth=month
+        savedYear=year
+
+        binding.etPopUpTaskDate.text="$savedDay/$savedMonth/$savedYear"
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+
+        savedHour=hourOfDay
+        savedMinute=minute
+
+        binding.etPopUpTaskTime.text="$savedHour:$savedMinute"
+
+    }
+
 }
-

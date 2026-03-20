@@ -41,38 +41,71 @@
         app:layout_constraintStart_toEndOf="@+id/imageButton"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
-    <Button
-        android:id="@+id/imageButton2"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="164dp"
         android:layout_marginHorizontal="15dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/button_insees"
-        android:drawableLeft="@drawable/insees_logo"
-        android:text="Insees"
-        android:textAlignment="center"
-        android:textSize="32dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/rounded_corners"
+        android:backgroundTint="#D3A01E"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3">
+
+        <ImageButton
+            android:id="@+id/imageButton1"
+            android:layout_width="150dp"
+            android:layout_height="98dp"
+            android:layout_marginRight="60dp"
+            android:backgroundTint="#D29F1E"
+            android:src="@drawable/insees_logo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="INSEES"
+            android:textColor="@android:color/white"
+            android:layout_marginRight="25dp"
+            android:textSize="32dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="164dp"
+        android:layout_marginHorizontal="15dp"
+        android:background="@drawable/rounded_corners"
+        android:backgroundTint="#228551"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5">
 
-    <Button
-        android:id="@+id/imageButton3"
-        android:layout_width="match_parent"
-        android:layout_height="164dp"
-        android:layout_marginHorizontal="15dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/rounded_corners"
-        android:drawableLeft="@drawable/members_img"
-        android:src="@drawable/insees_logo"
-        android:text="Members"
-        android:textAlignment="center"
-        android:textSize="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.551"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton2" />
+        <ImageButton
+            android:id="@+id/imageButton3"
+            android:layout_width="150dp"
+            android:layout_height="98dp"
+            android:backgroundTint="#228550"
+            android:src="@drawable/members_img" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:text="Members"
+            android:textColor="@android:color/white"
+            android:textSize="32dp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
