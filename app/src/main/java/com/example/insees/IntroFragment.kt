@@ -12,7 +12,7 @@ import com.example.insees.databinding.FragmentIntroBinding
 class IntroFragment : Fragment() {
 
     private lateinit var binding: FragmentIntroBinding
-    private lateinit var navController:NavController
+    private lateinit var navController: NavController
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -24,9 +24,9 @@ class IntroFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentIntroBinding.inflate(inflater,container,false)
+        binding = FragmentIntroBinding.inflate(inflater, container, false)
 
-        binding.alreadyHaveAccount.setOnClickListener{
+        binding.alreadyHaveAccount.setOnClickListener {
             navController.navigate(R.id.action_introFragment_to_loginFragment)
         }
 
