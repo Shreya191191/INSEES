@@ -20,7 +20,7 @@
         android:layout_marginTop="15dp">
         <ImageView
             android:id="@+id/btnTodoBack"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:layout_width="39dp"
             android:background="#D5353535"
             android:layout_height="39dp"
@@ -73,38 +73,47 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:textColor="#FFFFFF"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:textSize="24sp"
                 android:text="Add Task"/>
 
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
-    <ExpandableListView
-        android:id="@+id/todoExpandableListView"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnTodoAddTask"
-        android:layout_width="match_parent"
-        android:layout_height="525sp"/>
+        app:layout_constraintTop_toBottomOf="@+id/btnTodoAddTask" />
 
-    <FrameLayout
-        android:id="@+id/todoframelayout"
-        app:layout_constraintTop_toTopOf="@+id/bottomNavView"
-        app:layout_constraintTop_toBottomOf="@+id/todoExpandableListView"
-        android:layout_width="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_height="0dp"/>
+    <!--    <ExpandableListView-->
+    <!--        android:id="@+id/todoExpandableListView"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/btnTodoAddTask"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="525sp"/>-->
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavView"
-        android:layout_width="match_parent"
-        android:background="#D5353535"
-        android:layout_height="60sp"
-        app:itemIconTint="#FFFFFF"
-        app:menu="@menu/bottom_nav"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+    <!--    <FrameLayout-->
+    <!--        android:id="@+id/todoframelayout"-->
+    <!--        app:layout_constraintTop_toTopOf="@+id/bottomNavView"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/todoExpandableListView"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        android:layout_height="0dp"/>-->
+
+    <!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
+    <!--        android:id="@+id/bottomNavView"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:background="#D5353535"-->
+    <!--        android:layout_height="60sp"-->
+    <!--        app:itemIconTint="#FFFFFF"-->
+    <!--        app:menu="@menu/bottom_nav"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
