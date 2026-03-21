@@ -17,7 +17,6 @@ import com.google.firebase.auth.auth
 
 class SignUpFragment : Fragment() {
 
-    private lateinit var auth: FirebaseAuth
     private lateinit var binding: FragmentSignUpBinding
     private lateinit var navController: NavController
 
@@ -33,11 +32,13 @@ class SignUpFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentSignUpBinding.inflate(inflater,container,false)
 
-        auth = FirebaseAuth.getInstance()
 
         binding.btnNextSignUp.setOnClickListener {
             if (checkAllFields()) {
-                signUp(binding.etEmailSignup.text.toString(),binding.etPasswordSignup.text.toString())
+                navController.navigate(R.id.action_signUpFragment_to_completeProfileFragment, Bundle().apply {
+                    putString("email", binding.etEmailSignup.text.toString())
+                    putString("password", binding.etPasswordSignup.text.toString())
+                })
             }
         }
 
@@ -75,20 +76,6 @@ class SignUpFragment : Fragment() {
             return false
         }
         return true
-    }
-
-    private fun signUp(email: String, password:String){
-        auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener{task->
-            if(task.isSuccessful){
-                navController.navigate(R.id.action_signUpFragment_to_completeProfileFragment)
-            }else{
-                Toast.makeText(
-                    context,
-                    "SignUp failed.",
-                    Toast.LENGTH_SHORT,
-                ).show()
-            }
-        }
     }
 
 }

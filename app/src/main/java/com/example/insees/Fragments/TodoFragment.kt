@@ -95,8 +95,7 @@ class TodoFragment : Fragment(), PopUpFragment.DialogAddBtnClickListener,
     private fun init(view: View) {
 
         auth= FirebaseAuth.getInstance()
-        databaseRef=FirebaseDatabase.getInstance().reference
-            .child("Tasks")
+        databaseRef=FirebaseDatabase.getInstance().getReference("users")
             .child(auth.currentUser?.uid.toString())
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.layoutManager=LinearLayoutManager(context)
@@ -123,7 +122,7 @@ class TodoFragment : Fragment(), PopUpFragment.DialogAddBtnClickListener,
             "date" to todoDate
         )
 
-        databaseRef.push().setValue(task).addOnCompleteListener { task ->
+        databaseRef.child("Tasks").push().setValue(task).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Toast.makeText(context, "Todo Saved Successfully", Toast.LENGTH_SHORT).show()
                 todoTitleEt.text = null
