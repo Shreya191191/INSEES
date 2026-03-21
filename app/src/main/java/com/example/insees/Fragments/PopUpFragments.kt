@@ -4,22 +4,15 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
-import com.example.insees.R
+import com.example.insees.DialogAddBtnClickListener
 import com.example.insees.databinding.FragmentPopUpBinding
-import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import java.util.Calendar
@@ -28,10 +21,10 @@ class PopUpFragment : DialogFragment(),DatePickerDialog.OnDateSetListener,TimePi
 
     private lateinit var binding:FragmentPopUpBinding
     private lateinit var databaseRef:DatabaseReference
-    private lateinit var listener:DialogAddBtnClickListener
+    private lateinit var listener: DialogAddBtnClickListener
 
     fun setListener(listener:DialogAddBtnClickListener){
-        this.listener=listener
+        this.listener = listener
     }
 
     var day=0
@@ -44,12 +37,12 @@ class PopUpFragment : DialogFragment(),DatePickerDialog.OnDateSetListener,TimePi
     var savedMonth=0
     var savedYear=0
     var savedHour=0
-    var savedMinute=0
+    var savedMinute = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding=FragmentPopUpBinding.inflate(inflater,container,false)
         return binding.root
@@ -60,7 +53,6 @@ class PopUpFragment : DialogFragment(),DatePickerDialog.OnDateSetListener,TimePi
 
         init(view)
         registerEvents()
-
         pickDate()
         pickTime()
 
@@ -78,27 +70,11 @@ class PopUpFragment : DialogFragment(),DatePickerDialog.OnDateSetListener,TimePi
             }else{
                 Toast.makeText(context,"Please complete all the required fields",Toast.LENGTH_SHORT).show()
             }
-
         }
         binding.cancelPopUpButton.setOnClickListener {
             dismiss()
         }
-
     }
-
-    interface DialogAddBtnClickListener {
-        fun onSaveTask(
-            todoTitle: String,
-            todoTitleEt: EditText,
-            todoDesc: String,
-            todoDescEt: EditText,
-            todoTime: String,
-            todoTimeEt: TextView,
-            todoDate: String,
-            todoDateEt: TextView
-        )
-    }
-
     private fun init(view: View) {
 
         databaseRef=FirebaseDatabase.getInstance().reference
@@ -145,10 +121,11 @@ class PopUpFragment : DialogFragment(),DatePickerDialog.OnDateSetListener,TimePi
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
 
         savedHour=hourOfDay
-        savedMinute=minute
+        savedMinute = if(minute < 10)
+            "0$minute"
+        else
+            minute.toString()
 
         binding.etPopUpTaskTime.text="$savedHour:$savedMinute"
-
     }
-
 }

@@ -7,8 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.GridView
-import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.example.insees.Dataclasses.GridViewModal
+import com.example.insees.databinding.FragmentInseesAboutInseesBinding
+
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
 /**
@@ -19,12 +21,17 @@ import com.example.insees.Dataclasses.GridViewModal
 class InseesAboutInseesFragment : Fragment() {
     lateinit var MemberGRV: GridView
     lateinit var MemberList: List<GridViewModal>
+    lateinit var binding: FragmentInseesAboutInseesBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
-        val view =inflater.inflate(R.layout.fragment_insees_about_insees, container, false)
+        binding = FragmentInseesAboutInseesBinding.inflate(inflater, container, false)
+        val view = binding.root
 
+        binding.btnBackHomeFromInsees.setOnClickListener {
+            findNavController().navigate(R.id.action_inseesAboutInseesFragment_to_homeFragment)
+        }
         MemberGRV = view.findViewById(R.id.idgv)
         MemberList = ArrayList<GridViewModal>()
 
