@@ -1,5 +1,6 @@
 package com.example.insees
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -61,9 +62,9 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
             navController.navigate(R.id.action_homeFragment_to_inseesAboutInseesFragment)
         }
 
-//        binding.cardViewMembers.setOnClickListener{
-//            navController.navigate(R.id.)
-//        }
+        binding.cardViewMembers.setOnClickListener{
+            navController.navigate(R.id.action_homeFragment_to_aboutMembersFragment)
+        }
 
         binding.btnViewAll.setOnClickListener {
             navController.navigate(R.id.action_homeFragment_to_todoFragment)
@@ -83,9 +84,11 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
             if(userData.exists())
             {
                 val name = userData.child("name").getValue(String::class.java)
+                val profilePhoto = userData.child("profile_photo").getValue(String::class.java)?.let { Uri.parse(it) }
                 var userName = name
                 userName = "Hello $userName"
                 binding.tvHello.text = userName
+                binding.btnProfile.setImageURI(profilePhoto)
             }
             else
             {

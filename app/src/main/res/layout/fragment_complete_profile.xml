@@ -106,6 +106,15 @@
                         android:visibility="gone"
                         android:contentDescription="profile photo" />
 
+
+                    <Button
+                        android:id="@+id/close_image"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/baseline_close_24"
+                        android:layout_gravity="right"
+                        android:visibility="gone"/>
+
                     <LinearLayout
                         android:id="@+id/profile_layout"
                         android:layout_width="match_parent"
