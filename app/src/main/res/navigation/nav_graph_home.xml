@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_home"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/todoFragment"
+        android:name="com.example.insees.Fragments.TodoFragment"
+        android:label="fragment_todo"
+        tools:layout="@layout/fragment_todo" >
+        <action
+            android:id="@+id/action_todoFragment_to_semesterFragment"
+            app:destination="@id/semesterFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/semesterFragment"
+        android:name="com.example.insees.Fragments.SemesterFragment"
+        android:label="fragment_semester"
+        tools:layout="@layout/fragment_semester" >
+        <action
+            android:id="@+id/action_semesterFragment_to_todoFragment"
+            app:destination="@id/todoFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/popUpFragment"
+        android:name="com.example.insees.Fragments.PopUpFragment"
+        android:label="fragment_pop_up"
+        tools:layout="@layout/fragment_pop_up" />
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.insees.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_todoFragment"
+            app:destination="@id/todoFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_popUpFragment"
+            app:destination="@id/popUpFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/inseesAboutInseesFragment"
+        android:name="com.example.insees.InseesAboutInseesFragment"
+        android:label="fragment_insees_about_insees"
+        tools:layout="@layout/fragment_insees_about_insees" />
+    <fragment
+        android:id="@+id/inseesAboutUsFragment"
+        android:name="com.example.insees.InseesAboutUsFragment"
+        android:label="fragment_insees_about_us"
+        tools:layout="@layout/fragment_insees_about_us" >
+        <action
+            android:id="@+id/action_inseesAboutUsFragment_to_inseesAboutInseesFragment"
+            app:destination="@id/inseesAboutInseesFragment" />
+    </fragment>
+</navigation>
