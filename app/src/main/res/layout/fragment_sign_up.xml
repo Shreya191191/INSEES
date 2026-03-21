@@ -11,7 +11,7 @@
         android:layout_height="match_parent">
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="50sp"
             android:layout_marginHorizontal="12dp">
 
@@ -24,7 +24,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="SignUp Now"
+                    android:text="Sign-Up Now"
                     android:textStyle="bold"
                     android:textSize="16sp"
                     android:textColor="@color/primaryText"/>
@@ -74,6 +74,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:inputType="textEmailAddress"
+                        android:textColor="@color/primaryText"
                         android:background="#00000000"
                         android:padding="4dp"
                         android:ems="15"/>
@@ -101,6 +102,7 @@
                         android:id="@+id/et_password_signup"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:textColor="@color/primaryText"
                         android:inputType="textPassword"
                         android:background="#00000000"
                         android:padding="4dp"
@@ -110,7 +112,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Confirm Password"
+                    android:text="@string/confirm_password"
                     android:textStyle="bold"
                     android:textSize="12sp"
                     android:textColor="@color/primaryText"

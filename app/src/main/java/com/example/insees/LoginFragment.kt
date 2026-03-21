@@ -2,11 +2,11 @@ package com.example.insees
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.insees.databinding.FragmentLoginBinding
@@ -25,7 +25,7 @@ class LoginFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentLoginBinding.inflate(inflater,container,false)
 
@@ -38,7 +38,12 @@ class LoginFragment : Fragment() {
         binding.btnLogin.setOnClickListener {
             val email = binding.etEmailLogin.text.toString()
             val password = binding.etPasswordLogin.text.toString()
-            login(email, password)
+            if (email.isNotEmpty() && password.isNotEmpty() )
+                login(email, password)
+            else
+            {
+                Toast.makeText(requireContext(), "Enter Your Details", Toast.LENGTH_SHORT).show()
+            }
         }
 
         return binding.root
@@ -49,6 +54,7 @@ class LoginFragment : Fragment() {
             if (task.isSuccessful){
                 val intent = Intent(context, HomeActivity::class.java)
                 startActivity(intent)
+                requireActivity().finish()
             }
         }.addOnFailureListener {exception->
             Toast.makeText(context, exception.localizedMessage, Toast.LENGTH_LONG).show()
