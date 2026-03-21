@@ -27,9 +27,18 @@ class InseesAboutUsFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentInseesAboutUsBinding.inflate(inflater,container,false)
 
-        binding.imageButton1.setOnClickListener{
+        binding.inseesLayout.setOnClickListener{
             navController.navigate(R.id.action_inseesAboutUsFragment_to_inseesAboutInseesFragment)
         }
+
+        binding.aboutMembers.setOnClickListener {
+            navController.navigate(R.id.action_inseesAboutUsFragment_to_aboutMembersFragment)
+        }
+
+        binding.imageButton.setOnClickListener {
+            navController.navigate(R.id.action_inseesAboutUsFragment_to_aboutMembersFragment)
+        }
+
         return binding.root
     }
 
