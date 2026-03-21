@@ -1,6 +1,7 @@
 package com.example.insees
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -20,9 +21,9 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.insees.databinding.FragmentCompleteProfileBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
+@Suppress("DEPRECATION")
 class CompleteProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentCompleteProfileBinding
@@ -61,7 +62,6 @@ class CompleteProfileFragment : Fragment() {
 
         binding.uploadImage.setOnClickListener {
             galleryLauncher.launch("image/*")
-
         }
 
         binding.btnNextCompleteProfile.setOnClickListener {
@@ -110,7 +110,6 @@ class CompleteProfileFragment : Fragment() {
                 }
             }
 
-
         galleryLauncher =
             registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
                 binding.profilePhoto.apply {
@@ -121,6 +120,7 @@ class CompleteProfileFragment : Fragment() {
             }
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     private fun openCamera() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if (takePictureIntent.resolveActivity(requireActivity().packageManager) != null) {
@@ -170,6 +170,7 @@ class CompleteProfileFragment : Fragment() {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED
 
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,

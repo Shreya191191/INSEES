@@ -18,7 +18,7 @@ class SemesterFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding=FragmentSemesterBinding.inflate(inflater,container,false)
         return binding.root
@@ -33,10 +33,7 @@ class SemesterFragment : Fragment() {
 
 
 
-        binding.btnSemesterBack.setOnClickListener {
-            findNavController().navigate(R.id.action_semesterFragment_to_todoFragment)
+        findNavController().navigate(R.id.action_semesterFragment_to_homeFragment)
         }
-
-    }
 
 }
