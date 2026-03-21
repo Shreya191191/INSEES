@@ -1,52 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".SignUpFragment"
-    android:background="@color/background">
+    android:background="@color/background"
+    tools:context=".SignUpFragment">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50sp"
-            android:layout_marginHorizontal="12dp">
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginTop="50sp">
 
             <LinearLayout
+                android:id="@+id/signup_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/signup_text"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Sign-Up Now"
-                    android:textStyle="bold"
+                    android:textColor="@color/primaryText"
                     android:textSize="16sp"
-                    android:textColor="@color/primaryText"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text=""
-                    android:textSize="12sp"
                     android:alpha="0.75"
-                    android:textColor="@color/primaryText"/>
+                    android:text=""
+                    android:textColor="@color/primaryText"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
             <ImageView
+                android:id="@+id/signup_icon"
                 android:layout_width="240dp"
                 android:layout_height="240dp"
+                android:layout_below="@id/signup_text"
                 android:layout_centerHorizontal="true"
                 android:layout_marginVertical="32dp"
-                android:id="@+id/signup_icon"
-                android:src="@drawable/signup"
-                android:layout_below="@id/signup_text"/>
+                android:src="@drawable/signup" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -57,67 +59,67 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
                     android:text="Email ID"
-                    android:textStyle="bold"
-                    android:textSize="12sp"
                     android:textColor="@color/primaryText"
-                    android:layout_marginBottom="5dp"/>
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/et_email_signup_layout"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:background="@drawable/rounded_edit_text"
-                    >
+                    android:background="@drawable/rounded_edit_text">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_email_signup"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:inputType="textEmailAddress"
-                        android:textColor="@color/primaryText"
                         android:background="#00000000"
+                        android:ems="15"
+                        android:inputType="textEmailAddress"
                         android:padding="4dp"
-                        android:ems="15"/>
+                        android:textColor="@color/primaryText" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Password"
-                    android:textStyle="bold"
-                    android:textSize="12sp"
-                    android:textColor="@color/primaryText"
                     android:layout_marginTop="20dp"
-                    android:layout_marginBottom="5dp"/>
+                    android:layout_marginBottom="5dp"
+                    android:text="Password"
+                    android:textColor="@color/primaryText"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
 
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/et_password_signup_layout"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    app:passwordToggleEnabled="true"
                     android:background="@drawable/rounded_edit_text"
-                    >
+                    app:passwordToggleEnabled="true">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_password_signup"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:textColor="@color/primaryText"
-                        android:inputType="textPassword"
                         android:background="#00000000"
+                        android:ems="15"
+                        android:inputType="textPassword"
                         android:padding="4dp"
-                        android:ems="15"/>
+                        android:textColor="@color/primaryText" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/confirm_password"
-                    android:textStyle="bold"
-                    android:textSize="12sp"
-                    android:textColor="@color/primaryText"
                     android:layout_marginTop="20dp"
-                    android:layout_marginBottom="5dp"/>
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/confirm_password"
+                    android:textColor="@color/primaryText"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
 
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -125,50 +127,51 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:background="@drawable/rounded_edit_text"
-                    app:passwordToggleEnabled="true"
-                    >
+                    app:passwordToggleEnabled="true">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_confirm_password"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:inputType="textPassword"
                         android:background="#00000000"
+                        android:ems="15"
+                        android:inputType="textPassword"
                         android:padding="4dp"
-                        android:ems="15"/>
+                        android:textColor="@color/primaryText" />
                 </com.google.android.material.textfield.TextInputLayout>
 
 
                 <Button
-                    android:layout_width="match_parent"
                     android:id="@+id/btn_next_sign_up"
-                    android:background="@drawable/rounded_button"
+                    android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:text="Next"
                     android:layout_marginTop="25dp"
-                    android:textSize="12sp"
-                    />
+                    android:background="@drawable/rounded_button"
+                    android:text="Next"
+                    android:textSize="12sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_marginTop="5dp"
                     android:gravity="center"
-                    android:layout_marginTop="5dp">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Already have an account?"
                         android:textColor="@color/primaryText"
-                        android:textSize="12sp"/>
+                        android:textSize="12sp" />
+
                     <TextView
+                        android:id="@+id/tv_login"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:textColor="@color/primaryText"
-                        android:id="@+id/tv_login"
                         android:text="Login Now"
-                        android:textSize="12sp"/>
+                        android:textColor="@color/primaryText"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 

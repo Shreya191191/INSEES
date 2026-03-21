@@ -1,42 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/semester_subject"
+    android:id="@+id/cardItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginVertical="5dp"
-    app:cardCornerRadius="10dp"
+    android:layout_marginHorizontal="8dp"
+    app:cardCornerRadius="8dp"
     app:cardElevation="5dp"
     app:cardUseCompatPadding="true">
 
+    <!-- Parent ConstraintLayout -->
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint1"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="#D5353535"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:background="#353535"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="16dp">
 
+        <!-- Parent Title -->
         <TextView
-            android:id="@+id/subject_name"
+            android:id="@+id/parentTitleTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:padding="10dp"
-            android:text="Subject 1"
-            android:textColor="@color/white"
+            android:text="Semester 1"
+            android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/study_material_icon"
-            android:layout_width="50sp"
-            android:layout_height="50sp"
-            android:layout_marginTop="4dp"
-            android:padding="10dp"
-            android:src="@drawable/_0_804566_white_vector_png"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </com.google.android.material.card.MaterialCardView>
