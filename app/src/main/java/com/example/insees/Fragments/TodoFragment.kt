@@ -1,20 +1,17 @@
 package com.example.insees.Fragments
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.insees.DialogAddBtnClickListener
 import com.example.insees.R
 import com.example.insees.Utils.ToDoAdapter
 import com.example.insees.Utils.ToDoData
@@ -26,7 +23,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class TodoFragment : Fragment(), PopUpFragment.DialogAddBtnClickListener,
+class TodoFragment : Fragment(), DialogAddBtnClickListener,
     ToDoAdapter.ToDoAdapterClicksInterface {
 
     private lateinit var binding:FragmentTodoBinding
@@ -39,8 +36,8 @@ class TodoFragment : Fragment(), PopUpFragment.DialogAddBtnClickListener,
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    ): View {
+
         binding= FragmentTodoBinding.inflate(inflater,container,false)
         return binding.root
     }
@@ -48,12 +45,12 @@ class TodoFragment : Fragment(), PopUpFragment.DialogAddBtnClickListener,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        init(view)
+        init()
         getDataFromFirebase()
         registerEvents()
 
         binding.btnTodoBack.setOnClickListener {
-            findNavController().navigate(R.id.action_todoFragment_to_semesterFragment)
+            findNavController().navigate(R.id.action_todoFragment_to_homeFragment)
         }
     }
 
@@ -84,20 +81,18 @@ class TodoFragment : Fragment(), PopUpFragment.DialogAddBtnClickListener,
 
     private fun registerEvents() {
         binding.btnTodoAddTask.setOnClickListener {
-            popUpFragment= PopUpFragment()
+            popUpFragment = PopUpFragment()
             popUpFragment.setListener(this)
             popUpFragment.show(childFragmentManager,
                 "PopUpFragment")
-
         }
     }
 
-    private fun init(view: View) {
+    private fun init() {
 
         auth= FirebaseAuth.getInstance()
         databaseRef=FirebaseDatabase.getInstance().getReference("users")
             .child(auth.currentUser?.uid.toString())
-            .child("Tasks")
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.layoutManager=LinearLayoutManager(context)
         mList= mutableListOf()
@@ -123,15 +118,15 @@ class TodoFragment : Fragment(), PopUpFragment.DialogAddBtnClickListener,
             "date" to todoDate
         )
 
-        databaseRef.push().setValue(task).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
+        databaseRef.child("Tasks").push().setValue(task).addOnCompleteListener { tasks ->
+            if (tasks.isSuccessful) {
                 Toast.makeText(context, "Todo Saved Successfully", Toast.LENGTH_SHORT).show()
                 todoTitleEt.text = null
                 todoDescEt.text = null
                 todoDateEt.text = null
                 todoTimeEt.text = null
             } else {
-                Toast.makeText(context, task.exception.toString(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, tasks.exception.toString(), Toast.LENGTH_SHORT).show()
             }
             popUpFragment.dismiss()
         }
