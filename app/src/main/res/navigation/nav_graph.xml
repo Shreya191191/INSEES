@@ -35,6 +35,15 @@
         <action
             android:id="@+id/action_signUpFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+
+        <!-- ✅ Added from second file -->
+        <argument
+            android:name="email"
+            app:argType="string" />
+
+        <argument
+            android:name="password"
+            app:argType="string" />
     </fragment>
 
     <!-- Login -->
@@ -88,5 +97,12 @@
             android:id="@+id/action_todoFragment_to_semesterFragment"
             app:destination="@id/semesterFragment" />
     </fragment>
+
+    <!-- Popup Dialog -->
+    <dialog
+        android:id="@+id/popUpFragment"
+        android:name="com.example.insees.Fragments.PopUpFragment"
+        android:label="fragment_pop_up"
+        tools:layout="@layout/fragment_pop_up" />
 
 </navigation>

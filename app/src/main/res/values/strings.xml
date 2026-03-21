@@ -3,4 +3,25 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="insees">INSEES</string>
+    <string name="hello_shreya" />
+    <string name="good_wishes" />
+    <string name="user" />
+    <string name="view_all"><![CDATA[View All >]]></string>
+    <string name="_9">9</string>
+    <string name="my_todo_s">My ToDo\'s</string>
+    <string name="hello">Hello Shreya</string>
+    <string name="good_morning">Good Morning</string>
+    <string name="study">Study</string>
+    <string name="todo">Todo</string>
+    <string name="aboutus">AboutUs</string>
+    <string name="home">Home</string>
+    <string name="my_to_dos">My Tasks</string>
+    <string name="task_title">Task Title</string>
+    <string name="tod">TODO</string>
+    <string name="add_task">Add Task</string>
+    <string name="other_resources">Other Resources</string>
+    <string name="study_materials">Study Materials</string>
+    <string name="profile">Profile</string>
+    <string name="members">Members</string>
+    <string name="t">TODO</string>
 </resources>
