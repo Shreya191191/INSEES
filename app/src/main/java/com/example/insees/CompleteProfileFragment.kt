@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -19,8 +20,8 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.insees.databinding.FragmentCompleteProfileBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 class CompleteProfileFragment : Fragment() {
 
@@ -29,6 +30,8 @@ class CompleteProfileFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var cameraLauncher: ActivityResultLauncher<Intent>
     private lateinit var galleryLauncher: ActivityResultLauncher<String>
+    private lateinit var database: FirebaseDatabase
+    private lateinit var profilePhoto: String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -41,14 +44,18 @@ class CompleteProfileFragment : Fragment() {
     ): View {
         binding = FragmentCompleteProfileBinding.inflate(inflater, container, false)
 
+        requestPermissions()
+
         auth = FirebaseAuth.getInstance()
 
-        val db = Firebase.firestore
+        database = FirebaseDatabase.getInstance()
+
+        val email = requireArguments().getString("email")!!
+        val password = requireArguments().getString("password")!!
 
         initActivityResultLaunchers()
 
         binding.openCamera.setOnClickListener {
-            requestPermissions()
             openCamera()
         }
 
@@ -58,20 +65,34 @@ class CompleteProfileFragment : Fragment() {
         }
 
         binding.btnNextCompleteProfile.setOnClickListener {
-            if (validateField()) {
-                val name = binding.etNameCompleteProfile.toString()
-                val profilePhoto = binding.profilePhoto.toString()
-                val user = hashMapOf(
-                    "name" to name,
-                    "profile_photo" to profilePhoto
-                )
-
-                db.collection("users")
-                    .add(user)
-            }
+            signUp(email, password)
         }
 
         return binding.root
+    }
+
+    private fun signUp(email: String, password:String){
+        auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener{task->
+            if(task.isSuccessful){
+                if (validateField()) {
+                    val name = binding.etNameCompleteProfile.text.toString()
+                    val uid = auth.currentUser?.uid.toString()
+                    val user = hashMapOf(
+                        "name" to name,
+                        "profile_photo" to profilePhoto
+                    )
+
+                    val databaseRef = database.getReference("users")
+
+                    databaseRef.child(uid).setValue(user)
+
+                    val intent = Intent(context, HomeActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+        }.addOnFailureListener { exception->
+            Toast.makeText(context, exception.localizedMessage, Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun initActivityResultLaunchers() {
@@ -84,6 +105,7 @@ class CompleteProfileFragment : Fragment() {
                     binding.profilePhoto.apply {
                         visibility= View.VISIBLE
                         setImageBitmap(selectedImageBitmap)
+                        profilePhoto = selectedImageBitmap.toString()
                     }
                 }
             }
@@ -94,6 +116,7 @@ class CompleteProfileFragment : Fragment() {
                 binding.profilePhoto.apply {
                     visibility= View.VISIBLE
                     setImageURI(uri)
+                    profilePhoto = uri.toString()
                 }
             }
     }
@@ -161,4 +184,5 @@ class CompleteProfileFragment : Fragment() {
             }
         }
     }
+
 }

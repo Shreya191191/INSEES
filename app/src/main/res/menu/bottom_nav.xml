@@ -4,25 +4,25 @@
     <item
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/home"
+        android:id="@+id/homeFragment"
         android:title=""
         android:icon="@drawable/baseline_home_24"/>
     <item
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/style_material"
+        android:id="@+id/semesterFragment"
         android:title=""
         android:icon="@drawable/baseline_article_24"/>
     <item
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/todos"
+        android:id="@+id/todoFragment"
         android:title=""
         android:icon="@drawable/baseline_checklist_24"/>
     <item
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/about_us"
+        android:id="@+id/inseesAboutUsFragment"
         android:title=""
         android:icon="@drawable/baseline_info_24"/>
 </menu>

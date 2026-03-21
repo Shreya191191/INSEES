@@ -7,12 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import com.example.insees.databinding.FragmentInseesAboutUsBinding
+import com.example.insees.databinding.FragmentHomeBinding
+import com.example.insees.databinding.FragmentIntroBinding
 
+class HomeFragment : Fragment() {
 
-class InseesAboutUsFragment : Fragment() {
-
-    private lateinit var binding: FragmentInseesAboutUsBinding
+    private lateinit var binding: FragmentHomeBinding
     private lateinit var navController: NavController
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -25,12 +25,16 @@ class InseesAboutUsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentInseesAboutUsBinding.inflate(inflater,container,false)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        binding.imageButton1.setOnClickListener{
-            navController.navigate(R.id.action_inseesAboutUsFragment_to_inseesAboutInseesFragment)
+        binding.btnViewAll.setOnClickListener {
+            navController.navigate(R.id.action_homeFragment_to_todoFragment)
         }
+
+        binding.btnAddTask.setOnClickListener{
+            navController.navigate(R.id.action_homeFragment_to_popUpFragment)
+        }
+
         return binding.root
     }
-
 }
