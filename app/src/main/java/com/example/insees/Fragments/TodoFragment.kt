@@ -93,6 +93,7 @@ class TodoFragment : Fragment(), DialogAddBtnClickListener,
         auth= FirebaseAuth.getInstance()
         databaseRef=FirebaseDatabase.getInstance().getReference("users")
             .child(auth.currentUser?.uid.toString())
+            .child("Tasks")
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.layoutManager=LinearLayoutManager(context)
         mList= mutableListOf()
@@ -118,7 +119,7 @@ class TodoFragment : Fragment(), DialogAddBtnClickListener,
             "date" to todoDate
         )
 
-        databaseRef.child("Tasks").push().setValue(task).addOnCompleteListener { tasks ->
+        databaseRef.push().setValue(task).addOnCompleteListener { tasks ->
             if (tasks.isSuccessful) {
                 Toast.makeText(context, "Todo Saved Successfully", Toast.LENGTH_SHORT).show()
                 todoTitleEt.text = null
@@ -156,7 +157,6 @@ class TodoFragment : Fragment(), DialogAddBtnClickListener,
                         }
                     }
                 }
-
                 override fun onCancelled(error: DatabaseError) {
                     Toast.makeText(context,error.message,Toast.LENGTH_SHORT).show()
                 }
