@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".HomeFragment">
+    tools:context=".Fragments.HomeFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
@@ -85,14 +85,15 @@
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/rounded_textview_bg"
                 android:padding="8dp"
                 android:text="@string/my_to_dos"
                 android:textColor="@color/white"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.028"
+                app:layout_constraintHorizontal_bias="0.027"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -127,68 +128,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textView">
 
-                <TextView
-                    android:id="@+id/task1"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvTodo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/rounded_textview_bg"
-                    android:backgroundTint="#E4AD1C"
-                    android:elevation="80dp"
-                    android:gravity="center"
-                    android:padding="16dp"
-                    android:text="@string/task_title"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    app:drawableEndCompat="@drawable/baseline_delete_24"
-                    tools:ignore="TextContrastCheck" />
-
-                <TextView
-                    android:id="@+id/task2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/rounded_textview_bg"
-                    android:backgroundTint="#6F4BD7"
-                    android:elevation="80dp"
-                    android:gravity="center"
-                    android:padding="16dp"
-                    android:text="@string/task_title"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    app:drawableEndCompat="@drawable/baseline_delete_24" />
-
-                <TextView
-                    android:id="@+id/task3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/rounded_textview_bg"
-                    android:backgroundTint="#28A853"
-                    android:elevation="80dp"
-                    android:gravity="center"
-                    android:padding="16dp"
-                    android:text="@string/task_title"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    app:drawableEndCompat="@drawable/baseline_delete_24"
-                    tools:ignore="TextContrastCheck" />
-
-                <TextView
-                    android:id="@+id/task4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/rounded_textview_bg"
-                    android:backgroundTint="#DF392E"
-                    android:elevation="80dp"
-                    android:gravity="center"
-                    android:padding="16dp"
-                    android:text="@string/task_title"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    app:drawableEndCompat="@drawable/baseline_delete_24"
-                    tools:ignore="TextContrastCheck" />
+                    android:visibility="gone"
+                    tools:itemCount="4"
+                    tools:listitem="@layout/item_task"/>
 
                 <Button
                     android:id="@+id/btnAddTask"

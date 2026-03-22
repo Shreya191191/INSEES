@@ -28,30 +28,30 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:orientation="vertical">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Your Todos"
+                android:text="@string/your_todos"
                 android:textSize="23sp"
                 android:textStyle="bold"
                 android:textColor="@color/white"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="CONTENT TO BE WRITTEN!!"
+                android:text="@string/content_to_be_written"
                 android:textColor="@color/white"/>
         </LinearLayout>
 
     </LinearLayout>
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/btnTodoAddTask"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
         app:cardBackgroundColor="#D5353535"
-        android:layout_margin="10dp"
-        android:layout_height="60dp"
+        android:layout_margin="16dp"
         app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,12 +60,14 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_gravity="center"
+            android:padding="16dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:src="@drawable/baseline_add_box_24"/>
 
             <TextView
@@ -74,46 +76,21 @@
                 android:textStyle="bold"
                 android:textColor="#FFFFFF"
                 android:layout_marginStart="10dp"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:text="Add Task"/>
 
         </LinearLayout>
 
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnTodoAddTask" />
-
-    <!--    <ExpandableListView-->
-    <!--        android:id="@+id/todoExpandableListView"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/btnTodoAddTask"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="525sp"/>-->
-
-    <!--    <FrameLayout-->
-    <!--        android:id="@+id/todoframelayout"-->
-    <!--        app:layout_constraintTop_toTopOf="@+id/bottomNavView"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/todoExpandableListView"-->
-    <!--        android:layout_width="0dp"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        android:layout_height="0dp"/>-->
-
-    <!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
-    <!--        android:id="@+id/bottomNavView"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:background="#D5353535"-->
-    <!--        android:layout_height="60sp"-->
-    <!--        app:itemIconTint="#FFFFFF"-->
-    <!--        app:menu="@menu/bottom_nav"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
