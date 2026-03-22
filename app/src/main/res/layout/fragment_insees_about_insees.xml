@@ -20,13 +20,14 @@
         android:id="@+id/textView2"
         android:layout_width="351dp"
         android:layout_height="32dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/bentham"
         android:paddingStart="30dp"
         android:text="About INSEES"
         android:textColor="@color/white"
         android:textSize="24dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btnBackHomeFromInsees"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,7 +36,6 @@
         android:layout_width="351dp"
         android:layout_height="17dp"
         android:paddingStart="30dp"
-        android:text="Some Content"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
