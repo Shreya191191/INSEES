@@ -56,9 +56,7 @@ class TodoFragment : Fragment(), DialogAddBtnClickListener{
         initSwipe()
         getDataFromFirebase()
         registerEvents()
-        binding.btnTodoBack.setOnClickListener {
-            findNavController().navigate(R.id.action_todoFragment_to_homeFragment)
-        }
+
     }
 
     private fun getDataFromFirebase() {

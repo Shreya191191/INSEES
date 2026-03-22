@@ -9,11 +9,7 @@
         android:id="@+id/todoFragment"
         android:name="com.example.insees.Fragments.TodoFragment"
         android:label="fragment_todo"
-        tools:layout="@layout/fragment_todo" >
-        <action
-            android:id="@+id/action_todoFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_todo" />
     <fragment
         android:id="@+id/semesterFragment"
         android:name="com.example.insees.Fragments.SemesterFragment"
@@ -70,8 +66,8 @@
         android:label="fragment_insees_about_insees"
         tools:layout="@layout/fragment_insees_about_insees" >
         <action
-            android:id="@+id/action_inseesAboutInseesFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            android:id="@+id/action_inseesAboutInseesFragment_to_inseesAboutUsFragment"
+            app:destination="@id/inseesAboutUsFragment" />
     </fragment>
     <fragment
         android:id="@+id/inseesAboutUsFragment"
