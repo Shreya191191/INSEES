@@ -1,14 +1,15 @@
 package com.example.insees.Fragments
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.insees.R
 import com.example.insees.databinding.FragmentInseesAboutUsBinding
+
 
 class InseesAboutUsFragment : Fragment() {
 
@@ -27,17 +28,38 @@ class InseesAboutUsFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentInseesAboutUsBinding.inflate(inflater,container,false)
 
-        binding.inseesLayout.setOnClickListener{
-            navController.navigate(R.id.action_inseesAboutUsFragment_to_inseesAboutInseesFragment)
+        val membersFragment = InseesAboutInseesFragment()
+        val aboutinseesFragment = AboutMembersFragment()
+        childFragmentManager.beginTransaction().apply {
+            replace(R.id.flfragmentaboutus,membersFragment)
+            commit()
+        }
+        binding.membersbtn.setOnClickListener {
+            childFragmentManager.beginTransaction().apply {
+                replace(R.id.flfragmentaboutus,membersFragment)
+                commit()
+            }
         }
 
-        binding.aboutMembers.setOnClickListener {
-            navController.navigate(R.id.action_inseesAboutUsFragment_to_aboutMembersFragment)
+        binding.developersbtn.setOnClickListener {
+            childFragmentManager.beginTransaction().apply {
+                replace(R.id.flfragmentaboutus, aboutinseesFragment)
+                commit()
+            }
         }
 
-        binding.imageButton3.setOnClickListener {
-            navController.navigate(R.id.action_inseesAboutUsFragment_to_aboutMembersFragment)
-        }
+
+//        binding.inseesLayout.setOnClickListener{
+//            navController.navigate(R.id.action_inseesAboutUsFragment_to_inseesAboutInseesFragment)
+//        }
+//
+//        binding.aboutMembers.setOnClickListener {
+//            navController.navigate(R.id.action_inseesAboutUsFragment_to_aboutMembersFragment)
+//        }
+//
+//        binding.imageButton3.setOnClickListener {
+//            navController.navigate(R.id.action_inseesAboutUsFragment_to_aboutMembersFragment)
+//        }
 
         return binding.root
     }
