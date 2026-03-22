@@ -18,10 +18,6 @@ class AboutMembersFragment : Fragment() {
         // Inflate the layout for this fragment
         binding= FragmentAboutMembersBinding.inflate(inflater,container,false)
 
-        binding.btnSemesterBack.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
-        }
-
         return binding.root
 
     }
