@@ -12,7 +12,7 @@
     <color name="theme">#353535</color>
 
     <!-- Red Shades -->
-    <color name="darkRed">#D32F2F</color>
+    <color name="darkRed">#DF392E</color>
     <color name="mediumRed">#F44336</color>
     <color name="lightRed">#EF5350</color>
 
@@ -23,7 +23,7 @@
 
     <!-- Green Shades -->
     <color name="darkGreen">#388E3C</color>
-    <color name="mediumGreen">#4CAF50</color>
+    <color name="mediumGreen">#28A853</color>
     <color name="lightGreen">#81C784</color>
 
     <!-- Yellow Shades -->
@@ -54,5 +54,12 @@
     <color name="silver">#C0C0C0</color>
     <color name="lighttyellow">#E4AD1C</color>
     <color name="purpleblue">#6F4BD7</color>
+
+    <array name="colorResources">
+        <item name="lighttyellow">#E4AD1C</item>
+        <item name="purpleblue">#6F4BD7</item>
+        <item name="mediumGreen">#28A853</item>
+        <item name="darkRed">#DF392E</item>
+    </array>
 
 </resources>

@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#000000"
     android:layout_height="match_parent"
-    tools:context=".AboutMembersFragment">
+    tools:context=".Fragments.AboutMembersFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"

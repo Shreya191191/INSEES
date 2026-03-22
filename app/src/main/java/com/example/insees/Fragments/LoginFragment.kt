@@ -1,4 +1,4 @@
-package com.example.insees
+package com.example.insees.Fragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.example.insees.Activities.HomeActivity
+import com.example.insees.R
 import com.example.insees.databinding.FragmentLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 

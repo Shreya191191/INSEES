@@ -35,4 +35,6 @@
     <string name="create_a_new_account">Create a new account</string>
     <string name="new_user">New User?</string>
     <string name="todo3">TODO</string>
+    <string name="your_todos">Your Todos</string>
+    <string name="content_to_be_written">CONTENT TO BE WRITTEN!!</string>
 </resources>
