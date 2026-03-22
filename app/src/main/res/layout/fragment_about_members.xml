@@ -30,6 +30,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/bentham"
                 android:text="About Developers"
+                android:layout_marginTop="25dp"
                 android:textColor="@color/white"
                 android:textSize="30sp"
                 android:textStyle="bold" />
@@ -67,7 +68,7 @@
                 android:textColor="#FFFFFF"
                 android:textSize="20dp" />
 
-            <GridLayout
+            <android.widget.GridLayout
                 android:id="@+id/grid_layout1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -286,7 +287,7 @@
 
                 </androidx.cardview.widget.CardView>
 
-            </GridLayout>
+            </android.widget.GridLayout>
         </RelativeLayout>
 
 
