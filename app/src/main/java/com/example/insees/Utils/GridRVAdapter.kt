@@ -1,4 +1,4 @@
-package com.example.insees
+package com.example.insees.Utils
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.insees.Dataclasses.GridViewModal
+import com.example.insees.R
 
 // on below line we are creating an
 // adapter class for our grid view.
@@ -64,8 +65,8 @@ internal class GridRVAdapter(
         // on below line we are setting image for our course image view.
         memberimgIV.setImageResource(MemberList[position].courseImg)
         // on below line we are setting texts in our course text view.
-        memberNameTV.setText(MemberList[position].MemberName)
-        memberDescTV.setText(MemberList[position].courseDesc)
+        memberNameTV.text = MemberList[position].MemberName
+        memberDescTV.text = MemberList[position].courseDesc
         // at last we are returning our convert view.
         return convertView
     }

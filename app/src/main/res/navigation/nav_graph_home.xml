@@ -52,7 +52,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.insees.HomeFragment"
+        android:name="com.example.insees.Fragments.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
 
@@ -84,7 +84,7 @@
 
     <fragment
         android:id="@+id/inseesAboutInseesFragment"
-        android:name="com.example.insees.InseesAboutInseesFragment"
+        android:name="com.example.insees.Fragments.InseesAboutInseesFragment"
         android:label="fragment_insees_about_insees"
         tools:layout="@layout/fragment_insees_about_insees" >
         <action
@@ -94,7 +94,7 @@
 
     <fragment
         android:id="@+id/inseesAboutUsFragment"
-        android:name="com.example.insees.InseesAboutUsFragment"
+        android:name="com.example.insees.Fragments.InseesAboutUsFragment"
         android:label="fragment_insees_about_us"
         tools:layout="@layout/fragment_insees_about_us" >
 
@@ -111,13 +111,13 @@
 
     <fragment
         android:id="@+id/aboutMembersFragment"
-        android:name="com.example.insees.AboutMembersFragment"
+        android:name="com.example.insees.Fragments.AboutMembersFragment"
         android:label="fragment_about_members"
         tools:layout="@layout/fragment_about_members" />
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.insees.ProfileFragment"
+        android:name="com.example.insees.Fragments.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
