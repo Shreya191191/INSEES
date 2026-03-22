@@ -37,7 +37,7 @@ class SemesterFragment : Fragment() {
         semesterListView.onItemClickListener =
             AdapterView.OnItemClickListener { _, _, position, _ ->
                 val selectedSemester = semesters[position]
-                findNavController().navigate(R.id.action_semesterFragment_to_subjectsFragment, Bundle().apply {
+                findNavController().navigate(R.id.action_semesterFragment_to_yearFragment, Bundle().apply {
                     putString("selected_semester", selectedSemester)
                 })
             }

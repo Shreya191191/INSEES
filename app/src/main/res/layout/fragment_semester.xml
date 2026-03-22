@@ -29,15 +29,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Study Materials"
+                android:fontFamily="@font/bentham"
                 android:textColor="@color/white"
                 android:textSize="23sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="CONTENT TO BE WRITTEN!!"
-                android:textColor="@color/white" />
         </LinearLayout>
 
     </LinearLayout>
