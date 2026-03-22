@@ -15,9 +15,10 @@
         android:backgroundTint="#1E1F22"
         app:cardCornerRadius="24dp">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/idIVImage"
@@ -51,7 +52,7 @@
                 android:text="Lorem Ipsum qwertyuiopasdfghjklzxcvbnm"
                 />
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 
