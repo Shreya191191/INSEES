@@ -1,4 +1,5 @@
-package com.example.insees.Utils
+package com.example.insees.Adapters
+
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -6,8 +7,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.example.insees.R
-
-
 
 class YearAdapter(context: Context, private val year: Array<String>) :
     ArrayAdapter<String>(context, R.layout.semester_subject, year) {

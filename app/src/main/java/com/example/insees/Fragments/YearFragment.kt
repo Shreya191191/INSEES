@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.insees.R
 import com.example.insees.Utils.FirebaseManager
-import com.example.insees.Utils.YearAdapter
+import com.example.insees.Adapters.YearAdapter
 import com.google.firebase.storage.StorageReference
 
 class YearFragment : Fragment(){
@@ -37,7 +37,7 @@ class YearFragment : Fragment(){
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentYearListBinding.inflate(inflater,container,false)
         subjectListView = binding.subjectsList
 
@@ -46,11 +46,11 @@ class YearFragment : Fragment(){
             "Semester 1" -> arrayOf("Subject A", "Subject B", "Subject C")
             "Semester 2" -> arrayOf("Subject D", "Subject E", "Subject F")
             "Semester 3" -> arrayOf("2018", "2019", "2022","2023")
-            "Semester 4" -> arrayOf("Subject J", "Subject K", "Subject L")
-            "Semester 5" -> arrayOf("Subject M", "Subject N", "Subject L")
-            "Semester 6" -> arrayOf("Subject J", "Subject K", "Subject L")
-            "Semester 7" -> arrayOf("Subject J", "Subject K", "Subject L")
-            "Semester 8" -> arrayOf("Subject J", "Subject K", "Subject L")
+            "Semester 4" -> arrayOf("2000", "Subject K", "Subject L")
+            "Semester 5" -> arrayOf("Subject M", "Subject N", "Subject O")
+            "Semester 6" -> arrayOf("Subject P", "Subject Q", "Subject R")
+            "Semester 7" -> arrayOf("Subject S", "Subject T", "Subject U")
+            "Semester 8" -> arrayOf("Subject V", "Subject W", "Subject X")
             else -> arrayOf()
 
         }
