@@ -35,13 +35,10 @@
                 android:layout_height="wrap_content"
                 android:text="@string/your_todos"
                 android:textSize="23sp"
+                android:fontFamily="@font/bentham"
                 android:textStyle="bold"
                 android:textColor="@color/white"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/content_to_be_written"
-                android:textColor="@color/white"/>
+
         </LinearLayout>
 
     </LinearLayout>
@@ -74,6 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
+                android:fontFamily="@font/muskmedium"
                 android:textColor="#FFFFFF"
                 android:layout_marginStart="10dp"
                 android:textSize="20sp"
