@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:padding="8dp"
-    tools:context=".InseesAboutInseesFragment">
+    tools:context=".Fragments.InseesAboutInseesFragment">
 
     <ImageButton
         android:id="@+id/btnBackHomeFromInsees"

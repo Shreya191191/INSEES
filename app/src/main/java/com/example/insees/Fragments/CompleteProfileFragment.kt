@@ -1,4 +1,4 @@
-package com.example.insees
+package com.example.insees.Fragments
 
 import android.Manifest
 import android.app.Activity
@@ -21,6 +21,7 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.example.insees.Activities.HomeActivity
 import com.example.insees.databinding.FragmentCompleteProfileBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -124,10 +125,12 @@ class CompleteProfileFragment : Fragment() {
                     binding.profilePhoto.apply {
                         visibility= View.VISIBLE
 
-                        val result  = WeakReference<Bitmap>(Bitmap.createScaledBitmap(selectedImageBitmap,
-                            selectedImageBitmap.height, selectedImageBitmap.width, false).copy(
-                            Bitmap.Config.RGB_565, true
-                        )).get()
+                        val result  = WeakReference(Bitmap.createScaledBitmap(selectedImageBitmap,
+                                selectedImageBitmap.height, selectedImageBitmap.width, false
+                            ).copy(
+                                Bitmap.Config.RGB_565, true
+                            )
+                        ).get()
 
                         setImageBitmap(result)
 
@@ -200,6 +203,7 @@ class CompleteProfileFragment : Fragment() {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED
 
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -215,7 +219,7 @@ class CompleteProfileFragment : Fragment() {
         }
     }
 
-    private fun saveImage(image:Bitmap,context:Context ): Uri {
+    private fun saveImage(image: Bitmap, context: Context): Uri {
 
         val imagesFolder = File(context.cacheDir, "images")
         lateinit var uri: Uri
@@ -228,7 +232,7 @@ class CompleteProfileFragment : Fragment() {
             stream.close()
             uri = FileProvider.getUriForFile(context.applicationContext, "com.example.insees"+".provider", file)
         }
-        catch (e:FileNotFoundException){
+        catch (e: FileNotFoundException){
             e.printStackTrace()
         }catch (e: IOException){
             e.printStackTrace()
