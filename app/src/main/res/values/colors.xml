@@ -11,6 +11,8 @@
     <color name="background">#0D0D0D</color>
     <color name="theme">#353535</color>
 
+    <color name="bottomNav">#6200EE</color>
+
     <!-- Red Shades -->
     <color name="darkRed">#DF392E</color>
     <color name="mediumRed">#F44336</color>
