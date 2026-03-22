@@ -35,7 +35,7 @@ class InseesAboutUsFragment : Fragment() {
             navController.navigate(R.id.action_inseesAboutUsFragment_to_aboutMembersFragment)
         }
 
-        binding.imageButton.setOnClickListener {
+        binding.imageButton3.setOnClickListener {
             navController.navigate(R.id.action_inseesAboutUsFragment_to_aboutMembersFragment)
         }
 
