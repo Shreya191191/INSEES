@@ -15,7 +15,7 @@ import com.example.insees.R
 internal class GridRVAdapter(
     // on below line we are creating two
     // variables for course list and context
-    private val MemberList: List<GridViewModal>,
+    private val memberList: List<GridViewModal>,
     private val context: Context
 ) :
     BaseAdapter() {
@@ -24,11 +24,11 @@ internal class GridRVAdapter(
     private var layoutInflater: LayoutInflater? = null
     private lateinit var memberNameTV: TextView
     private lateinit var memberDescTV: TextView
-    private lateinit var memberimgIV: ImageView
+    private lateinit var memberImgIV: ImageView
 
     // below method is use to return the count of course list
     override fun getCount(): Int {
-        return MemberList.size
+        return memberList.size
     }
 
     // below function is use to return the item of grid view.
@@ -42,7 +42,7 @@ internal class GridRVAdapter(
     }
 
     // in below function we are getting individual item of grid view.
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         var convertView = convertView
         // on blow line we are checking if layout inflater
         // is null, if it is null we are initializing it.
@@ -59,14 +59,14 @@ internal class GridRVAdapter(
         }
         // on below line we are initializing our course image view
         // and course text view with their ids.
-        memberimgIV = convertView!!.findViewById(R.id.idIVImage)
+        memberImgIV = convertView!!.findViewById(R.id.idIVImage)
         memberNameTV = convertView.findViewById(R.id.idTVName)
         memberDescTV = convertView.findViewById(R.id.idTVDesc)
         // on below line we are setting image for our course image view.
-        memberimgIV.setImageResource(MemberList[position].courseImg)
+        memberImgIV.setImageResource(memberList[position].courseImg)
         // on below line we are setting texts in our course text view.
-        memberNameTV.text = MemberList[position].MemberName
-        memberDescTV.text = MemberList[position].courseDesc
+        memberNameTV.text = memberList[position].MemberName
+        memberDescTV.text = memberList[position].courseDesc
         // at last we are returning our convert view.
         return convertView
     }
