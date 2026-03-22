@@ -14,74 +14,56 @@
             android:id="@+id/action_todoFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
-
     <fragment
         android:id="@+id/semesterFragment"
         android:name="com.example.insees.Fragments.SemesterFragment"
         android:label="fragment_semester"
         tools:layout="@layout/fragment_semester" >
-
         <action
             android:id="@+id/action_semesterFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
-
         <action
             android:id="@+id/action_semesterFragment_to_homeFragment2"
             app:destination="@id/homeFragment" />
-
-        <action
-            android:id="@+id/action_semesterFragment_to_subjectsFragment"
-            app:destination="@id/subjectsFragment" />
-
         <action
             android:id="@+id/action_semesterFragment_to_homeFragment3"
             app:destination="@id/homeFragment" />
-
-        <!-- 🔥 ADDED -->
         <argument
             android:name="selected_semester"
             app:argType="string" />
-
+        <action
+            android:id="@+id/action_semesterFragment_to_yearFragment"
+            app:destination="@id/yearFragment" />
     </fragment>
-
     <dialog
         android:id="@+id/popUpFragment"
         android:name="com.example.insees.Fragments.PopUpFragment"
         android:label="fragment_pop_up"
         tools:layout="@layout/fragment_pop_up" />
-
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.insees.Fragments.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
-
         <action
             android:id="@+id/action_homeFragment_to_todoFragment"
             app:destination="@id/todoFragment" />
-
         <action
             android:id="@+id/action_homeFragment_to_popUpFragment"
             app:destination="@id/popUpFragment" />
-
         <action
             android:id="@+id/action_homeFragment_to_semesterFragment"
             app:destination="@id/semesterFragment" />
-
         <action
             android:id="@+id/action_homeFragment_to_inseesAboutInseesFragment"
             app:destination="@id/inseesAboutInseesFragment" />
-
         <action
             android:id="@+id/action_homeFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
-
         <action
             android:id="@+id/action_homeFragment_to_aboutMembersFragment"
             app:destination="@id/aboutMembersFragment" />
-
     </fragment>
-
     <fragment
         android:id="@+id/inseesAboutInseesFragment"
         android:name="com.example.insees.Fragments.InseesAboutInseesFragment"
@@ -91,30 +73,18 @@
             android:id="@+id/action_inseesAboutInseesFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
-
     <fragment
         android:id="@+id/inseesAboutUsFragment"
         android:name="com.example.insees.Fragments.InseesAboutUsFragment"
         android:label="fragment_insees_about_us"
         tools:layout="@layout/fragment_insees_about_us" >
-
         <action
             android:id="@+id/action_inseesAboutUsFragment_to_inseesAboutInseesFragment"
             app:destination="@id/inseesAboutInseesFragment" />
-
         <action
             android:id="@+id/action_inseesAboutUsFragment_to_aboutMembersFragment"
             app:destination="@id/aboutMembersFragment" />
-
-
     </fragment>
-
-    <fragment
-        android:id="@+id/aboutMembersFragment"
-        android:name="com.example.insees.Fragments.AboutMembersFragment"
-        android:label="fragment_about_members"
-        tools:layout="@layout/fragment_about_members" />
-
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.insees.Fragments.ProfileFragment"
@@ -124,30 +94,32 @@
             android:id="@+id/action_profileFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
-
     <fragment
-        android:id="@+id/subjectsFragment"
-        android:name="com.example.insees.Fragments.SubjectsFragment"
-        android:label="fragment_subject_list"
-        tools:layout="@layout/fragment_subject_list" >
-
+        android:id="@+id/aboutMembersFragment"
+        android:name="com.example.insees.Fragments.AboutMembersFragment"
+        android:label="fragment_about_members"
+        tools:layout="@layout/fragment_about_members" />
+    <fragment
+        android:id="@+id/pdfViewerFragment"
+        android:name="com.example.insees.Fragments.PdfViewerFragment"
+        android:label="fragment_pdf_viewer"
+        tools:layout="@layout/fragment_pdf_viewer" />
+    <fragment
+        android:id="@+id/yearFragment"
+        android:name="com.example.insees.Fragments.YearFragment"
+        android:label="fragment_year_list"
+        tools:layout="@layout/fragment_year_list" >
         <action
-            android:id="@+id/action_subjectsFragment_to_semesterFragment"
+            android:id="@+id/action_yearFragment_to_semesterFragment"
             app:destination="@id/semesterFragment" />
-
         <action
-            android:id="@+id/action_subjectsFragment_to_homeFragment"
+            android:id="@+id/action_yearFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
-
         <action
-            android:id="@+id/action_subjectsFragment_to_todoFragment"
+            android:id="@+id/action_yearFragment_to_pdfViewerFragment"
+            app:destination="@id/pdfViewerFragment" />
+        <action
+            android:id="@+id/action_yearFragment_to_todoFragment"
             app:destination="@id/todoFragment" />
-
-        <!-- 🔥 ADDED -->
-        <argument
-            android:name="selected_semester"
-            app:argType="string" />
-
     </fragment>
-
 </navigation>
