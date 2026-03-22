@@ -106,6 +106,7 @@
             android:id="@+id/action_inseesAboutUsFragment_to_aboutMembersFragment"
             app:destination="@id/aboutMembersFragment" />
 
+
     </fragment>
 
     <fragment
