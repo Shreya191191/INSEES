@@ -30,7 +30,7 @@ class InseesAboutInseesFragment : Fragment() {
         val view = binding.root
 
         binding.btnBackHomeFromInsees.setOnClickListener {
-            findNavController().navigate(R.id.action_inseesAboutInseesFragment_to_homeFragment)
+            findNavController().navigate(R.id.action_inseesAboutInseesFragment_to_inseesAboutUsFragment)
         }
         MemberGRV = view.findViewById(R.id.idgv)
         MemberList = ArrayList<GridViewModal>()
