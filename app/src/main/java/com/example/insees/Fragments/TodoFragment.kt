@@ -18,8 +18,8 @@ import com.example.insees.R
 import com.example.insees.Utils.DialogAddBtnClickListener
 import com.example.insees.Utils.FirebaseManager
 import com.example.insees.Utils.Swipe
-import com.example.insees.Utils.ToDoAdapter
-import com.example.insees.Utils.ToDoData
+import com.example.insees.Adapters.ToDoAdapter
+import com.example.insees.Dataclasses.ToDoData
 import com.example.insees.databinding.FragmentTodoBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -35,7 +35,7 @@ class TodoFragment : Fragment(), DialogAddBtnClickListener{
     private lateinit var binding: FragmentTodoBinding
     private lateinit var databaseRef: DatabaseReference
     private lateinit var popUpFragment: PopUpFragment
-    private lateinit var adapter:ToDoAdapter
+    private lateinit var adapter: ToDoAdapter
     private lateinit var mList:MutableList<ToDoData>
     private lateinit var auth:FirebaseAuth
 
@@ -56,7 +56,6 @@ class TodoFragment : Fragment(), DialogAddBtnClickListener{
         initSwipe()
         getDataFromFirebase()
         registerEvents()
-
     }
 
     private fun getDataFromFirebase() {

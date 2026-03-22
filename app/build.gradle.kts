@@ -85,5 +85,4 @@ dependencies {
     //pdf viewer library
     implementation("com.github.mhiew:android-pdf-viewer:3.2.0-beta.3")
 
-    implementation("io.coil-kt:coil:2.6.0")
 }

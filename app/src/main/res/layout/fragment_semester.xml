@@ -9,7 +9,7 @@
     tools:context=".Fragments.SemesterFragment">
 
     <LinearLayout
-        android:id="@+id/studylinearLayout"
+        android:id="@+id/studyLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15sp"
@@ -22,19 +22,24 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="23dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Study Materials"
+                android:text="@string/study_materials"
                 android:fontFamily="@font/bentham"
                 android:textColor="@color/white"
                 android:textSize="30sp"
+                android:layout_marginTop="25dp"
                 android:textStyle="bold" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/content_to_be_written"
+                android:textColor="@color/white" />
         </LinearLayout>
 
     </LinearLayout>
@@ -43,9 +48,9 @@
         android:id="@+id/SemesterList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15sp"
+        android:layout_marginTop="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/studylinearLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/studyLinearLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

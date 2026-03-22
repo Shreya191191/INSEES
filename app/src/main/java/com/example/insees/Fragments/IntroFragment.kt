@@ -15,7 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 class IntroFragment : Fragment() {
 
     private lateinit var binding: FragmentIntroBinding
-    private lateinit var navController: NavController
+    private lateinit var navController:NavController
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -26,6 +26,7 @@ class IntroFragment : Fragment() {
             {
                 Toast.makeText(requireContext(), "User is already logged in", Toast.LENGTH_SHORT).show()
                 redirect("MAIN")
+                requireActivity().finish()
             }
             else
                 redirect("LOGIN")
