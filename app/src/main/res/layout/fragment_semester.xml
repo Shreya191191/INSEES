@@ -8,41 +8,21 @@
     android:orientation="vertical"
     tools:context=".Fragments.SemesterFragment">
 
-    <LinearLayout
-        android:id="@+id/studyLinearLayout"
+
+    <TextView
+        android:id="@+id/headerstudymat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15sp"
-        android:orientation="horizontal"
+        android:layout_marginTop="25dp"
+        android:layout_marginStart="15dp"
+        android:fontFamily="@font/bentham"
+        android:text="@string/study_materials"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/study_materials"
-                android:fontFamily="@font/bentham"
-                android:textColor="@color/white"
-                android:textSize="30sp"
-                android:layout_marginTop="25dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/content_to_be_written"
-                android:textColor="@color/white" />
-        </LinearLayout>
-
-    </LinearLayout>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
         android:id="@+id/SemesterList"
@@ -51,6 +31,6 @@
         android:layout_marginTop="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/studyLinearLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/headerstudymat" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
