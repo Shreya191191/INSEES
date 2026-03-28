@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:fontFamily="@font/bentham"
-        android:paddingStart="12dp"
+        android:layout_marginStart="15dp"
         android:text="About Us"
         android:textColor="@color/white"
         android:textSize="30sp"
@@ -28,42 +28,64 @@
         android:layout_width="359dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/coco"
-        android:paddingStart="12dp"
+        android:layout_marginStart="15dp"
         android:text="Eletronics and Instrumentation"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/membersbtn"
-        android:layout_width="155dp"
-        android:layout_height="42dp"
-        android:layout_marginTop="28dp"
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/togglebuttonlayout"
+        android:layout_width="370dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="35dp"
         android:background="@drawable/rounded_button"
-        android:backgroundTint="#28A452"
-        android:fontFamily="@font/muskmedium"
-        android:text="Members"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/developersbtn"
-        app:layout_constraintHorizontal_bias="0.5"
+        android:backgroundTint="@color/customgreen"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/flfragmentaboutus"
+        app:layout_constraintEnd_toEndOf="@id/flfragmentaboutus"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:singleSelection="true">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/developersbtn"
-        android:layout_width="155dp"
-        android:layout_height="42dp"
-        android:layout_marginTop="28dp"
-        android:background="@drawable/rounded_button"
-        android:backgroundTint="#28A552"
-        android:fontFamily="@font/muskmedium"
-        android:text="Developers"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/membersbtn"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        <Button
+            android:id="@+id/membersbtn"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/customgreen"
+            android:fontFamily="@font/muskmedium"
+            android:text="Members"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:checkedIconTint="@color/white"
+            app:icon="@drawable/insees_logo"
+            app:iconTint="@color/white"
+            app:iconSize="30dp"
+            app:shapeAppearanceOverlay="@style/roundedButtonShape"
+            tools:layout_editor_absoluteX="160dp"
+            tools:layout_editor_absoluteY="113dp" />
+
+        <Button
+            android:id="@+id/developersbtn"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/customgreen"
+            android:fontFamily="@font/muskmedium"
+            android:text="Developers"
+            android:textColor="@color/white"
+            app:iconSize="30dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:checkedIconTint="@color/white"
+            app:icon="@drawable/android_logo"
+            app:iconTint="@color/white"
+            app:shapeAppearanceOverlay="@style/roundedButtonShape"
+            tools:layout_editor_absoluteX="160dp"
+            tools:layout_editor_absoluteY="218dp" />
+
+    </com.google.android.material.button.MaterialButtonToggleGroup>
 
     <FrameLayout
         android:id="@+id/flfragmentaboutus"
@@ -74,7 +96,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/membersbtn" />
+        app:layout_constraintTop_toBottomOf="@+id/togglebuttonlayout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
