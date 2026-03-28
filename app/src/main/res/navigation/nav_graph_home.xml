@@ -14,6 +14,7 @@
             android:id="@+id/action_todoFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/semesterFragment"
         android:name="com.example.insees.Fragments.SemesterFragment"
@@ -35,11 +36,13 @@
             android:id="@+id/action_semesterFragment_to_yearFragment"
             app:destination="@id/yearFragment" />
     </fragment>
+
     <dialog
         android:id="@+id/popUpFragment"
         android:name="com.example.insees.Fragments.PopUpFragment"
         android:label="fragment_pop_up"
         tools:layout="@layout/fragment_pop_up" />
+
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.insees.Fragments.HomeFragment"
@@ -64,6 +67,8 @@
             android:id="@+id/action_homeFragment_to_aboutMembersFragment"
             app:destination="@id/aboutMembersFragment" />
     </fragment>
+
+    <!-- ✅ FIXED: Correct fragment class + layout -->
     <fragment
         android:id="@+id/inseesAboutInseesFragment"
         android:name="com.example.insees.Fragments.InseesAboutInseesFragment"
@@ -73,6 +78,7 @@
             android:id="@+id/action_inseesAboutInseesFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/inseesAboutUsFragment"
         android:name="com.example.insees.Fragments.InseesAboutUsFragment"
@@ -85,6 +91,7 @@
             android:id="@+id/action_inseesAboutUsFragment_to_aboutMembersFragment"
             app:destination="@id/aboutMembersFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.insees.Fragments.ProfileFragment"
@@ -94,11 +101,14 @@
             android:id="@+id/action_profileFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
+
+    <!-- ✅ About Developers fragment -->
     <fragment
         android:id="@+id/aboutMembersFragment"
-        android:name="com.example.insees.Fragments.AboutMembersFragment"
+        android:name="com.example.insees.Fragments.AboutDevelopersFragment"
         android:label="fragment_about_members"
-        tools:layout="@layout/fragment_about_members" />
+        tools:layout="@layout/fragment_about_developers" />
+
     <fragment
         android:id="@+id/yearFragment"
         android:name="com.example.insees.Fragments.YearFragment"
@@ -110,9 +120,11 @@
             android:id="@+id/action_yearFragment_to_semesterFragment"
             app:destination="@id/semesterFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/pdfViewerFragment"
         android:name="com.example.insees.Fragments.PdfViewerFragment"
         android:label="fragment_pdf_viewer"
         tools:layout="@layout/fragment_pdf_viewer" />
+
 </navigation>
