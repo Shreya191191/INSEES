@@ -6,4 +6,9 @@
         <item name="android:statusBarColor">@color/black</item>
         <item name="android:textColor">@color/primaryText</item>
     </style>
+
+    <style name="roundedButtonShape" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
 </resources>
