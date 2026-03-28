@@ -1,10 +1,12 @@
 package com.example.insees.Fragments
 
+import android.content.res.ColorStateList
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.insees.R
@@ -28,38 +30,47 @@ class InseesAboutUsFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentInseesAboutUsBinding.inflate(inflater,container,false)
 
-        val membersFragment = InseesAboutInseesFragment()
-        val aboutinseesFragment = AboutMembersFragment()
+        val membersFragment = AboutMembersFragment()
+        val aboutinseesFragment = AboutDevelopersFragment()
+
+        binding.membersbtn.backgroundTintList = ColorStateList.valueOf(
+            ContextCompat.getColor(requireContext(), R.color.darkGreen)
+        )
+
         childFragmentManager.beginTransaction().apply {
             replace(R.id.flfragmentaboutus,membersFragment)
             commit()
         }
+
         binding.membersbtn.setOnClickListener {
+            // Change button colors when "Members" button is selected
+            binding.membersbtn.backgroundTintList = ColorStateList.valueOf(
+                ContextCompat.getColor(requireContext(), R.color.darkGreen)
+            )
+            binding.developersbtn.backgroundTintList = ColorStateList.valueOf(
+                ContextCompat.getColor(requireContext(), R.color.customgreen)
+            )
+
             childFragmentManager.beginTransaction().apply {
-                replace(R.id.flfragmentaboutus,membersFragment)
+                replace(R.id.flfragmentaboutus, membersFragment)
                 commit()
             }
         }
 
         binding.developersbtn.setOnClickListener {
+            // Change button colors when "Developers" button is selected
+            binding.developersbtn.backgroundTintList = ColorStateList.valueOf(
+                ContextCompat.getColor(requireContext(), R.color.darkGreen)
+            )
+            binding.membersbtn.backgroundTintList = ColorStateList.valueOf(
+                ContextCompat.getColor(requireContext(), R.color.customgreen)
+            )
+
             childFragmentManager.beginTransaction().apply {
                 replace(R.id.flfragmentaboutus, aboutinseesFragment)
                 commit()
             }
         }
-
-
-//        binding.inseesLayout.setOnClickListener{
-//            navController.navigate(R.id.action_inseesAboutUsFragment_to_inseesAboutInseesFragment)
-//        }
-//
-//        binding.aboutMembers.setOnClickListener {
-//            navController.navigate(R.id.action_inseesAboutUsFragment_to_aboutMembersFragment)
-//        }
-//
-//        binding.imageButton3.setOnClickListener {
-//            navController.navigate(R.id.action_inseesAboutUsFragment_to_aboutMembersFragment)
-//        }
 
         return binding.root
     }
