@@ -47,7 +47,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/idTVName"
-                android:fontFamily="@font/muskmedium"
+                android:fontFamily="@font/bevietnamprolight"
                 android:textColor="@color/white"
                 android:text="Lorem Ipsum qwertyuiopasdfghjklzxcvbnm"
                 />
