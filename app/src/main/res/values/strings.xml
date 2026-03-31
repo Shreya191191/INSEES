@@ -31,6 +31,7 @@
     <string name="email_id">Email ID</string>
     <string name="welcome_back">Welcome Back</string>
     <string name="login">Login</string>
+    <string name="ForgotPassword">ForgotPassword</string>
     <string name="login1">Login</string>
     <string name="create_a_new_account">Create a new account</string>
     <string name="new_user">New User?</string>

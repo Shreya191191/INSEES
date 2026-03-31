@@ -48,9 +48,12 @@ class LoginFragment : Fragment() {
             }
         }
 
+        binding.btnForgetPassword.setOnClickListener {
+            navController.navigate(R.id.action_loginFragment_to_forgotPasswordFragment)
+        }
+
         return binding.root
     }
-
     private fun login(email:String, password:String){
         auth.signInWithEmailAndPassword(email,password).addOnCompleteListener{task->
             if (task.isSuccessful){
