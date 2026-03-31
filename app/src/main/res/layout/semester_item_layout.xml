@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Semester 1"
-            android:fontFamily="@font/muskmedium"
+            android:fontFamily="@font/bevietnamprolight"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:textStyle="bold"

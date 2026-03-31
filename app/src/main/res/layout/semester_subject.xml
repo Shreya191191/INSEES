@@ -22,7 +22,7 @@
             android:layout_gravity="center"
             android:padding="10dp"
             android:text="Subject 1"
-            android:fontFamily="@font/muskmedium"
+            android:fontFamily="@font/bevietnamprolight"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold"

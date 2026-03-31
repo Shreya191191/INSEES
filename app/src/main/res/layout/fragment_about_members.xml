@@ -46,12 +46,12 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/bentham"
+                android:fontFamily="@font/bevietnampromedium"
                 android:paddingStart="16dp"
                 android:paddingTop="16dp"
                 android:text="Header"
                 android:textColor="@color/white"
-                android:textSize="19dp"
+                android:textSize="25dp"
                 android:textStyle="bold" />
 
             <TextView
@@ -65,7 +65,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/bentham"
+                android:fontFamily="@font/bevietnamprosemibold"
                 android:paddingStart="16dp"
                 android:paddingTop="16dp"
                 android:text="Members"
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20sp"
-                android:fontFamily="@font/muskmedium"
+                android:fontFamily="@font/bevietnampromedium"
                 android:text="Core Members"
                 android:textColor="#FFFFFF"
                 android:textSize="21dp" />
@@ -264,7 +264,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20sp"
-                android:fontFamily="@font/muskmedium"
+                android:fontFamily="@font/bevietnampromedium"
                 android:text="Executive Members"
                 android:textColor="#FFFFFF"
                 android:textSize="21dp" />
