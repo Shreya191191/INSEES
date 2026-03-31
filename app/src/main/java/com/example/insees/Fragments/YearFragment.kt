@@ -2,7 +2,6 @@ package com.example.insees.Fragments
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences.Editor
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -63,8 +62,7 @@ class YearFragment : Fragment(){
         setupListView()
 
         binding.btnSubjectBack.setOnClickListener {
-            findNavController().navigate(R.id.action_yearFragment_to_semesterFragment)
-
+            findNavController().popBackStack()
         }
     }
 

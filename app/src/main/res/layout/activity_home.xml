@@ -17,8 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/bvNavBar"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/nav_graph_home" />
-
+        app:navGraph="@navigation/nav_graph_home"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bvNavBar"
@@ -26,7 +25,7 @@
         android:layout_height="72dp"
         app:itemBackground="@color/theme"
         app:itemIconSize="24dp"
-        app:itemIconTint="@color/white"
+        app:itemIconTint="@color/nav_bar_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

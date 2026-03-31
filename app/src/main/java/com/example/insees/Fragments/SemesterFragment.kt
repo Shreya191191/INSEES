@@ -1,15 +1,15 @@
 package com.example.insees.Fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.insees.R
 import com.example.insees.Adapters.SemesterAdapter
+import com.example.insees.R
 import com.example.insees.databinding.FragmentSemesterBinding
 
 class SemesterFragment : Fragment() {
@@ -35,7 +35,7 @@ class SemesterFragment : Fragment() {
         semesterListView.onItemClickListener =
             AdapterView.OnItemClickListener { _, _, position, _ ->
                 val selectedSemester = semesters[position]
-                findNavController().navigate(R.id.action_semesterFragment_to_yearFragment, Bundle().apply {
+                findNavController().navigate(R.id.action_viewPagerFragment_to_yearFragment, Bundle().apply {
                     putString("selected_semester", selectedSemester)
                 })
             }
