@@ -11,6 +11,7 @@ import android.widget.DatePicker
 import android.widget.TimePicker
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.navigation.fragment.findNavController
 import com.example.insees.Utils.DialogAddBtnClickListener
 import com.example.insees.databinding.FragmentPopUpBinding
 import com.google.firebase.database.DatabaseReference
@@ -23,21 +24,21 @@ class PopUpFragment : DialogFragment(),DatePickerDialog.OnDateSetListener,TimePi
     private lateinit var databaseRef:DatabaseReference
     private lateinit var listener: DialogAddBtnClickListener
 
-    fun setListener(listener:DialogAddBtnClickListener){
+    fun setListener(listener: DialogAddBtnClickListener){
         this.listener = listener
     }
 
-    var day=0
-    var month=0
-    var year=0
-    var hour=0
-    var minute=0
+    private var day=0
+    private var month=0
+    private var year=0
+    private var hour=0
+    private var minute=0
 
-    var savedDay=0
-    var savedMonth=0
-    var savedYear=0
-    var savedHour=0
-    var savedMinute = ""
+    private var savedDay=0
+    private var savedMonth=0
+    private var savedYear=0
+    private var savedHour=0
+    private var savedMinute = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,7 +52,7 @@ class PopUpFragment : DialogFragment(),DatePickerDialog.OnDateSetListener,TimePi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        init(view)
+        init()
         registerEvents()
         pickDate()
         pickTime()
@@ -73,11 +74,12 @@ class PopUpFragment : DialogFragment(),DatePickerDialog.OnDateSetListener,TimePi
         }
         binding.cancelPopUpButton.setOnClickListener {
             dismiss()
+            findNavController().popBackStack()
         }
     }
-    private fun init(view: View) {
+    private fun init() {
 
-        databaseRef=FirebaseDatabase.getInstance().reference
+        databaseRef = FirebaseDatabase.getInstance().reference
 
     }
 

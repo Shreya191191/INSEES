@@ -11,10 +11,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.example.insees.Adapters.HomeToDoAdapter
 import com.example.insees.Dataclasses.ToDoData
 import com.example.insees.R
@@ -36,6 +37,7 @@ import kotlinx.coroutines.launch
 class HomeFragment : Fragment(), DialogAddBtnClickListener {
 
     private lateinit var binding: FragmentHomeBinding
+    private lateinit var viewPager: ViewPager2
     private lateinit var navController: NavController
     private lateinit var databaseRef : DatabaseReference
     private lateinit var currentUser : FirebaseUser
@@ -46,7 +48,10 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
     private var isDataLoaded = false
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        navController = Navigation.findNavController(view)
+
+        navController = findNavController()
+
+        viewPager = requireActivity().findViewById(R.id.viewPager)
 
         setUpViews(viewModel.userData.toString())
 
@@ -81,27 +86,27 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
         }
 
         binding.cardViewStudyMaterials.setOnClickListener{
-            navController.navigate(R.id.action_homeFragment_to_semesterFragment)
+            viewPager.currentItem = 1
         }
 
         binding.btnProfile.setOnClickListener {
-            navController.navigate(R.id.action_homeFragment_to_profileFragment)
+            navController.navigate(R.id.action_viewPagerFragment_to_profileFragment)
         }
 
         binding.cardViewInsees.setOnClickListener{
-            navController.navigate(R.id.action_homeFragment_to_inseesAboutInseesFragment)
+            viewPager.currentItem = 3
         }
 
         binding.cardViewMembers.setOnClickListener{
-            navController.navigate(R.id.action_homeFragment_to_aboutMembersFragment)
+            viewPager.currentItem = 3
         }
 
         binding.btnViewAll.setOnClickListener {
-            navController.navigate(R.id.action_homeFragment_to_todoFragment)
+            viewPager.currentItem = 2
         }
 
         binding.btnAddTask.setOnClickListener{
-            navController.navigate(R.id.action_homeFragment_to_popUpFragment)
+            navController.navigate(R.id.action_viewPagerFragment_to_popUpFragment)
         }
         return binding.root
     }
