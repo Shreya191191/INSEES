@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import com.example.insees.R
 import com.example.insees.databinding.FragmentAishwaryaBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
