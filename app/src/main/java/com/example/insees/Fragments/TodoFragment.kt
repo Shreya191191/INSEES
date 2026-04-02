@@ -28,23 +28,21 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class TodoFragment : Fragment(), DialogAddBtnClickListener{
+class TodoFragment : Fragment(), DialogAddBtnClickListener {
 
     private lateinit var binding: FragmentTodoBinding
     private lateinit var databaseRef: DatabaseReference
     private lateinit var popUpFragment: PopUpFragment
     private lateinit var adapter: ToDoAdapter
-    private lateinit var mList:MutableList<ToDoData>
-    private lateinit var auth:FirebaseAuth
+    private lateinit var mList: MutableList<ToDoData>
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        binding = FragmentTodoBinding.inflate(inflater,container,false)
+        binding = FragmentTodoBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,46 +54,6 @@ class TodoFragment : Fragment(), DialogAddBtnClickListener{
         registerEvents()
     }
 
-    private fun getDataFromFirebase() {
-        val database = databaseRef
-            .child("users")
-            .child(auth.currentUser!!.uid)
-            .child("Tasks")
-
-        database.addValueEventListener(object :ValueEventListener{
-            @SuppressLint("NotifyDataSetChanged")
-            override fun onDataChange(snapshot: DataSnapshot) {
-                mList.clear()
-                for (taskSnapshot in snapshot.children){
-                    val taskTitle= taskSnapshot.child("title").getValue(String::class.java) ?:""
-                    val taskDesc=  taskSnapshot.child("description").getValue(String::class.java)?:""
-                    val taskTime=  taskSnapshot.child("time").getValue(String::class.java)?:""
-                    val taskDate=  taskSnapshot.child("date").getValue(String::class.java)?:""
-
-                    val todoTask = ToDoData(taskTitle,taskDesc,taskTime,taskDate)
-                    mList.add(todoTask)
-                }
-                mList.sortWith(compareBy({
-                    it.taskDate},{it.taskTime}))
-                adapter.notifyDataSetChanged()
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(context,error.message,Toast.LENGTH_SHORT).show()
-            }
-
-        })
-    }
-
-    private fun registerEvents() {
-        binding.btnTodoAddTask.setOnClickListener {
-            popUpFragment = PopUpFragment()
-            popUpFragment.setListener(this)
-            popUpFragment.show(childFragmentManager,
-                "PopUpFragment")
-        }
-    }
-
     private fun init() {
         auth = FirebaseManager.getFirebaseAuth()
         databaseRef = FirebaseManager.getFirebaseDatabase().reference
@@ -104,6 +62,48 @@ class TodoFragment : Fragment(), DialogAddBtnClickListener{
         mList = mutableListOf()
         adapter = ToDoAdapter(mList)
         binding.recyclerView.adapter = adapter
+    }
+
+    private fun getDataFromFirebase() {
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            val database = databaseRef
+                .child("users")
+                .child(currentUser.uid)
+                .child("Tasks")
+
+            database.addValueEventListener(object : ValueEventListener {
+                @SuppressLint("NotifyDataSetChanged")
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    mList.clear()
+                    for (taskSnapshot in snapshot.children) {
+                        val taskTitle = taskSnapshot.child("title").getValue(String::class.java) ?: ""
+                        val taskDesc = taskSnapshot.child("description").getValue(String::class.java) ?: ""
+                        val taskTime = taskSnapshot.child("time").getValue(String::class.java) ?: ""
+                        val taskDate = taskSnapshot.child("date").getValue(String::class.java) ?: ""
+
+                        val todoTask = ToDoData(taskTitle, taskDesc, taskTime, taskDate)
+                        mList.add(todoTask)
+                    }
+                    mList.sortWith(compareBy({ it.taskDate }, { it.taskTime }))
+                    adapter.notifyDataSetChanged()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
+                }
+            })
+        } else {
+            Toast.makeText(context, "User not authenticated", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun registerEvents() {
+        binding.btnTodoAddTask.setOnClickListener {
+            popUpFragment = PopUpFragment()
+            popUpFragment.setListener(this)
+            popUpFragment.show(childFragmentManager, "PopUpFragment")
+        }
     }
 
     override fun onSaveTask(
@@ -122,61 +122,30 @@ class TodoFragment : Fragment(), DialogAddBtnClickListener{
             "time" to todoTime,
             "date" to todoDate
         )
-        val database = databaseRef
-            .child("users")
-            .child(auth.currentUser!!.uid)
-            .child("Tasks")
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            val database = databaseRef
+                .child("users")
+                .child(currentUser.uid)
+                .child("Tasks")
 
-        database.push().setValue(task).addOnCompleteListener { tasks ->
-            if (tasks.isSuccessful) {
-                Toast.makeText(context, "Todo Saved Successfully", Toast.LENGTH_SHORT).show()
-                todoTitleEt.text = null
-                todoDescEt.text = null
-                todoDateEt.text = null
-                todoTimeEt.text = null
-            } else {
-                Toast.makeText(context, tasks.exception.toString(), Toast.LENGTH_SHORT).show()
+            database.push().setValue(task).addOnCompleteListener { tasks ->
+                if (tasks.isSuccessful) {
+                    Toast.makeText(context, "Todo Saved Successfully", Toast.LENGTH_SHORT).show()
+                    todoTitleEt.text = null
+                    todoDescEt.text = null
+                    todoDateEt.text = null
+                    todoTimeEt.text = null
+                } else {
+                    Toast.makeText(context, tasks.exception.toString(), Toast.LENGTH_SHORT).show()
+                }
+                popUpFragment.dismiss()
             }
-            popUpFragment.dismiss()
+        } else {
+            Toast.makeText(context, "User not authenticated", Toast.LENGTH_SHORT).show()
         }
     }
 
-
-    //    override fun onDeleteTaskBtnClicked(toDoData: ToDoData) {
-//        val database = databaseRef
-//            .child("users")
-//            .child(auth.currentUser!!.uid)
-//            .child("Tasks")
-//
-//        database
-//            .orderByChild("title")
-//            .equalTo(toDoData.taskTitle)
-//            .addListenerForSingleValueEvent(object : ValueEventListener{
-//                override fun onDataChange(snapshot: DataSnapshot) {
-//                    for (taskSnapshot in snapshot.children){
-//                        //check if the found entry matches the data to be deleted
-//                        if (taskSnapshot.child("title").getValue(String::class.java)==toDoData.taskTitle &&
-//                            taskSnapshot.child("description").getValue(String::class.java)==toDoData.taskDesc &&
-//                            taskSnapshot.child("time").getValue(String::class.java)==toDoData.taskTime &&
-//                            taskSnapshot.child("date").getValue(String::class.java)==toDoData.taskDate){
-//                            //Delete the entry
-//                            taskSnapshot.ref.removeValue()
-//                                .addOnCompleteListener {
-//                                    if (it.isSuccessful){
-//                                        Toast.makeText(context,"Deleted Successfully",Toast.LENGTH_SHORT).show()
-//                                    }else{
-//                                        Toast.makeText(context,it.exception?.message,Toast.LENGTH_SHORT).show()
-//                                    }
-//                                }
-//                        }
-//                    }
-//                }
-//                override fun onCancelled(error: DatabaseError) {
-//                    Toast.makeText(context,error.message,Toast.LENGTH_SHORT).show()
-//                }
-//
-//            })
-//    }
     @OptIn(DelicateCoroutinesApi::class)
     private fun initSwipe() {
         val swipe = object : Swipe() {
@@ -201,40 +170,45 @@ class TodoFragment : Fragment(), DialogAddBtnClickListener{
         val itemTouchHelper = ItemTouchHelper(swipe)
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)
     }
+
     private fun onSwiped(toDoData: ToDoData) {
         val currentUser = auth.currentUser
-        val database = databaseRef
-            .child("users")
-            .child(currentUser!!.uid)
-            .child("Tasks")
+        if (currentUser != null) {
+            val database = databaseRef
+                .child("users")
+                .child(currentUser.uid)
+                .child("Tasks")
 
-        database
-            .orderByChild("title")
-            .equalTo(toDoData.taskTitle)
-            .addListenerForSingleValueEvent(object : ValueEventListener{
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    for (taskSnapshot in snapshot.children){
-                        //check if the found entry matches the data to be deleted
-                        if (taskSnapshot.child("title").getValue(String::class.java)==toDoData.taskTitle &&
-                            taskSnapshot.child("description").getValue(String::class.java)==toDoData.taskDesc &&
-                            taskSnapshot.child("time").getValue(String::class.java)==toDoData.taskTime &&
-                            taskSnapshot.child("date").getValue(String::class.java)==toDoData.taskDate){
-                            //Delete the entry
-                            taskSnapshot.ref.removeValue()
-                                .addOnCompleteListener {
-                                    if(it.isSuccessful){
-                                        Log.d("Delete","Deleted")
-                                    }else{
-                                        it.exception?.message?.let { it1 -> Log.d("Failed", it1) }
+            database
+                .orderByChild("title")
+                .equalTo(toDoData.taskTitle)
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        for (taskSnapshot in snapshot.children) {
+                            // Check if the found entry matches the data to be deleted
+                            if (taskSnapshot.child("title").getValue(String::class.java) == toDoData.taskTitle &&
+                                taskSnapshot.child("description").getValue(String::class.java) == toDoData.taskDesc &&
+                                taskSnapshot.child("time").getValue(String::class.java) == toDoData.taskTime &&
+                                taskSnapshot.child("date").getValue(String::class.java) == toDoData.taskDate) {
+                                // Delete the entry
+                                taskSnapshot.ref.removeValue()
+                                    .addOnCompleteListener {
+                                        if (it.isSuccessful) {
+                                            Log.d("Delete", "Deleted")
+                                        } else {
+                                            it.exception?.message?.let { it1 -> Log.d("Failed", it1) }
+                                        }
                                     }
-                                }
+                            }
                         }
                     }
-                }
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(context,error.message,Toast.LENGTH_SHORT).show()
-                }
-            })
-    }
 
+                    override fun onCancelled(error: DatabaseError) {
+                        Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
+                    }
+                })
+        } else {
+            Toast.makeText(context, "User not authenticated", Toast.LENGTH_SHORT).show()
+        }
+    }
 }
