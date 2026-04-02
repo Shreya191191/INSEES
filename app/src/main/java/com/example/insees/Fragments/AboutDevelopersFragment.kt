@@ -8,10 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.example.insees.BottomSheetDialogDevelopers.AnkitFragment
-import com.example.insees.BottomSheetDialogDevelopers.BishalFragment
-import com.example.insees.BottomSheetDialogDevelopers.RishiFragment
-import com.example.insees.BottomSheetDialogDevelopers.SudipFragment
+import com.example.insees.BottomSheetDialogDevelopers.AishwaryaFragment
+import com.example.insees.BottomSheetDialogDevelopers.ShreyaFragment
 import com.example.insees.databinding.FragmentAboutDevelopersBinding
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
@@ -34,26 +32,17 @@ class AboutDevelopersFragment : Fragment() {
 
         getImages()
 
-        val bottomSheetSudip = SudipFragment()
-        val bottomSheetAnkit = AnkitFragment()
-        val bottomSheetRishi = RishiFragment()
-        val bottomsheetBishal = BishalFragment()
+        val bottomSheetAishwarya = AishwaryaFragment()
+        val bottomSheetShreya = ShreyaFragment()
 
         binding.btnSudip.setOnClickListener {
-            bottomSheetSudip.show(childFragmentManager, "BottomSheetDialog")
+            bottomSheetAishwarya.show(childFragmentManager, "BottomSheetDialog")
         }
 
         binding.btnAnkit.setOnClickListener {
-            bottomSheetAnkit.show(childFragmentManager, "BottomSheetDialog")
+            bottomSheetShreya.show(childFragmentManager, "BottomSheetDialog")
         }
 
-        binding.btnRishi.setOnClickListener {
-            bottomSheetRishi.show(childFragmentManager, "BottomSheetDialog")
-        }
-
-        binding.btnBishal.setOnClickListener {
-            bottomsheetBishal.show(childFragmentManager, "BottomSheetDialog")
-        }
     }
 
     private fun getImages() {
