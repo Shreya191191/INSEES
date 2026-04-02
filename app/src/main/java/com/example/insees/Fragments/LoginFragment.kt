@@ -16,9 +16,9 @@ import com.google.firebase.auth.FirebaseAuth
 
 class LoginFragment : Fragment() {
 
-    private lateinit var auth: FirebaseAuth
     private lateinit var binding: FragmentLoginBinding
     private lateinit var navController: NavController
+    private lateinit var auth: FirebaseAuth
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
