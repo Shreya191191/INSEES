@@ -72,6 +72,12 @@ dependencies {
 
     implementation("androidx.gridlayout:gridlayout:1.0.0")
 
+    //pdf viewer library
+    implementation("com.github.mhiew:android-pdf-viewer:3.2.0-beta.3")
+
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -82,10 +88,5 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
-    //pdf viewer library
-    implementation("com.github.mhiew:android-pdf-viewer:3.2.0-beta.3")
-
-    implementation("com.github.bumptech.glide:glide:4.16.0")
-    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
 
 }
