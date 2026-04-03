@@ -27,6 +27,8 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 class TodoFragment : Fragment(), DialogAddBtnClickListener {
 
@@ -116,6 +118,12 @@ class TodoFragment : Fragment(), DialogAddBtnClickListener {
         todoDate: String,
         todoDateEt: TextView
     ) {
+        // Validate task date not before current date
+        if (!isDateValid(todoDate)) {
+            Toast.makeText(context, "Please select a date on or after today", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val task = hashMapOf(
             "title" to todoTitle,
             "description" to todoDesc,
@@ -144,6 +152,16 @@ class TodoFragment : Fragment(), DialogAddBtnClickListener {
         } else {
             Toast.makeText(context, "User not authenticated", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun isDateValid(todoDate: String): Boolean {
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val currentDate = Calendar.getInstance().time
+        val selectedDate = sdf.parse(todoDate)
+        if (selectedDate != null) {
+            return !selectedDate.before(currentDate)
+        }
+        return false
     }
 
     @OptIn(DelicateCoroutinesApi::class)
