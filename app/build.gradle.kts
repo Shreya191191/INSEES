@@ -85,4 +85,7 @@ dependencies {
     //pdf viewer library
     implementation("com.github.mhiew:android-pdf-viewer:3.2.0-beta.3")
 
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
+
 }
