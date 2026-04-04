@@ -13,8 +13,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.example.insees.BottomSheetDialogDevelopers.ShreyaFragment
 import com.example.insees.BottomSheetDialogDevelopers.AishwaryaFragment
+import com.example.insees.BottomSheetDialogDevelopers.ShreyaFragment
 import com.example.insees.R
 import com.example.insees.databinding.FragmentAboutDevelopersBinding
 import com.google.firebase.storage.FirebaseStorage
@@ -40,15 +40,16 @@ class AboutDevelopersFragment : Fragment() {
 
         getImages()
 
-        val bottomSheetShreya = ShreyaFragment()
-        val bottomSheetAishwarya = AishwaryaFragment()
+        val bottomSheetAishwarya=AishwaryaFragment()
+        val bottomSheetShreya=ShreyaFragment()
 
-        binding.btnShreya.setOnClickListener {
-            bottomSheetShreya.show(childFragmentManager, "BottomSheetDialog")
-        }
 
         binding.btnAishwarya.setOnClickListener {
             bottomSheetAishwarya.show(childFragmentManager, "BottomSheetDialog")
+        }
+
+        binding.btnShreya.setOnClickListener {
+            bottomSheetShreya.show(childFragmentManager, "BottomSheetDialog")
         }
     }
 

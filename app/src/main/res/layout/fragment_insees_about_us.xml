@@ -4,17 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="8dp"
     android:background="@color/background"
     tools:context=".Fragments.InseesAboutUsFragment">
 
-
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="359dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:fontFamily="@font/bentham"
-        android:layout_marginStart="15dp"
+        android:layout_marginHorizontal="15dp"
         android:text="About Us"
         android:textColor="@color/white"
         android:textSize="30sp"
@@ -25,7 +25,7 @@
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="359dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/coco"
         android:layout_marginStart="15dp"
@@ -37,12 +37,13 @@
 
     <com.google.android.material.button.MaterialButtonToggleGroup
         android:id="@+id/togglebuttonlayout"
-        android:layout_width="370dp"
-        android:layout_height="48dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
         android:background="@drawable/rounded_button"
         android:backgroundTint="@color/customgreen"
         android:gravity="center"
+        android:layout_marginHorizontal="8dp"
         app:layout_constraintBottom_toTopOf="@+id/flfragmentaboutus"
         app:layout_constraintEnd_toEndOf="@id/flfragmentaboutus"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,39 +52,37 @@
 
         <Button
             android:id="@+id/membersbtn"
-            android:layout_width="180dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/customgreen"
             android:fontFamily="@font/bevietnamprolight"
             android:text="Members"
+            android:layout_weight="1"
             android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textSize="12sp"
             android:textStyle="bold"
             app:checkedIconTint="@color/white"
             app:icon="@drawable/insees_logo"
             app:iconTint="@color/white"
             app:iconSize="30dp"
-            app:shapeAppearanceOverlay="@style/roundedButtonShape"
-            tools:layout_editor_absoluteX="160dp"
-            tools:layout_editor_absoluteY="113dp" />
+            app:shapeAppearanceOverlay="@style/roundedButtonShape"/>
 
         <Button
             android:id="@+id/developersbtn"
-            android:layout_width="180dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:backgroundTint="@color/customgreen"
             android:fontFamily="@font/bevietnamprolight"
             android:text="Developers"
             android:textColor="@color/white"
             app:iconSize="30dp"
-            android:textSize="16sp"
+            android:textSize="12sp"
             android:textStyle="bold"
             app:checkedIconTint="@color/white"
             app:icon="@drawable/android_logo"
             app:iconTint="@color/white"
-            app:shapeAppearanceOverlay="@style/roundedButtonShape"
-            tools:layout_editor_absoluteX="160dp"
-            tools:layout_editor_absoluteY="218dp" />
+            app:shapeAppearanceOverlay="@style/roundedButtonShape"/>
 
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
@@ -91,7 +90,6 @@
         android:id="@+id/flfragmentaboutus"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
