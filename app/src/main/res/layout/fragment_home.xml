@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -19,13 +20,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.appbar.AppBarLayout
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background"
-        android:padding="8dp"
-        android:visibility="gone"
+        android:background="@color/bnvColor"
+        android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -33,19 +33,18 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clAppBar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp">
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/tvHello"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp"
                 android:fontFamily="@font/bentham"
                 android:text="@string/hello"
                 android:textColor="@color/white"
-                android:textSize="30sp"
+                android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -55,11 +54,10 @@
                 app:layout_constraintVertical_bias="0.0" />
 
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/btnProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@drawable/rounded_button"
                 android:backgroundTint="@color/darkGrey"
                 android:contentDescription="@string/profile"
                 android:focusable="true"
@@ -70,7 +68,7 @@
                 app:layout_constraintStart_toEndOf="@+id/tvHello"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.appbar.AppBarLayout>
+    </com.google.android.material.appbar.MaterialToolbar>
 
     <ScrollView
         android:id="@+id/scrollViewHome"
@@ -148,7 +146,7 @@
                     android:id="@+id/btnAddTask"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="4sp"
+                    android:layout_margin="8dp"
                     android:backgroundTint="@color/theme"
                     android:drawableLeft="@drawable/baseline_add_box_24"
                     android:drawableTint="@color/white"

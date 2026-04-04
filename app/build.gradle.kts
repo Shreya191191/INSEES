@@ -88,5 +88,7 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
+    implementation("de.hdodenhof:circleimageview:3.1.0")
+
 
 }

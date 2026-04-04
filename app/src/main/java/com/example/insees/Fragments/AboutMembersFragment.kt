@@ -55,6 +55,7 @@ class AboutMembersFragment : Fragment() {
     private fun loadImage(remotePath: String, imageView: ImageView) {
         val storageRef = FirebaseStorage.getInstance().reference.child(remotePath)
         storageRef.downloadUrl.addOnSuccessListener { uri ->
+            Toast.makeText(requireContext(), "Done", Toast.LENGTH_SHORT).show()
             Glide.with(this)
                 .load(uri)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)  // Enable disk caching
