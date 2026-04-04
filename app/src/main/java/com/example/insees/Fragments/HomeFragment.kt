@@ -34,6 +34,8 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.*
 
 class HomeFragment : Fragment(), DialogAddBtnClickListener {
 
@@ -173,6 +175,12 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
         todoDate: String,
         todoDateEt: TextView
     ) {
+        // Validate task date not before current date
+        if (!isDateValid(todoDate)) {
+            Toast.makeText(context, "Please select a date on or after today", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val task = hashMapOf(
             "title" to todoTitle,
             "description" to todoDesc,
@@ -198,6 +206,13 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
         }
         updateRecyclerViewVisibility()
         homeAdapter.notifyDataSetChanged()
+    }
+
+    private fun isDateValid(todoDate: String): Boolean {
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val currentDate = sdf.format(Calendar.getInstance().time)
+        val selectedDate = sdf.format(sdf.parse(todoDate) ?: return false)
+        return selectedDate >= currentDate
     }
 
     private fun initSwipe() {
@@ -245,21 +260,21 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
                         if (taskSnapshot.child("title").getValue(String::class.java) == toDoData.taskTitle &&
                             taskSnapshot.child("description").getValue(String::class.java) == toDoData.taskDesc &&
                             taskSnapshot.child("time").getValue(String::class.java) == toDoData.taskTime &&
-                            taskSnapshot.child("date").getValue(String::class.java) == toDoData.taskDate) {
-                            // Delete the entry
-                            taskSnapshot.ref.removeValue().addOnCompleteListener {
-                                if (it.isSuccessful) {
-                                    Toast.makeText(context, "Deleted Successfully", Toast.LENGTH_SHORT).show()
-                                } else {
-                                    Toast.makeText(context, it.exception?.message, Toast.LENGTH_SHORT).show()
-                                }
-                            }
+                            taskSnapshot.child("date").getValue(String::class.java) == toDoData.taskDate
+                        ) {
+                            taskSnapshot.ref.removeValue()
+                            tasks.remove(toDoData)
+                            break
                         }
                     }
+                    updateRecyclerViewVisibility()
+                    homeAdapter.notifyDataSetChanged()
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        Toast.makeText(requireContext(), "Error in Deleting Task", Toast.LENGTH_SHORT).show()
+                    }
                 }
             })
     }

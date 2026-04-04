@@ -19,14 +19,11 @@ class AboutMembersFragment : Fragment() {
                               savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
         binding = FragmentAboutMembersBinding.inflate(inflater, container, false)
-        val view = binding.root
-
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         getImages()
     }
 
@@ -55,13 +52,16 @@ class AboutMembersFragment : Fragment() {
     private fun loadImage(remotePath: String, imageView: ImageView) {
         val storageRef = FirebaseStorage.getInstance().reference.child(remotePath)
         storageRef.downloadUrl.addOnSuccessListener { uri ->
-            Toast.makeText(requireContext(), "Done", Toast.LENGTH_SHORT).show()
-            Glide.with(this)
-                .load(uri)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)  // Enable disk caching
-                .into(imageView)
+            if (isAdded) { // Check if fragment is added to its activity
+                Glide.with(this)
+                    .load(uri)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)  // Enable disk caching
+                    .into(imageView)
+            }
         }.addOnFailureListener {
-            Toast.makeText(context, "Failed to load image: $remotePath", Toast.LENGTH_SHORT).show()
+            if (isAdded) { // Check if fragment is added to its activity
+                Toast.makeText(context, "Failed to load image: $remotePath", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
