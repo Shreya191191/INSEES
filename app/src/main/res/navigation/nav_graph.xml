@@ -27,7 +27,8 @@
         tools:layout="@layout/fragment_sign_up" >
         <action
             android:id="@+id/action_signUpFragment_to_completeProfileFragment"
-            app:destination="@id/completeProfileFragment" />
+            app:destination="@id/completeProfileFragment"
+            app:popUpTo="@id/loginFragment" />
         <action
             android:id="@+id/action_signUpFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
@@ -50,7 +51,20 @@
             android:id="@+id/action_loginFragment_to_forgotPasswordFragment"
             app:destination="@id/forgotPasswordFragment" />
     </fragment>
-
+    <fragment
+        android:id="@+id/completeProfileFragment"
+        android:name="com.example.insees.Fragments.CompleteProfileFragment"
+        android:label="fragment_complete_profile"
+        tools:layout="@layout/fragment_complete_profile" >
+        <action
+            android:id="@+id/action_completeProfileFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <activity
+        android:id="@+id/homeActivity"
+        android:name="com.example.insees.Activities.HomeActivity"
+        android:label="activity_home"
+        tools:layout="@layout/activity_home" />
     <fragment
         android:id="@+id/forgotPasswordFragment"
         android:name="com.example.insees.Fragments.ForgotPasswordFragment"
@@ -61,15 +75,4 @@
             app:destination="@id/loginFragment" />
     </fragment>
 
-    <fragment
-        android:id="@+id/completeProfileFragment"
-        android:name="com.example.insees.Fragments.CompleteProfileFragment"
-        android:label="fragment_complete_profile"
-        tools:layout="@layout/fragment_complete_profile" >
-    </fragment>
-    <activity
-        android:id="@+id/homeActivity"
-        android:name="com.example.insees.Activities.HomeActivity"
-        android:label="activity_home"
-        tools:layout="@layout/activity_home" />
 </navigation>
