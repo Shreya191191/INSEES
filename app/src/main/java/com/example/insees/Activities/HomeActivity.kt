@@ -8,6 +8,7 @@ import com.example.insees.R
 
 class HomeActivity : AppCompatActivity() {
 
+
     private lateinit var navController: NavController
     private lateinit var navHostFragment: NavHostFragment
     override fun onCreate(savedInstanceState: Bundle?) {

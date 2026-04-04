@@ -28,6 +28,7 @@ class AboutMembersFragment : Fragment() {
     }
 
     private fun getImages() {
+        loadImage("inseesimages/inseesgroup.jpg",binding.inseesImage)
         loadImage("inseesimages/president.png", binding.imgPresident)
         loadImage("inseesimages/snehagupta.png", binding.imgVicePresident)
         loadImage("inseesimages/ankitraj.png", binding.imgGenSecretary)
@@ -47,6 +48,7 @@ class AboutMembersFragment : Fragment() {
         loadImage("inseesimages/harish.png", binding.imgHarish)
         loadImage("inseesimages/amipsa.png", binding.imgAmipsa)
         loadImage("inseesimages/silpangana.png", binding.imgSilpangana)
+
     }
 
     private fun loadImage(remotePath: String, imageView: ImageView) {

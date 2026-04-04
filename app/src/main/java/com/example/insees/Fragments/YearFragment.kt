@@ -19,6 +19,7 @@ import com.example.insees.Adapters.YearAdapter
 import com.example.insees.R
 import com.example.insees.Utils.FirebaseManager
 import com.example.insees.databinding.FragmentYearListBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
@@ -60,9 +61,12 @@ class YearFragment : Fragment(){
         super.onViewCreated(view, savedInstanceState)
 
         setupListView()
+        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bvNavBar)
+        bottomNavigationView.visibility = View.GONE
 
         binding.btnSubjectBack.setOnClickListener {
-            findNavController().popBackStack()
+            findNavController().navigateUp()
+            bottomNavigationView.visibility = View.VISIBLE
         }
     }
 
@@ -71,8 +75,8 @@ class YearFragment : Fragment(){
         fetchDataAndSetupAdapter()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         lifecycleScope.coroutineContext.cancel()
     }
 
