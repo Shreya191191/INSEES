@@ -10,7 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.insees.Activities.MainActivity
+import com.example.insees.R
 import com.example.insees.databinding.FragmentProfileBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 
 
@@ -22,7 +24,6 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
-
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,8 +32,11 @@ class ProfileFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         val view = binding.root
+        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bvNavBar)
+        bottomNavigationView.visibility = View.GONE
         binding.btnBackToHome.setOnClickListener {
-            navController.popBackStack()
+            navController.navigateUp()
+            bottomNavigationView.visibility = View.VISIBLE
         }
         binding.btnLogOut.setOnClickListener {
             logout()

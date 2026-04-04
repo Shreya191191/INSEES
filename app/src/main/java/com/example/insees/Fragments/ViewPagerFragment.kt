@@ -29,7 +29,7 @@ class ViewPagerFragment : Fragment() {
             InseesAboutUsFragment()
         )
 
-        val adapter = ViewPagerAdapter(fragmentList, requireActivity().supportFragmentManager, lifecycle)
+        val adapter = ViewPagerAdapter(fragmentList, childFragmentManager, lifecycle)
         val viewPager = view.findViewById<ViewPager2>(R.id.viewPager)
         viewPager.adapter = adapter
 
