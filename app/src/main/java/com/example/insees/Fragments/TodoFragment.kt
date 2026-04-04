@@ -1,12 +1,6 @@
 package com.example.insees.Fragments
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.app.*
-import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,8 +9,6 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,7 +17,6 @@ import com.example.insees.Adapters.ToDoAdapter
 import com.example.insees.Dataclasses.ToDoData
 import com.example.insees.Utils.DialogAddBtnClickListener
 import com.example.insees.Utils.FirebaseManager
-import com.example.insees.Utils.NotificationReceiver
 import com.example.insees.Utils.Swipe
 import com.example.insees.databinding.FragmentTodoBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -35,7 +26,6 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -48,10 +38,6 @@ class TodoFragment : Fragment(), DialogAddBtnClickListener {
     private lateinit var adapter: ToDoAdapter
     private lateinit var mList: MutableList<ToDoData>
     private lateinit var auth: FirebaseAuth
-    private lateinit var alarmManager: AlarmManager
-    private lateinit var pendingIntent: PendingIntent
-
-    private val PERMISSION_REQUEST_CODE = 101
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,70 +64,6 @@ class TodoFragment : Fragment(), DialogAddBtnClickListener {
         mList = mutableListOf()
         adapter = ToDoAdapter(mList)
         binding.recyclerView.adapter = adapter
-
-        createNotificationChannel()
-
-        // Initialize AlarmManager and PendingIntent
-        alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, NotificationReceiver::class.java)
-        pendingIntent = PendingIntent.getBroadcast(
-            context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        // Request SCHEDULE_EXACT_ALARM permission if necessary
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (!hasScheduleExactAlarmPermission()) {
-                requestScheduleExactAlarmPermission()
-            }
-        }
-
-        // Start periodic checks for notifications
-        checkAndScheduleNotifications()
-    }
-
-
-    private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "Task Reminder Channel"
-            val descriptionText = "Channel for Task Reminders"
-            val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel("task_reminder_channel", name, importance).apply {
-                description = descriptionText
-            }
-            val notificationManager: NotificationManager = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
-        }
-    }
-
-    private fun hasScheduleExactAlarmPermission(): Boolean {
-        return ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.SCHEDULE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.USE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun requestScheduleExactAlarmPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.SCHEDULE_EXACT_ALARM) ||
-            ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.USE_EXACT_ALARM)) {
-            // Show an explanation to the user *asynchronously* -- don't block
-            // this thread waiting for the user's response! After the user
-            // sees the explanation, try again to request the permission.
-            Toast.makeText(context, "Exact Alarm Permission is required to schedule notifications", Toast.LENGTH_SHORT).show()
-        } else {
-            // No explanation needed; request the permission
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.SCHEDULE_EXACT_ALARM, Manifest.permission.USE_EXACT_ALARM), PERMISSION_REQUEST_CODE)
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == PERMISSION_REQUEST_CODE) {
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                // Permission granted
-                Toast.makeText(context, "Exact Alarm Permission Granted", Toast.LENGTH_SHORT).show()
-            } else {
-                // Permission denied
-                Toast.makeText(context, "Exact Alarm Permission Denied", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 
     private fun getDataFromFirebase() {
@@ -186,7 +108,6 @@ class TodoFragment : Fragment(), DialogAddBtnClickListener {
         }
     }
 
-
     override fun onSaveTask(
         todoTitle: String,
         todoTitleEt: EditText,
@@ -223,9 +144,6 @@ class TodoFragment : Fragment(), DialogAddBtnClickListener {
                     todoDescEt.text = null
                     todoDateEt.text = null
                     todoTimeEt.text = null
-
-                    // Schedule the notification
-                    scheduleNotification(todoTitle, todoDesc, todoDate, todoTime)
                 } else {
                     Toast.makeText(context, tasks.exception.toString(), Toast.LENGTH_SHORT).show()
                 }
@@ -235,65 +153,6 @@ class TodoFragment : Fragment(), DialogAddBtnClickListener {
             Toast.makeText(context, "User not authenticated", Toast.LENGTH_SHORT).show()
         }
     }
-
-    @OptIn(DelicateCoroutinesApi::class)
-    private fun checkAndScheduleNotifications() {
-        GlobalScope.launch {
-            while (true) {
-                // Fetch tasks from Firebase
-                getDataFromFirebase()
-
-                // Check for tasks whose time matches the current time
-                mList.forEach { task ->
-                    val currentTime = Calendar.getInstance()
-                    val taskTime = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-                        .parse("${task.taskDate} ${task.taskTime}")
-
-                    if (taskTime != null && currentTime.time >= taskTime) {
-                        // Schedule notification for this task
-                        task?.let {
-                            scheduleNotification(it.taskTitle, it.taskDesc, it.taskDate, it.taskTime)
-                        }
-                    }
-                }
-
-                // Sleep for 1 minute before checking again
-                delay(60000) // Check every 1 minute
-            }
-        }
-    }
-
-    @SuppressLint("ScheduleExactAlarm")
-    private fun scheduleNotification(title: String, description: String, date: String, time: String) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !hasScheduleExactAlarmPermission()) {
-            requestScheduleExactAlarmPermission()
-            return
-        }
-
-        val intent = Intent(context, NotificationReceiver::class.java).apply {
-            putExtra("taskTitle", title)
-            putExtra("taskDesc", description)
-        }
-
-        val pendingIntent = PendingIntent.getBroadcast(
-            context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-        val dateTime = "$date $time"
-
-        val triggerAtMillis = sdf.parse(dateTime)?.time
-        if (triggerAtMillis == null) {
-            Log.e("scheduleNotification", "Failed to parse date and time: $dateTime")
-            return
-        }
-
-        Log.d("scheduleNotification", "Scheduling notification at $triggerAtMillis ($dateTime)")
-
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
-        Log.d("scheduleNotification", "Notification scheduled with AlarmManager")
-    }
-
 
     private fun isDateValid(todoDate: String): Boolean {
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
