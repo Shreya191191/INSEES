@@ -28,7 +28,6 @@ class SignUpFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentSignUpBinding.inflate(inflater,container,false)
 
-
         binding.btnNextSignUp.setOnClickListener {
             if (checkAllFields()) {
                 navController.navigate(R.id.action_signUpFragment_to_completeProfileFragment, Bundle().apply {
