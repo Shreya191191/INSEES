@@ -16,9 +16,9 @@ import com.google.firebase.auth.FirebaseAuth
 
 class LoginFragment : Fragment() {
 
+    private lateinit var auth: FirebaseAuth
     private lateinit var binding: FragmentLoginBinding
     private lateinit var navController: NavController
-    private lateinit var auth: FirebaseAuth
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,10 +38,12 @@ class LoginFragment : Fragment() {
         }
 
         binding.btnLogin.setOnClickListener {
-            val email = binding.etEmailLogin.text.toString()
-            val password = binding.etPasswordLogin.text.toString()
-            if (email.isNotEmpty() && password.isNotEmpty() )
+            val email = binding.etEmailLogin.text.toString().trim()
+            val password = binding.etPasswordLogin.text.toString().trim()
+
+            if (email.isNotEmpty() && password.isNotEmpty()) {
                 login(email, password)
+            }
             else
             {
                 Toast.makeText(requireContext(), "Enter Your Details", Toast.LENGTH_SHORT).show()
@@ -51,19 +53,23 @@ class LoginFragment : Fragment() {
         binding.btnForgetPassword.setOnClickListener {
             navController.navigate(R.id.action_loginFragment_to_forgotPasswordFragment)
         }
-
         return binding.root
     }
     private fun login(email:String, password:String){
         auth.signInWithEmailAndPassword(email,password).addOnCompleteListener{task->
             if (task.isSuccessful){
-                val intent = Intent(context, HomeActivity::class.java)
-                startActivity(intent)
-                requireActivity().finish()
+                val verification = auth.currentUser?.isEmailVerified
+                when(verification){
+                    true -> {
+                        val intent = Intent(context, HomeActivity::class.java)
+                        startActivity(intent)
+                        requireActivity().finish()
+                    }
+                    else -> Toast.makeText(requireContext(), "Please Verify Your Email", Toast.LENGTH_SHORT).show()
+                }
             }
         }.addOnFailureListener {exception->
             Toast.makeText(context, exception.localizedMessage, Toast.LENGTH_LONG).show()
         }
     }
-
 }

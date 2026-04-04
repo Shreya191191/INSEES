@@ -22,7 +22,7 @@ class IntroFragment : Fragment() {
         navController = Navigation.findNavController(view)
         val auth = FirebaseAuth.getInstance()
         binding.alreadyHaveAccount.setOnClickListener{
-            if(auth.currentUser != null)
+            if(auth.currentUser != null && auth.currentUser!!.isEmailVerified)
             {
                 Toast.makeText(requireContext(), "User is already logged in", Toast.LENGTH_SHORT).show()
                 redirect("MAIN")
