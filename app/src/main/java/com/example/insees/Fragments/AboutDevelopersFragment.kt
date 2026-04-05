@@ -35,28 +35,22 @@ class AboutDevelopersFragment : Fragment() {
         val bottomSheetAishwarya = AishwaryaFragment()
         val bottomSheetShreya = ShreyaFragment()
 
-        binding.btnSudip.setOnClickListener {
+        binding.btnShreya.setOnClickListener {
             bottomSheetAishwarya.show(childFragmentManager, "BottomSheetDialog")
         }
 
-        binding.btnAnkit.setOnClickListener {
+        binding.btnAishwarya.setOnClickListener {
             bottomSheetShreya.show(childFragmentManager, "BottomSheetDialog")
         }
 
     }
 
     private fun getImages() {
-        loadImage("images/sudip.jpg", "sudip.jpg") { bitmap ->
-            binding.sudipImage.setImageBitmap(bitmap)
+        loadImage("images/shreya.jpg", "shreya.jpg") { bitmap ->
+            binding.shreyaImage.setImageBitmap(bitmap)
         }
-        loadImage("images/ankit.jpg", "ankit.jpg") { bitmap ->
-            binding.ankitImage.setImageBitmap(bitmap)
-        }
-        loadImage("images/rishi.jpg", "rishi.jpg") { bitmap ->
-            binding.rishiImage.setImageBitmap(bitmap)
-        }
-        loadImage("images/bishal.jpg", "bishal.jpg") { bitmap ->
-            binding.bishalImage.setImageBitmap(bitmap)
+        loadImage("images/aishwarya.jpg", "aishwarya.jpg") { bitmap ->
+            binding.aishwaryaImage.setImageBitmap(bitmap)
         }
     }
 

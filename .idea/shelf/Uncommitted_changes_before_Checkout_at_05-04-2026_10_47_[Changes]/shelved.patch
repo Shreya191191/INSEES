@@ -1,0 +1,137 @@
+Index: app/src/main/java/com/example/insees/Fragments/AboutDevelopersFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.insees.Fragments\r\n\r\nimport android.graphics.Bitmap\r\nimport android.graphics.BitmapFactory\r\nimport android.os.Bundle\r\nimport androidx.fragment.app.Fragment\r\nimport android.view.LayoutInflater\r\nimport android.view.View\r\nimport android.view.ViewGroup\r\nimport android.widget.Toast\r\nimport com.example.insees.BottomSheetDialogDevelopers.AishwaryaFragment\r\nimport com.example.insees.BottomSheetDialogDevelopers.ShreyaFragment\r\nimport com.example.insees.databinding.FragmentAboutDevelopersBinding\r\nimport com.google.firebase.storage.FirebaseStorage\r\nimport java.io.File\r\n\r\nclass AboutDevelopersFragment : Fragment() {\r\n\r\n    private lateinit var binding: FragmentAboutDevelopersBinding\r\n\r\n    override fun onCreateView(\r\n        inflater: LayoutInflater, container: ViewGroup?,\r\n        savedInstanceState: Bundle?\r\n    ): View {\r\n        // Inflate the layout for this fragment\r\n        binding = FragmentAboutDevelopersBinding.inflate(inflater, container, false)\r\n        return binding.root\r\n    }\r\n\r\n    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {\r\n        super.onViewCreated(view, savedInstanceState)\r\n\r\n        getImages()\r\n\r\n        val bottomSheetAishwarya = AishwaryaFragment()\r\n        val bottomSheetShreya = ShreyaFragment()\r\n\r\n        binding.btnSudip.setOnClickListener {\r\n            bottomSheetAishwarya.show(childFragmentManager, \"BottomSheetDialog\")\r\n        }\r\n\r\n        binding.btnAnkit.setOnClickListener {\r\n            bottomSheetShreya.show(childFragmentManager, \"BottomSheetDialog\")\r\n        }\r\n\r\n    }\r\n\r\n    private fun getImages() {\r\n        loadImage(\"images/sudip.jpg\", \"sudip.jpg\") { bitmap ->\r\n            binding.sudipImage.setImageBitmap(bitmap)\r\n        }\r\n        loadImage(\"images/ankit.jpg\", \"ankit.jpg\") { bitmap ->\r\n            binding.ankitImage.setImageBitmap(bitmap)\r\n        }\r\n        loadImage(\"images/rishi.jpg\", \"rishi.jpg\") { bitmap ->\r\n            binding.rishiImage.setImageBitmap(bitmap)\r\n        }\r\n        loadImage(\"images/bishal.jpg\", \"bishal.jpg\") { bitmap ->\r\n            binding.bishalImage.setImageBitmap(bitmap)\r\n        }\r\n    }\r\n\r\n    private fun loadImage(remotePath: String, localFileName: String, onImageLoaded: (bitmap: Bitmap) -> Unit) {\r\n        val localFile = File(requireContext().cacheDir, localFileName)\r\n\r\n        if (localFile.exists()) {\r\n            // Load the image from the local cache\r\n            val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)\r\n            onImageLoaded(bitmap)\r\n        } else {\r\n            // Download the image from Firebase Storage and save it locally\r\n            val storageRef = FirebaseStorage.getInstance().reference.child(remotePath)\r\n\r\n            storageRef.getFile(localFile).addOnSuccessListener {\r\n                val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)\r\n                onImageLoaded(bitmap)\r\n            }.addOnFailureListener {\r\n                Toast.makeText(context, \"Failed to load image: $remotePath\", Toast.LENGTH_SHORT).show()\r\n            }\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/insees/Fragments/AboutDevelopersFragment.kt b/app/src/main/java/com/example/insees/Fragments/AboutDevelopersFragment.kt
+--- a/app/src/main/java/com/example/insees/Fragments/AboutDevelopersFragment.kt	(revision 7c96c798a74e0c271672c5855130714d49909c33)
++++ b/app/src/main/java/com/example/insees/Fragments/AboutDevelopersFragment.kt	(date 1775366204285)
+@@ -1,18 +1,26 @@
+ package com.example.insees.Fragments
+ 
+ import android.graphics.Bitmap
+-import android.graphics.BitmapFactory
++import android.graphics.drawable.Drawable
+ import android.os.Bundle
+ import androidx.fragment.app.Fragment
+ import android.view.LayoutInflater
+ import android.view.View
+ import android.view.ViewGroup
++import android.widget.ImageView
+ import android.widget.Toast
++import com.bumptech.glide.Glide
++import com.bumptech.glide.load.engine.DiskCacheStrategy
++import com.bumptech.glide.request.target.CustomTarget
++import com.bumptech.glide.request.transition.Transition
+ import com.example.insees.BottomSheetDialogDevelopers.AishwaryaFragment
+ import com.example.insees.BottomSheetDialogDevelopers.ShreyaFragment
++import com.example.insees.R
+ import com.example.insees.databinding.FragmentAboutDevelopersBinding
+ import com.google.firebase.storage.FirebaseStorage
+ import java.io.File
++import java.io.FileOutputStream
++import java.io.IOException
+ 
+ class AboutDevelopersFragment : Fragment() {
+ 
+@@ -32,51 +40,71 @@
+ 
+         getImages()
+ 
+-        val bottomSheetAishwarya = AishwaryaFragment()
+-        val bottomSheetShreya = ShreyaFragment()
++        val bottomSheetAishwarya=AishwaryaFragment()
++        val bottomSheetShreya=ShreyaFragment()
+ 
+-        binding.btnSudip.setOnClickListener {
++
++        binding.btnAishwarya.setOnClickListener {
+             bottomSheetAishwarya.show(childFragmentManager, "BottomSheetDialog")
+         }
+ 
+-        binding.btnAnkit.setOnClickListener {
++        binding.btnShreya.setOnClickListener {
+             bottomSheetShreya.show(childFragmentManager, "BottomSheetDialog")
+         }
+-
+     }
+ 
+     private fun getImages() {
+-        loadImage("images/sudip.jpg", "sudip.jpg") { bitmap ->
+-            binding.sudipImage.setImageBitmap(bitmap)
+-        }
+-        loadImage("images/ankit.jpg", "ankit.jpg") { bitmap ->
+-            binding.ankitImage.setImageBitmap(bitmap)
+-        }
+-        loadImage("images/rishi.jpg", "rishi.jpg") { bitmap ->
+-            binding.rishiImage.setImageBitmap(bitmap)
+-        }
+-        loadImage("images/bishal.jpg", "bishal.jpg") { bitmap ->
+-            binding.bishalImage.setImageBitmap(bitmap)
+-        }
++        loadImage("images/shreya.jpg", binding.shreyaImage, "shreya.jpg")
++        loadImage("images/aishwarya.jpg", binding.aishwaryaImage, "aishwarya.jpg")
+     }
+ 
+-    private fun loadImage(remotePath: String, localFileName: String, onImageLoaded: (bitmap: Bitmap) -> Unit) {
+-        val localFile = File(requireContext().cacheDir, localFileName)
++    private fun loadImage(remotePath: String, imageView: ImageView, localFileName: String) {
++        val localFile = File(requireContext().filesDir, localFileName)
+ 
+         if (localFile.exists()) {
+-            // Load the image from the local cache
+-            val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
+-            onImageLoaded(bitmap)
++            // Load the image from the local file
++            Glide.with(this)
++                .load(localFile)
++                .placeholder(R.drawable.rounded_corners) // Use a placeholder image
++                .diskCacheStrategy(DiskCacheStrategy.ALL) // Enable disk caching
++                .into(imageView)
+         } else {
+             // Download the image from Firebase Storage and save it locally
+             val storageRef = FirebaseStorage.getInstance().reference.child(remotePath)
++            storageRef.downloadUrl.addOnSuccessListener { uri ->
++                if (isAdded) {
++                    Glide.with(this)
++                        .asBitmap()
++                        .load(uri)
++                        .placeholder(R.drawable.rounded_corners) // Use a placeholder image
++                        .diskCacheStrategy(DiskCacheStrategy.ALL) // Enable disk caching
++                        .into(object : CustomTarget<Bitmap>() {
++                            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
++                                imageView.setImageBitmap(resource)
++                                saveImageToLocalFile(resource, localFile)
++                            }
+ 
+-            storageRef.getFile(localFile).addOnSuccessListener {
+-                val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
+-                onImageLoaded(bitmap)
++                            override fun onLoadCleared(placeholder: Drawable?) {
++                                // Handle cleanup if necessary
++                            }
++                        })
++                }
+             }.addOnFailureListener {
+-                Toast.makeText(context, "Failed to load image: $remotePath", Toast.LENGTH_SHORT).show()
++                if (isAdded) {
++                    Toast.makeText(context, "Failed to load image: $remotePath", Toast.LENGTH_SHORT).show()
++                }
+             }
+         }
+     }
++
++    private fun saveImageToLocalFile(bitmap: Bitmap, file: File) {
++        try {
++            FileOutputStream(file).use { out ->
++                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
++            }
++        } catch (e: IOException) {
++            e.printStackTrace()
++            Toast.makeText(context, "Failed to save image locally", Toast.LENGTH_SHORT).show()
++        }
++    }
+ }
+\ No newline at end of file

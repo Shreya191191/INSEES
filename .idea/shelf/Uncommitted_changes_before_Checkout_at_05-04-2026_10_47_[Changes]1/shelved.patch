@@ -1,0 +1,37 @@
+Index: app/build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n    alias(libs.plugins.android.application)\r\n    alias(libs.plugins.kotlin.compose)\r\n    id(\"com.google.gms.google-services\")\r\n}\r\n\r\nandroid {\r\n    namespace = \"com.example.insees\"\r\n    compileSdk {\r\n        version = release(36)\r\n    }\r\n\r\n    defaultConfig {\r\n        applicationId = \"com.example.insees\"\r\n        minSdk = 24\r\n        targetSdk = 36\r\n        versionCode = 1\r\n        versionName = \"1.0\"\r\n\r\n        testInstrumentationRunner = \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            isMinifyEnabled = false\r\n            proguardFiles(\r\n                getDefaultProguardFile(\"proguard-android-optimize.txt\"),\r\n                \"proguard-rules.pro\"\r\n            )\r\n        }\r\n    }\r\n\r\n    compileOptions {\r\n        sourceCompatibility = JavaVersion.VERSION_17\r\n        targetCompatibility = JavaVersion.VERSION_17\r\n    }\r\n\r\n    buildFeatures {\r\n        compose = true\r\n        viewBinding = true\r\n    }\r\n}\r\n\r\ndependencies {\r\n\r\n    implementation(libs.androidx.core.ktx)\r\n    implementation(libs.androidx.lifecycle.runtime.ktx)\r\n    implementation(libs.androidx.activity.compose)\r\n\r\n    implementation(platform(libs.androidx.compose.bom))\r\n    implementation(libs.androidx.compose.ui)\r\n    implementation(libs.androidx.compose.ui.graphics)\r\n    implementation(libs.androidx.compose.ui.tooling.preview)\r\n    implementation(libs.androidx.compose.material3)\r\n\r\n    implementation(\"androidx.appcompat:appcompat:1.6.1\")\r\n    implementation(\"com.google.android.material:material:1.11.0\")\r\n    implementation(\"androidx.constraintlayout:constraintlayout:2.1.4\")\r\n\r\n    implementation(platform(\"com.google.firebase:firebase-bom:32.7.0\"))\r\n    implementation(\"com.google.firebase:firebase-auth\")\r\n    implementation(\"com.google.firebase:firebase-firestore\")\r\n    implementation(\"com.google.firebase:firebase-database-ktx\")\r\n    implementation(\"com.google.firebase:firebase-storage-ktx\")\r\n\r\n    // \uD83D\uDD25 UPDATED Navigation (2.7.7)\r\n    implementation(\"androidx.navigation:navigation-fragment-ktx:2.7.7\")\r\n    implementation(\"androidx.navigation:navigation-ui-ktx:2.7.7\")\r\n\r\n    // \uD83D\uDD25 ADDED Coil (image loading)\r\n    implementation(\"io.coil-kt:coil:2.6.0\")\r\n\r\n    implementation(\"androidx.gridlayout:gridlayout:1.0.0\")\r\n\r\n    testImplementation(libs.junit)\r\n    androidTestImplementation(libs.androidx.junit)\r\n    androidTestImplementation(libs.androidx.espresso.core)\r\n\r\n    androidTestImplementation(platform(libs.androidx.compose.bom))\r\n    androidTestImplementation(libs.androidx.compose.ui.test.junit4)\r\n\r\n    debugImplementation(libs.androidx.compose.ui.tooling)\r\n    debugImplementation(libs.androidx.compose.ui.test.manifest)\r\n\r\n    //pdf viewer library\r\n    implementation(\"com.github.mhiew:android-pdf-viewer:3.2.0-beta.3\")\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle.kts b/app/build.gradle.kts
+--- a/app/build.gradle.kts	(revision 7c96c798a74e0c271672c5855130714d49909c33)
++++ b/app/build.gradle.kts	(date 1775332301610)
+@@ -57,7 +57,7 @@
+     implementation("com.google.android.material:material:1.11.0")
+     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+ 
+-    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
++    implementation(platform("com.google.firebase:firebase-bom:34.11.0"))
+     implementation("com.google.firebase:firebase-auth")
+     implementation("com.google.firebase:firebase-firestore")
+     implementation("com.google.firebase:firebase-database-ktx")
+Index: build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>// Top-level build file where you can add configuration options common to all sub-projects/modules.\r\nplugins {\r\n    alias(libs.plugins.android.application) apply false\r\n    alias(libs.plugins.kotlin.compose) apply false\r\n\r\n    id(\"com.google.gms.google-services\") version \"4.4.1\" apply false\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build.gradle.kts b/build.gradle.kts
+--- a/build.gradle.kts	(revision 7c96c798a74e0c271672c5855130714d49909c33)
++++ b/build.gradle.kts	(date 1775332288907)
+@@ -3,5 +3,5 @@
+     alias(libs.plugins.android.application) apply false
+     alias(libs.plugins.kotlin.compose) apply false
+ 
+-    id("com.google.gms.google-services") version "4.4.1" apply false
++    id("com.google.gms.google-services") version "4.4.4" apply false
+ }
+\ No newline at end of file
