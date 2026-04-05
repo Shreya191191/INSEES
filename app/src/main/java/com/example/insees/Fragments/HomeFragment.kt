@@ -25,6 +25,7 @@ import com.example.insees.Utils.FirebaseManager
 import com.example.insees.Utils.HomeViewModel
 import com.example.insees.Utils.Swipe
 import com.example.insees.databinding.FragmentHomeBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
@@ -57,6 +58,11 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
         super.onCreate(savedInstanceState)
 
         init()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        requireActivity().findViewById<BottomNavigationView>(R.id.bvNavBar).visibility = View.VISIBLE
     }
 
     private fun init() {
