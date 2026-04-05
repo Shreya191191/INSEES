@@ -21,6 +21,7 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.example.insees.Utils.FirebaseManager
 import com.example.insees.databinding.FragmentCompleteProfileBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -50,13 +51,10 @@ class CompleteProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCompleteProfileBinding.inflate(inflater, container, false)
+        auth = FirebaseManager.getFirebaseAuth()
+        database = FirebaseManager.getFirebaseDatabase()
 
         requestPermissions()
-
-        auth = FirebaseAuth.getInstance()
-
-        database = FirebaseDatabase.getInstance()
-
         val email = requireArguments().getString("email")!!
         val password = requireArguments().getString("password")!!
 

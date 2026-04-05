@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
@@ -15,6 +16,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class ViewPagerFragment : Fragment() {
 
+    private lateinit var viewPager : ViewPager2
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,7 +32,7 @@ class ViewPagerFragment : Fragment() {
         )
 
         val adapter = ViewPagerAdapter(fragmentList, childFragmentManager, lifecycle)
-        val viewPager = view.findViewById<ViewPager2>(R.id.viewPager)
+        viewPager = view.findViewById<ViewPager2>(R.id.viewPager)
         viewPager.adapter = adapter
 
         val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bvNavBar)
@@ -66,5 +68,15 @@ class ViewPagerFragment : Fragment() {
             }
         }
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                viewPager.currentItem = 0
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 }
