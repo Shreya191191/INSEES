@@ -44,7 +44,7 @@ class ProfileFragment : Fragment() {
         bottomNavigationView.visibility = View.GONE
         binding.btnBackToHome.setOnClickListener {
             navController.navigateUp()
-            bottomNavigationView.visibility = View.VISIBLE
+
         }
         binding.btnLogOut.setOnClickListener {
             logout()
