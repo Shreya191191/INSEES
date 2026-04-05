@@ -25,21 +25,24 @@ import com.example.insees.Utils.FirebaseManager
 import com.example.insees.Utils.HomeViewModel
 import com.example.insees.Utils.Swipe
 import com.example.insees.databinding.FragmentHomeBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 class HomeFragment : Fragment(), DialogAddBtnClickListener {
 
     private lateinit var binding: FragmentHomeBinding
+    private lateinit var auth:FirebaseAuth
     private lateinit var viewPager: ViewPager2
     private lateinit var navController: NavController
     private lateinit var databaseRef: DatabaseReference
@@ -49,6 +52,17 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
     private var tasks: MutableList<ToDoData> = mutableListOf()
     private lateinit var viewModel: HomeViewModel
     private var isDataLoaded = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        init()
+    }
+
+    private fun init() {
+        databaseRef = FirebaseManager.getFirebaseDatabase().reference
+        auth = FirebaseManager.getFirebaseAuth()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -70,6 +84,10 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
         fetchDatabase()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        lifecycleScope.coroutineContext.cancel()
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -131,9 +149,8 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
     private fun fetchDatabase() {
         isDataLoaded = true
 
-        databaseRef = FirebaseDatabase.getInstance().reference
         databaseRef.keepSynced(true)
-        currentUser = FirebaseManager.getFirebaseAuth().currentUser!!
+        currentUser = auth.currentUser!!
 
         lifecycleScope.launch {
             val query = databaseRef.child("users").child(currentUser.uid).child("Tasks")
@@ -206,7 +223,6 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
             popUpFragment.dismiss()
         }
         updateRecyclerViewVisibility()
-        homeAdapter.notifyDataSetChanged()
     }
 
     private fun isDateValid(todoDate: String): Boolean {
@@ -224,18 +240,18 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
                 val task = homeAdapter.getItem(position)
                 if (direction == ItemTouchHelper.LEFT) {
                     lifecycleScope.launch {
-                        onSwiped(task)
+                        onSwiped(task, position)
                         withContext(Dispatchers.Main) {
                             Toast.makeText(context, "Task Deleted", Toast.LENGTH_SHORT).show()
-                            homeAdapter.notifyDataSetChanged()
+                            homeAdapter.notifyItemRemoved(position)
                         }
                     }
                 } else if (direction == ItemTouchHelper.RIGHT) {
                     lifecycleScope.launch {
-                        onSwiped(task)
+                        onSwiped(task, position)
                         withContext(Dispatchers.Main) {
                             Toast.makeText(context, "Task Finished", Toast.LENGTH_SHORT).show()
-                            homeAdapter.notifyDataSetChanged()
+                            homeAdapter.notifyItemRemoved(position)
                         }
                     }
                 }
@@ -245,7 +261,7 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
         itemTouchHelper.attachToRecyclerView(binding.rvTodo)
     }
 
-    private fun onSwiped(toDoData: ToDoData) {
+    private fun onSwiped(toDoData: ToDoData, position: Int) {
         val database = databaseRef
             .child("users")
             .child(currentUser.uid)
@@ -269,7 +285,7 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
                         }
                     }
                     updateRecyclerViewVisibility()
-                    homeAdapter.notifyDataSetChanged()
+                    homeAdapter.notifyItemRemoved(position)
                 }
 
                 override fun onCancelled(error: DatabaseError) {

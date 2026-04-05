@@ -5,20 +5,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.insees.R
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class HomeActivity : AppCompatActivity() {
 
 
     private lateinit var navController: NavController
     private lateinit var navHostFragment: NavHostFragment
+    private lateinit var bottomNavigationView : BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-//        bottomNavigationView = findViewById(R.id.bvNavBar)
+        bottomNavigationView = findViewById(R.id.bvNavBar)
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_home) as NavHostFragment
         navController = navHostFragment.navController
-
 //        NavigationUI.setupWithNavController(bottomNavigationView, navController)
 //
 //        // Custom navigation handling
@@ -60,5 +61,6 @@ class HomeActivity : AppCompatActivity() {
 //                else -> false
 //            }
 //        }
+
     }
 }

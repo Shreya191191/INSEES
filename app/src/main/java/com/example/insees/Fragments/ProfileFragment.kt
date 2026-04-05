@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -19,10 +20,18 @@ class ProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
     private lateinit var navController : NavController
-
+    private lateinit var bottomNavigationView: BottomNavigationView
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
+        bottomNavigationView = requireActivity().findViewById(R.id.bvNavBar)
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                navController.navigateUp()
+                bottomNavigationView.visibility = View.VISIBLE
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

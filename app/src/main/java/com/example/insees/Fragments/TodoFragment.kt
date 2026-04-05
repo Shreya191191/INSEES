@@ -2,7 +2,10 @@ package com.example.insees.Fragments
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.*
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -15,8 +18,8 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,12 +41,14 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 class TodoFragment : Fragment(), DialogAddBtnClickListener {
 
     private lateinit var binding: FragmentTodoBinding
-    private lateinit var databaseRef: DatabaseReference
+    //    private lateinit var viewPager: ViewPager2
+    private lateinit var databaseRef : DatabaseReference
     private lateinit var popUpFragment: PopUpFragment
     private lateinit var adapter: ToDoAdapter
     private lateinit var mList: MutableList<ToDoData>
@@ -58,6 +63,7 @@ class TodoFragment : Fragment(), DialogAddBtnClickListener {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentTodoBinding.inflate(inflater, container, false)
+//        viewPager = requireActivity().findViewById<ViewPager2>(R.id.viewPager)
         return binding.root
     }
 
@@ -113,11 +119,13 @@ class TodoFragment : Fragment(), DialogAddBtnClickListener {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
     private fun hasScheduleExactAlarmPermission(): Boolean {
         return ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.SCHEDULE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED ||
                 ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.USE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
     private fun requestScheduleExactAlarmPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.SCHEDULE_EXACT_ALARM) ||
             ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.USE_EXACT_ALARM)) {
@@ -131,6 +139,7 @@ class TodoFragment : Fragment(), DialogAddBtnClickListener {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == PERMISSION_REQUEST_CODE) {
@@ -251,7 +260,7 @@ class TodoFragment : Fragment(), DialogAddBtnClickListener {
 
                     if (taskTime != null && currentTime.time >= taskTime) {
                         // Schedule notification for this task
-                        task?.let {
+                        task.let {
                             scheduleNotification(it.taskTitle, it.taskDesc, it.taskDate, it.taskTime)
                         }
                     }
@@ -307,7 +316,7 @@ class TodoFragment : Fragment(), DialogAddBtnClickListener {
         val swipe = object : Swipe() {
             @SuppressLint("NotifyDataSetChanged")
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
+                val position = viewHolder.layoutPosition
                 val task = adapter.getItem(position)
                 if (direction == ItemTouchHelper.LEFT) {
                     GlobalScope.launch {
