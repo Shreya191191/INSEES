@@ -245,7 +245,7 @@
                                 android:layout_height="70dp"
                                 android:contentDescription="@string/insees"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/insees_logo"
+                                android:src="@drawable/inseeslogo"
                                 tools:ignore="ImageContrastCheck" />
 
                             <TextView

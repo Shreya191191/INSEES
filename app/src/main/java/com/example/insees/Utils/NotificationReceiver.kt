@@ -16,7 +16,7 @@ class NotificationReceiver : BroadcastReceiver() {
         val description = intent.getStringExtra("taskDesc") ?: "You have a task to complete."
 
         val builder = NotificationCompat.Builder(context, "task_reminder_channel")
-            .setSmallIcon(R.drawable.insees_logo)
+            .setSmallIcon(R.drawable.inseeslogo)
             .setContentTitle(title)
             .setContentText(description)
             .setPriority(NotificationCompat.PRIORITY_HIGH)

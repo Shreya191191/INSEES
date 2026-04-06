@@ -62,7 +62,7 @@
             android:textSize="12sp"
             android:textStyle="bold"
             app:checkedIconTint="@color/white"
-            app:icon="@drawable/insees_logo"
+            app:icon="@drawable/inseeslogo"
             app:iconTint="@color/white"
             app:iconSize="30dp"
             app:shapeAppearanceOverlay="@style/roundedButtonShape"/>

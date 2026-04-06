@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "829064717037",
+    "project_id": "insees-1e7b5",
+    "storage_bucket": "insees-1e7b5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:829064717037:android:2ddb876eb68f2e4d0222e4",
+        "android_client_info": {
+          "package_name": "com.example.insees"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDznDTA_bjQ3mhM4AH_oPUa22fkpaFDwc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
