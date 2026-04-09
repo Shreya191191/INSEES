@@ -65,7 +65,18 @@ class LoginFragment : Fragment() {
                         startActivity(intent)
                         requireActivity().finish()
                     }
-                    else -> Toast.makeText(requireContext(), "Please Verify Your Email", Toast.LENGTH_SHORT).show()
+                    else -> {
+                        auth.currentUser?.sendEmailVerification()?.addOnSuccessListener {
+                            Toast.makeText(
+                                requireContext(),
+                                "Please Verify Your Email",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                            ?.addOnFailureListener{
+                                Toast.makeText(requireContext(),it.localizedMessage, Toast.LENGTH_SHORT).show()
+                            }
+                    }
                 }
             }
         }.addOnFailureListener {exception->
