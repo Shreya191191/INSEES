@@ -1,5 +1,6 @@
 package com.example.insees.Utils
 
+import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,8 +12,11 @@ class HomeViewModel : ViewModel() {
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> get() = _loading
 
-    private val _userData = MutableLiveData<String>()
-    val userData: LiveData<String> get() = _userData
+    private val _userName = MutableLiveData<String>()
+    val userName: LiveData<String> get() = _userName
+
+    private val _profilePhoto = MutableLiveData<String>()
+    val profilePhoto: LiveData<String> get() = _profilePhoto
 
     fun fetchUserData() {
         // Fetch user data from Firebase and update _userData LiveData
@@ -26,8 +30,12 @@ class HomeViewModel : ViewModel() {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val name = dataSnapshot.child("name").getValue(String::class.java)
                     name?.let {
-                        _userData.value = "Hello $it"
+                        _userName.value = "Hello $it"
                         _loading.value = false
+                    }
+                    val photo = dataSnapshot.child("profile_photo").getValue(String::class.java)
+                    photo?.let {
+                        _profilePhoto.value = it
                     }
                 }
                 override fun onCancelled(error: DatabaseError) {

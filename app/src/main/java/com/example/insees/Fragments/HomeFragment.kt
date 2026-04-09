@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -80,8 +81,16 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
         viewPager.currentItem = 0
         setUpViews()
 
-        viewModel.userData.observe(viewLifecycleOwner) {
+        viewModel.userName.observe(viewLifecycleOwner) {
             binding.tvHello.text = it
+        }
+
+        viewModel.profilePhoto.observe(viewLifecycleOwner){
+            if(it != null) {
+                binding.btnProfile.apply {
+                    setImageURI(it.toUri())
+                }
+            }
         }
 
         registerEvents()

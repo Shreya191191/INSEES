@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,6 +34,7 @@ class YearFragment : Fragment(){
     private lateinit var selectedSemester: String
     private lateinit var storageRef: StorageReference
     private lateinit var downloadUrl: String
+    private lateinit var bottomNavigationView : BottomNavigationView
     private var years: MutableList<String> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,9 +51,7 @@ class YearFragment : Fragment(){
     ): View {
         binding = FragmentYearListBinding.inflate(inflater,container,false)
         subjectListView = binding.subjectsList
-
         fetchDataAndSetupAdapter()
-
         return binding.root
     }
 
@@ -61,17 +59,16 @@ class YearFragment : Fragment(){
         super.onViewCreated(view, savedInstanceState)
 
         setupListView()
-        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bvNavBar)
-        bottomNavigationView.visibility = View.GONE
+        bottomNavigationView = requireActivity().findViewById(R.id.bvNavBar)
 
         binding.btnSubjectBack.setOnClickListener {
             findNavController().navigateUp()
-            bottomNavigationView.visibility = View.VISIBLE
         }
     }
 
     override fun onResume() {
         super.onResume()
+        bottomNavigationView.visibility = View.GONE
         fetchDataAndSetupAdapter()
     }
 
@@ -91,7 +88,7 @@ class YearFragment : Fragment(){
         lifecycleScope.launch {
             years = getYears(selectedSemester)
 
-            val adapter = YearAdapter(requireContext(), years.toTypedArray())
+            val adapter = context?.let { YearAdapter(it, years.toTypedArray()) }
             subjectListView.adapter = adapter
         }
     }
@@ -131,7 +128,6 @@ class YearFragment : Fragment(){
 
         if(fileName!=null) {
             val file = File(downloadDir, fileName)
-            Log.d("abcde",fileName)
 
             if (file.exists()) {
                 openPdf(file)
@@ -139,14 +135,13 @@ class YearFragment : Fragment(){
         }else{
             storageRef.listAll()
                 .addOnSuccessListener { listResult ->
-                    Log.d("abcdefg",selectedYear)
+
                     listResult.items.firstOrNull()?.let { fileRef ->
                         fileName = fileRef.name
-                        Log.d("abcdef", fileName!!)
 
                         binding.progressBar.visibility = View.VISIBLE
                         fileRef.downloadUrl.addOnCompleteListener {
-                            if (it.isSuccessful) {
+                            if (it.isSuccessful ) {
                                 downloadUrl = it.result.toString()
                                 findNavController().navigate(
                                     R.id.action_yearFragment_to_pdfViewerFragment,
@@ -161,7 +156,7 @@ class YearFragment : Fragment(){
                             }
                         }
                     }?.addOnFailureListener { exception ->
-                        Log.d("abcdefgh", selectedYear)
+
                         Toast.makeText(
                             context,
                             "Error getting file: ${exception.message}",
