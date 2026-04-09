@@ -1,6 +1,7 @@
 package com.example.insees.Fragments
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -84,9 +85,10 @@ class CompleteProfileFragment : Fragment() {
     }
 
     private fun signUp(email: String, password:String){
-        auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener{task->
-            if(task.isSuccessful){
-                if (validateField()) {
+        if(validateField()) {
+            auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener{task->
+                if(task.isSuccessful){
+
                     val name = binding.etNameCompleteProfile.text.toString()
 
                     val uid = auth.currentUser?.uid.toString()
@@ -110,13 +112,14 @@ class CompleteProfileFragment : Fragment() {
 //                    startActivity(intent)
 //                    navController.navigate(R.id.action_completeProfileFragment_to_loginFragment)
                 }
-            }
-        }.addOnFailureListener { exception->
-            Toast.makeText(requireContext(), exception.localizedMessage, Toast.LENGTH_LONG).show()
+
+            }.addOnFailureListener { exception->
+                Toast.makeText(requireContext(), exception.localizedMessage, Toast.LENGTH_LONG).show()
 //            parentFragmentManager.beginTransaction()
 //                .replace(R.id.nav_host_fragment, LoginFragment())
 //                .commit()
-            navController.popBackStack()
+                navController.popBackStack()
+            }
         }
     }
 
@@ -152,16 +155,19 @@ class CompleteProfileFragment : Fragment() {
 
         galleryLauncher =
             registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-                binding.profileLayout.visibility = View.INVISIBLE
-                binding.profilePhoto.apply {
-                    visibility= View.VISIBLE
-                    setImageURI(uri)
-                    binding.closeImage.visibility = View.VISIBLE
-                    profilePhoto = uri.toString()
+                if(uri != null){
+                    binding.profileLayout.visibility = View.INVISIBLE
+                    binding.profilePhoto.apply {
+                        visibility = View.VISIBLE
+                        setImageURI(uri)
+                        binding.closeImage.visibility = View.VISIBLE
+                        profilePhoto = uri.toString()
+                    }
                 }
             }
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     private fun openCamera() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if (takePictureIntent.resolveActivity(requireActivity().packageManager) != null) {
