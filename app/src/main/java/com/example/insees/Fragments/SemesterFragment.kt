@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -47,9 +48,16 @@ class SemesterFragment : Fragment() {
         semesterListView.onItemClickListener =
             AdapterView.OnItemClickListener { _, _, position, _ ->
                 val selectedSemester = semesters[position]
-                navController.navigate(R.id.action_viewPagerFragment_to_yearFragment, Bundle().apply {
-                    putString("selected_semester", selectedSemester)
-                })
+
+                if (selectedSemester == "Semester 1"|| selectedSemester == "Semester 2"){
+                    Toast.makeText(requireContext(),"Coming Soon!",Toast.LENGTH_SHORT).show()
+                }else {
+                    navController.navigate(
+                        R.id.action_viewPagerFragment_to_yearFragment,
+                        Bundle().apply {
+                            putString("selected_semester", selectedSemester)
+                        })
+                }
             }
 
 //        val callback = object : OnBackPressedCallback(true) {

@@ -44,14 +44,14 @@ import java.util.Locale
 
 class HomeFragment : Fragment(), DialogAddBtnClickListener {
 
-    private lateinit var binding: FragmentHomeBinding
-    private lateinit var auth:FirebaseAuth
-    private lateinit var viewPager: ViewPager2
-    private lateinit var navController: NavController
-    private lateinit var databaseRef: DatabaseReference
-    private lateinit var currentUser: FirebaseUser
-    private lateinit var popUpFragment: PopUpFragment
-    private lateinit var homeAdapter: HomeToDoAdapter
+    private lateinit var binding : FragmentHomeBinding
+    private lateinit var auth : FirebaseAuth
+    private lateinit var viewPager : ViewPager2
+    private lateinit var navController : NavController
+    private lateinit var databaseRef : DatabaseReference
+    private lateinit var currentUser : FirebaseUser
+    private lateinit var popUpFragment : PopUpFragment
+    private lateinit var homeAdapter : HomeToDoAdapter
     private var tasks: MutableList<ToDoData> = mutableListOf()
     private lateinit var viewModel: HomeViewModel
     private var isDataLoaded = false
@@ -117,7 +117,7 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
         viewModel.fetchUserData()
 
         binding.cardViewStudyMaterials.setOnClickListener {
-            viewPager.currentItem = 1
+            viewPager.setCurrentItem(1, false)
         }
 
         binding.btnProfile.setOnClickListener {
@@ -125,15 +125,15 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
         }
 
         binding.cardViewInsees.setOnClickListener {
-            viewPager.currentItem = 3
+            viewPager.setCurrentItem(3, false)
         }
 
         binding.cardViewMembers.setOnClickListener {
-            viewPager.currentItem = 3
+            viewPager.setCurrentItem(3, false)
         }
 
         binding.btnViewAll.setOnClickListener {
-            viewPager.currentItem = 2
+            viewPager.setCurrentItem(2, false)
         }
 
         binding.btnAddTask.setOnClickListener {
