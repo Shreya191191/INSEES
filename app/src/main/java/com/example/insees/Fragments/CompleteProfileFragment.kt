@@ -118,7 +118,7 @@ class CompleteProfileFragment : Fragment() {
 //            parentFragmentManager.beginTransaction()
 //                .replace(R.id.nav_host_fragment, LoginFragment())
 //                .commit()
-                navController.popBackStack()
+                navController.navigateUp()
             }
         }
     }

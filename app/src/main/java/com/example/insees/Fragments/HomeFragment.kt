@@ -37,6 +37,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -87,8 +88,11 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
 
         viewModel.profilePhoto.observe(viewLifecycleOwner){
             if(it != null) {
-                binding.btnProfile.apply {
-                    setImageURI(it.toUri())
+                val file = File(it)
+                if(file.exists()) {
+                    binding.btnProfile.apply {
+                        setImageURI(it.toUri())
+                    }
                 }
             }
         }
