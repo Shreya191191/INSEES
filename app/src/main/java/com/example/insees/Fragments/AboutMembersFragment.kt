@@ -37,18 +37,17 @@ class AboutMembersFragment : Fragment() {
         loadImage("inseesimages/rupantar.png", binding.imgRupantar)
         loadImage("inseesimages/riya.png", binding.imgRiya)
         loadImage("inseesimages/khyanmoi.png", binding.imgKhyanmoi)
-        loadImage("inseesimages/bhawna.png", binding.imgBhawna)
-        loadImage("inseesimages/sayanrup.png", binding.imgSayanrup)
+        loadImage("inseesimages/bhawnajpg.jpg", binding.imgBhawna)
+        loadImage("inseesimages/sayanrupjpg.jpg", binding.imgSayanrup)
         loadImage("inseesimages/ankit.png", binding.imgAnkit)
-        loadImage("inseesimages/siddharth.png", binding.imgSiddharth)
-        loadImage("inseesimages/anuj.png", binding.imgAnuj)
+        loadImage("inseesimages/siddharthjpg.jpg", binding.imgSiddharth)
+        loadImage("inseesimages/anujjpg.jpg", binding.imgAnuj)
         loadImage("inseesimages/shweta.png", binding.imgShweta)
         loadImage("inseesimages/akash.png", binding.imgAkash)
         loadImage("inseesimages/ankur.png", binding.imgAnkur)
         loadImage("inseesimages/harish.png", binding.imgHarish)
-        loadImage("inseesimages/amipsa.png", binding.imgAmipsa)
+        loadImage("inseesimages/amipsajpg_11zon.jpg", binding.imgAmipsa)
         loadImage("inseesimages/silpangana.png", binding.imgSilpangana)
-
     }
 
     private fun loadImage(remotePath: String, imageView: ImageView) {
