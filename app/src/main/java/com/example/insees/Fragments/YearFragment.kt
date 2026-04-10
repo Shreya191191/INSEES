@@ -2,6 +2,7 @@ package com.example.insees.Fragments
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -21,7 +22,6 @@ import com.example.insees.Utils.FirebaseManager
 import com.example.insees.databinding.FragmentYearListBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.storage.StorageReference
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.io.File
 import kotlin.coroutines.resume
@@ -35,7 +35,9 @@ class YearFragment : Fragment(){
     private lateinit var selectedSemester: String
     private lateinit var storageRef: StorageReference
     private lateinit var downloadUrl: String
+    private lateinit var bottomNavigationView : BottomNavigationView
     private var years: MutableList<String> = mutableListOf()
+    private var cacheYears = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,9 +53,8 @@ class YearFragment : Fragment(){
     ): View {
         binding = FragmentYearListBinding.inflate(inflater,container,false)
         subjectListView = binding.subjectsList
-
+        storageRef = FirebaseManager.getFirebaseStorage().reference.child("PYQs").child(selectedSemester)
         fetchDataAndSetupAdapter()
-
         return binding.root
     }
 
@@ -61,55 +62,83 @@ class YearFragment : Fragment(){
         super.onViewCreated(view, savedInstanceState)
 
         setupListView()
-        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bvNavBar)
-        bottomNavigationView.visibility = View.GONE
+        bottomNavigationView = requireActivity().findViewById(R.id.bvNavBar)
 
         binding.btnSubjectBack.setOnClickListener {
             findNavController().navigateUp()
-            bottomNavigationView.visibility = View.VISIBLE
         }
     }
 
     override fun onResume() {
         super.onResume()
+        bottomNavigationView.visibility = View.GONE
         fetchDataAndSetupAdapter()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        lifecycleScope.coroutineContext.cancel()
-    }
 
     private fun setupListView() {
         subjectListView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             val selectedYear = years[position]
+
             getDataFromFirebase(selectedYear, selectedSemester)
         }
     }
 
     private fun fetchDataAndSetupAdapter() {
         lifecycleScope.launch {
-            years = getYears(selectedSemester)
 
-            val adapter = YearAdapter(requireContext(), years.toTypedArray())
+            val sharedPrefYears = requireContext().getSharedPreferences("years", Context.MODE_PRIVATE)
+            val cacheYear = sharedPrefYears.getString(selectedSemester,null)
+
+
+            if(cacheYear != null){
+
+                years = cacheYear.substring(1).split("\\s+".toRegex()).toMutableList()
+
+            }else {
+                years = getYears()
+                sharedPrefYears.edit().putString(selectedSemester, cacheYears).apply()
+            }
+
+            val adapter = context?.let { YearAdapter(it, years.toTypedArray()) }
             subjectListView.adapter = adapter
+
+            updateData(sharedPrefYears)
         }
     }
 
 
-    private suspend fun getYears(selectedSemester: String): MutableList<String> {
+    private suspend fun getYears(): MutableList<String> {
         return suspendCoroutine { continuation ->
-            storageRef = FirebaseManager.getFirebaseStorage().reference.child("PYQs").child(selectedSemester)
-
             storageRef.listAll().addOnSuccessListener { result ->
                 val years = mutableListOf<String>()
+
+                cacheYears = ""
                 for (prefix in result.prefixes) {
                     years.add(prefix.name)
+                    cacheYears = "$cacheYears ${prefix.name}"
                 }
                 continuation.resume(years)
+
             }.addOnFailureListener { exception ->
                 Toast.makeText(context, "Something went wrong: ${exception.message}", Toast.LENGTH_SHORT).show()
                 continuation.resumeWithException(exception)
+            }
+        }
+    }
+
+    private suspend fun updateData(sharedPrefYears: SharedPreferences) {
+        lifecycleScope.launch {
+            val years = getYears()
+            val updatedYears = years.joinToString(separator = " ")
+
+
+            val cacheYears = sharedPrefYears.getString(selectedSemester,null)
+
+            if (cacheYears != "") {
+                if (updatedYears != cacheYears?.substring(1)){
+                    sharedPrefYears.edit().putString(selectedSemester, " $updatedYears").apply()
+                }
             }
         }
     }
@@ -131,7 +160,6 @@ class YearFragment : Fragment(){
 
         if(fileName!=null) {
             val file = File(downloadDir, fileName)
-            Log.d("abcde",fileName)
 
             if (file.exists()) {
                 openPdf(file)
@@ -139,29 +167,30 @@ class YearFragment : Fragment(){
         }else{
             storageRef.listAll()
                 .addOnSuccessListener { listResult ->
-                    Log.d("abcdefg",selectedYear)
+
                     listResult.items.firstOrNull()?.let { fileRef ->
                         fileName = fileRef.name
-                        Log.d("abcdef", fileName!!)
 
                         binding.progressBar.visibility = View.VISIBLE
                         fileRef.downloadUrl.addOnCompleteListener {
-                            if (it.isSuccessful) {
+                            if (it.isSuccessful ) {
                                 downloadUrl = it.result.toString()
-                                findNavController().navigate(
-                                    R.id.action_yearFragment_to_pdfViewerFragment,
-                                    Bundle().apply {
-                                        putString("file_name", fileName)
-                                        putString("download_url", downloadUrl)
-                                        putString("selected_semester", selectedSemester)
-                                        putString("selected_year", selectedYear)
-                                    })
-                                binding.progressBar.visibility = View.GONE
+                                if (isAdded) {
+                                    findNavController().navigate(
+                                        R.id.action_yearFragment_to_pdfViewerFragment,
+                                        Bundle().apply {
+                                            putString("file_name", fileName)
+                                            putString("download_url", downloadUrl)
+                                            putString("selected_semester", selectedSemester)
+                                            putString("selected_year", selectedYear)
+                                        })
+                                    binding.progressBar.visibility = View.GONE
+                                }
 
                             }
                         }
                     }?.addOnFailureListener { exception ->
-                        Log.d("abcdefgh", selectedYear)
+
                         Toast.makeText(
                             context,
                             "Error getting file: ${exception.message}",

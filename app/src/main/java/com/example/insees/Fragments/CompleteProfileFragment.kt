@@ -1,6 +1,7 @@
 package com.example.insees.Fragments
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -39,7 +40,7 @@ class CompleteProfileFragment : Fragment() {
     private lateinit var cameraLauncher: ActivityResultLauncher<Intent>
     private lateinit var galleryLauncher: ActivityResultLauncher<String>
     private lateinit var database: FirebaseDatabase
-    private lateinit var profilePhoto: String
+    private var profilePhoto: String = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -55,6 +56,7 @@ class CompleteProfileFragment : Fragment() {
         database = FirebaseManager.getFirebaseDatabase()
 
         requestPermissions()
+
         val email = requireArguments().getString("email")!!
         val password = requireArguments().getString("password")!!
 
@@ -83,9 +85,10 @@ class CompleteProfileFragment : Fragment() {
     }
 
     private fun signUp(email: String, password:String){
-        auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener{task->
-            if(task.isSuccessful){
-                if (validateField()) {
+        if(validateField()) {
+            auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener{task->
+                if(task.isSuccessful){
+
                     val name = binding.etNameCompleteProfile.text.toString()
 
                     val uid = auth.currentUser?.uid.toString()
@@ -100,23 +103,23 @@ class CompleteProfileFragment : Fragment() {
 
                     auth.currentUser?.sendEmailVerification()?.addOnSuccessListener {
                         Toast.makeText(requireContext(), "Please Verify Your Email", Toast.LENGTH_SHORT).show()
-                        navController.popBackStack()
+                        navController.navigateUp()
                     }
                         ?.addOnFailureListener {
                             Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
                         }
-
 //                    val intent = Intent(context, HomeActivity::class.java)
 //                    startActivity(intent)
 //                    navController.navigate(R.id.action_completeProfileFragment_to_loginFragment)
                 }
-            }
-        }.addOnFailureListener { exception->
-            Toast.makeText(requireContext(), exception.localizedMessage, Toast.LENGTH_LONG).show()
+
+            }.addOnFailureListener { exception->
+                Toast.makeText(requireContext(), exception.localizedMessage, Toast.LENGTH_LONG).show()
 //            parentFragmentManager.beginTransaction()
 //                .replace(R.id.nav_host_fragment, LoginFragment())
 //                .commit()
-            navController.popBackStack()
+                navController.navigateUp()
+            }
         }
     }
 
@@ -152,16 +155,19 @@ class CompleteProfileFragment : Fragment() {
 
         galleryLauncher =
             registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-                binding.profileLayout.visibility = View.INVISIBLE
-                binding.profilePhoto.apply {
-                    visibility= View.VISIBLE
-                    setImageURI(uri)
-                    binding.closeImage.visibility = View.VISIBLE
-                    profilePhoto = uri.toString()
+                if(uri != null){
+                    binding.profileLayout.visibility = View.INVISIBLE
+                    binding.profilePhoto.apply {
+                        visibility = View.VISIBLE
+                        setImageURI(uri)
+                        binding.closeImage.visibility = View.VISIBLE
+                        profilePhoto = uri.toString()
+                    }
                 }
             }
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     private fun openCamera() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if (takePictureIntent.resolveActivity(requireActivity().packageManager) != null) {

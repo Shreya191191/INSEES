@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -36,20 +37,21 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 class HomeFragment : Fragment(), DialogAddBtnClickListener {
 
-    private lateinit var binding: FragmentHomeBinding
-    private lateinit var auth:FirebaseAuth
-    private lateinit var viewPager: ViewPager2
-    private lateinit var navController: NavController
-    private lateinit var databaseRef: DatabaseReference
-    private lateinit var currentUser: FirebaseUser
-    private lateinit var popUpFragment: PopUpFragment
-    private lateinit var homeAdapter: HomeToDoAdapter
+    private lateinit var binding : FragmentHomeBinding
+    private lateinit var auth : FirebaseAuth
+    private lateinit var viewPager : ViewPager2
+    private lateinit var navController : NavController
+    private lateinit var databaseRef : DatabaseReference
+    private lateinit var currentUser : FirebaseUser
+    private lateinit var popUpFragment : PopUpFragment
+    private lateinit var homeAdapter : HomeToDoAdapter
     private var tasks: MutableList<ToDoData> = mutableListOf()
     private lateinit var viewModel: HomeViewModel
     private var isDataLoaded = false
@@ -80,8 +82,19 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
         viewPager.currentItem = 0
         setUpViews()
 
-        viewModel.userData.observe(viewLifecycleOwner) {
+        viewModel.userName.observe(viewLifecycleOwner) {
             binding.tvHello.text = it
+        }
+
+        viewModel.profilePhoto.observe(viewLifecycleOwner){
+            if(it != null) {
+                val file = File(it)
+                if(file.exists()) {
+                    binding.btnProfile.apply {
+                        setImageURI(it.toUri())
+                    }
+                }
+            }
         }
 
         registerEvents()
@@ -104,7 +117,7 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
         viewModel.fetchUserData()
 
         binding.cardViewStudyMaterials.setOnClickListener {
-            viewPager.currentItem = 1
+            viewPager.setCurrentItem(1, false)
         }
 
         binding.btnProfile.setOnClickListener {
@@ -112,15 +125,15 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
         }
 
         binding.cardViewInsees.setOnClickListener {
-            viewPager.currentItem = 3
+            viewPager.setCurrentItem(3, false)
         }
 
         binding.cardViewMembers.setOnClickListener {
-            viewPager.currentItem = 3
+            viewPager.setCurrentItem(3, false)
         }
 
         binding.btnViewAll.setOnClickListener {
-            viewPager.currentItem = 2
+            viewPager.setCurrentItem(2, false)
         }
 
         binding.btnAddTask.setOnClickListener {

@@ -59,6 +59,10 @@ class PdfViewerFragment : Fragment(), DownloadProgressUpdater.DownloadProgressLi
 
         val downloadDir = File(requireContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),"Insees")
 
+        if (!downloadDir.exists()) {
+            downloadDir.mkdirs()
+        }
+
         val file = File(downloadDir,fileName)
 
         loadPdf()
@@ -73,18 +77,14 @@ class PdfViewerFragment : Fragment(), DownloadProgressUpdater.DownloadProgressLi
     private fun loadPdf(){
 
         lifecycleScope.launch(Dispatchers.IO) {
-            Log.d("abcd", downloadUrl)
 
             val inputStream = URL(downloadUrl).openStream()
-
             withContext(Dispatchers.Main) {
-                binding.pdfView.fromStream(inputStream)
-                    .onRender { pages ->
-                        if (pages >= 1) {
-                            binding.progressBar.visibility = View.GONE
-                        }
+                binding.pdfView.fromStream(inputStream).onRender { pages ->
+                    if (pages >= 1) {
+                        binding.progressBar.visibility = View.GONE
                     }
-                    .load()
+                }.load()
             }
         }
     }
