@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/customgreen"
             android:fontFamily="@font/bevietnamprolight"
-            android:text="Members"
+            android:text="Professors"
             android:layout_weight="1"
             android:textColor="@color/white"
             android:textSize="12sp"
