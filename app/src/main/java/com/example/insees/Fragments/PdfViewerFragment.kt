@@ -74,17 +74,13 @@ class PdfViewerFragment : Fragment(), DownloadProgressUpdater.DownloadProgressLi
 
         lifecycleScope.launch(Dispatchers.IO) {
 
-
             val inputStream = URL(downloadUrl).openStream()
-
             withContext(Dispatchers.Main) {
-                binding.pdfView.fromStream(inputStream)
-                    .onRender { pages ->
-                        if (pages >= 1) {
-                            binding.progressBar.visibility = View.GONE
-                        }
+                binding.pdfView.fromStream(inputStream).onRender { pages ->
+                    if (pages >= 1) {
+                        binding.progressBar.visibility = View.GONE
                     }
-                    .load()
+                }.load()
             }
         }
     }
