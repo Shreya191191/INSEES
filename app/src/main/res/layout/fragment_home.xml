@@ -23,7 +23,7 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:background="@color/background"
         android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="parent"

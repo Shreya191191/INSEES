@@ -1,7 +1,9 @@
 package com.example.insees.Fragments
 
 import android.annotation.SuppressLint
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -77,6 +79,20 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
 
         viewModel.userName.observe(viewLifecycleOwner) {
             binding.tvHello.text = it
+        }
+
+        viewModel.profilePhoto.observe(viewLifecycleOwner) {
+            if (viewModel.profilePhoto.value != null){
+                val photoByteArray = viewModel.profilePhoto.value!!.toByteArray()
+                val bitmap = BitmapFactory.decodeByteArray(
+                    photoByteArray,
+                    0,
+                    photoByteArray.size
+                )
+                binding.btnProfile.setImageBitmap(bitmap)
+                Log.d("Image", "Posted")
+            }
+            else Log.d("Image", "Not found")
         }
 
         registerEvents()

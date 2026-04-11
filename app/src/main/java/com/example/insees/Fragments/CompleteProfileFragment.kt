@@ -26,6 +26,7 @@ import com.example.insees.Utils.FirebaseManager
 import com.example.insees.databinding.FragmentCompleteProfileBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.io.ByteArrayOutputStream
@@ -49,6 +50,11 @@ class CompleteProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        lifecycleScope.coroutineContext.cancel(cause = null)
     }
 
     override fun onCreateView(
@@ -294,7 +300,7 @@ class CompleteProfileFragment : Fragment() {
 
         // Convert bitmap to byte array
         val baos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 25, baos)
         val data = baos.toByteArray()
 
         imageRef.putBytes(data).await()
