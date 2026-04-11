@@ -13,9 +13,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.insees.Adapters.ProfessorAdapter
-import com.example.insees.databinding.FragmentAboutMembersBinding
 import com.example.insees.Dataclasses.Professor
 import com.example.insees.R
+import com.example.insees.databinding.FragmentAboutMembersBinding
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 
@@ -33,7 +33,7 @@ class AboutMembersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val storageRef = FirebaseStorage.getInstance().reference.child("images/Insees.DNG")
+        val storageRef = FirebaseStorage.getInstance().reference.child("images/Insees.jpg")
         storageRef.downloadUrl.addOnSuccessListener { uri ->
             if (isAdded) {
                 Glide.with(this)
