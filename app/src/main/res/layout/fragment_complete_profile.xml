@@ -89,12 +89,12 @@
                     android:id="@+id/et_name_complete_profile_layout"
                     >
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_name_complete_profile"
+                        android:id="@+id/etNameCompleteProfile"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:inputType="text"
+                        android:inputType="textPersonName"
                         android:textColor="@color/white"
-                        android:background="#00000000"
+                        android:background="#242424"
                         android:padding="4dp"
                         android:ems="15"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -182,7 +182,7 @@
 
                 <Button
                     android:layout_width="match_parent"
-                    android:id="@+id/btn_next_complete_profile"
+                    android:id="@+id/btnNextCompleteProfile"
                     android:background="@drawable/rounded_button"
                     android:layout_height="40dp"
                     android:text="Next"

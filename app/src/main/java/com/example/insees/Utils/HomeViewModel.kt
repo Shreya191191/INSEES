@@ -26,6 +26,7 @@ class HomeViewModel : ViewModel() {
             _loading.postValue(true)
             val user = FirebaseManager.getFirebaseAuth().currentUser
 
+
             if (user != null) {
                 val uid = user.uid
                 val databaseRef = FirebaseManager.getFirebaseDatabase().reference
@@ -34,8 +35,20 @@ class HomeViewModel : ViewModel() {
                 try {
                     // 🔹 Fetch name from Realtime Database
                     val nameSnapshot = databaseRef.child("users").child(uid).get().await()
-                    val name = nameSnapshot.child("name").getValue(String::class.java)
-                    _userName.postValue(name?.let { "Hello $it" } ?: "Hello!")
+                    Log.d("UID", uid)
+                    val name = nameSnapshot.child("name").getValue(String::class.java).toString().trim()
+
+                    Log.d("name", "Name: $name")
+
+                    var firstName = ""
+
+                    for(ch in name){
+                        if(ch == ' ')
+                            break
+                        else
+                            firstName += ch
+                    }
+                    _userName.postValue(name.let{ "Hello $firstName!" })
 
                     // 🔹 Fetch profile photo from Storage
                     val photoRef = storageRef.child("Profile/$uid.jpg")
@@ -47,6 +60,43 @@ class HomeViewModel : ViewModel() {
                     _profilePhoto.postValue(outputStream)
                 } catch (e: Exception) {
                     Log.e("HomeViewModel", "Error fetching user data: ${e.message}")
+                } finally {
+                    _loading.postValue(false)
+                }
+            } else {
+                _loading.postValue(false)
+            }
+        }
+    }
+
+    fun fetchUserName() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _loading.postValue(true)
+            val user = FirebaseManager.getFirebaseAuth().currentUser
+
+            if (user != null) {
+                val uid = user.uid
+                val databaseRef = FirebaseManager.getFirebaseDatabase().reference
+
+                try {
+                    // 🔹 Fetch name from Realtime Database
+                    val nameSnapshot = databaseRef.child("users").child(uid).get().await()
+                    Log.d("UID", uid)
+                    val name = nameSnapshot.child("name").getValue(String::class.java).toString().trim()
+
+                    Log.d("name", "Name: $name")
+
+                    var firstName = ""
+
+                    for(ch in name){
+                        if(ch == ' ')
+                            break
+                        else
+                            firstName += ch
+                    }
+                    _userName.postValue(name.let{ "Hello $firstName!" })
+                } catch (e: Exception) {
+                    Log.e("HomeViewModel", "Error fetching user name: ${e.message}")
                 } finally {
                     _loading.postValue(false)
                 }

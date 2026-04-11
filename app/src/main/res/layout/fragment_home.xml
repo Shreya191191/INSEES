@@ -190,7 +190,7 @@
                         android:paddingBottom="24dp">
 
                         <ImageView
-                            android:id="@+id/imageView"
+                            android:id="@+id/profileImage"
                             android:layout_width="90dp"
                             android:layout_height="90dp"
                             android:contentDescription="@string/todo"

@@ -4,18 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp"
     android:background="@color/background"
-    tools:context=".Fragments.InseesAboutUsFragment">
+    android:padding="8dp"
+    tools:context=".Fragments.AboutMembersFragment">
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/bentham"
-        android:layout_marginHorizontal="15dp"
-        android:text="About Us"
+        android:layout_marginStart="20dp"
+        android:text="@string/about_insees"
         android:textColor="@color/white"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -23,78 +23,56 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/coco"
-        android:layout_marginStart="15dp"
-        android:text="Eletronics and Instrumentation"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-    <com.google.android.material.button.MaterialButtonToggleGroup
-        android:id="@+id/togglebuttonlayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
-        android:background="@drawable/rounded_button"
-        android:backgroundTint="@color/customgreen"
-        android:gravity="center"
-        android:layout_marginHorizontal="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/flfragmentaboutus"
-        app:layout_constraintEnd_toEndOf="@id/flfragmentaboutus"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
-        app:singleSelection="true">
-
-        <Button
-            android:id="@+id/membersbtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/customgreen"
-            android:fontFamily="@font/bevietnamprolight"
-            android:text="Professors"
-            android:layout_weight="1"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:checkedIconTint="@color/white"
-            app:icon="@drawable/inseeslogo"
-            app:iconTint="@color/white"
-            app:iconSize="30dp"
-            app:shapeAppearanceOverlay="@style/roundedButtonShape"/>
-
-        <Button
-            android:id="@+id/developersbtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="@color/customgreen"
-            android:fontFamily="@font/bevietnamprolight"
-            android:text="Developers"
-            android:textColor="@color/white"
-            app:iconSize="30dp"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:checkedIconTint="@color/white"
-            app:icon="@drawable/android_logo"
-            app:iconTint="@color/white"
-            app:shapeAppearanceOverlay="@style/roundedButtonShape"/>
-
-    </com.google.android.material.button.MaterialButtonToggleGroup>
-
-    <FrameLayout
-        android:id="@+id/flfragmentaboutus"
-        android:layout_width="match_parent"
+    <ScrollView
+        android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/togglebuttonlayout" />
+        app:layout_constraintTop_toBottomOf="@id/textView2">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
+            <ImageView
+                android:id="@+id/insees_image"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:padding="16dp"
+                android:layout_marginTop="15dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/rounded_corners" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingTop="8dp"
+                android:text="The department was established in the year 2008 and currently offers B.Tech programme in Electronics and Instrumentation Engineering, M.Tech in Instrumentation Engineering and PhD program. The impact of electronics and instrumentation engineering touches almost every area of today’s life. This department with its state-of-the-art laboratories and young and dynamic faculty members is involved in providing quality education and promoting innovative research. The lab facilities include Sensors and Transducers, Analog and Digital Circuits, Measurement, Control and Instrumentation, Power Electronics, Biomedical, Communication, Microprocessor, and Design and Fabrication Labs. Facilities are available for interdisciplinary research activities in the broad domain of signal processing, biomedical engineering, instrumentation, sensors, embedded systems, robotics, control and automation, Communication, and micro/nanoelectronics. High-end Lab facilities have been established with funding from external agencies."
+                android:textColor="@color/white" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/bevietnamprosemibold"
+                android:paddingStart="16dp"
+                android:paddingTop="16dp"
+                android:text="Professors"
+                android:textColor="@color/white"
+                android:textSize="25dp"
+                android:textStyle="bold" />
+
+            <!-- First GridLayout -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:padding="8dp"
+                android:scrollbars="vertical" />
+
+        </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

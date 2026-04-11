@@ -3,7 +3,6 @@ package com.example.insees.Fragments
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -18,10 +17,11 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.core.graphics.scale
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import com.example.insees.Utils.FirebaseManager
 import com.example.insees.databinding.FragmentCompleteProfileBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -43,19 +43,18 @@ class CompleteProfileFragment : Fragment() {
     private lateinit var galleryLauncher: ActivityResultLauncher<String>
     private lateinit var database: FirebaseDatabase
     private var profilePhoto: String = ""
-    private lateinit var name: String
     private lateinit var result: Bitmap
     private lateinit var email: String
     private lateinit var password: String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        navController = Navigation.findNavController(view)
+        navController = view.findNavController()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        lifecycleScope.coroutineContext.cancel(cause = null)
+        lifecycleScope.coroutineContext.cancel()
     }
 
     override fun onCreateView(
@@ -65,8 +64,10 @@ class CompleteProfileFragment : Fragment() {
         binding = FragmentCompleteProfileBinding.inflate(inflater, container, false)
         auth = FirebaseManager.getFirebaseAuth()
         database = FirebaseManager.getFirebaseDatabase()
+
         binding.progressBar.visibility = View.GONE
         binding.scrollViewCompleteProfile.visibility = View.VISIBLE
+
         requestPermissions()
 
         email = requireArguments().getString("email")!!
@@ -123,10 +124,9 @@ class CompleteProfileFragment : Fragment() {
 
         try {
             auth.createUserWithEmailAndPassword(email, password).await()
-            name = binding.etNameCompleteProfile.text.toString()
 
             // Wait for image upload
-            saveImage(requireContext(), this.result) // make this a suspend function too
+            saveImage(this.result) // make this a suspend function too
 
             // Then send verification link
             sendLink()
@@ -160,9 +160,10 @@ class CompleteProfileFragment : Fragment() {
                         visibility = View.VISIBLE
 
                         val result = WeakReference(
-                            Bitmap.createScaledBitmap(
-                                selectedImageBitmap,
-                                selectedImageBitmap.height, selectedImageBitmap.width, false
+                            selectedImageBitmap.scale(
+                                selectedImageBitmap.height,
+                                selectedImageBitmap.width,
+                                false
                             ).copy(
                                 Bitmap.Config.RGB_565, true
                             )
@@ -210,7 +211,7 @@ class CompleteProfileFragment : Fragment() {
 
 
     private fun validateField(): Boolean {
-        if (binding.etNameCompleteProfile.toString().trim() == "") {
+        if (binding.etNameCompleteProfile.editableText.toString().trim() == "") {
             Toast.makeText(context, "This is required field", Toast.LENGTH_SHORT).show()
             return false
         }
@@ -294,7 +295,7 @@ class CompleteProfileFragment : Fragment() {
 //        return uri
 //    }
 
-    private suspend fun saveImage(context: Context, bitmap: Bitmap){
+    private suspend fun saveImage(bitmap: Bitmap){
         val uid = auth.currentUser?.uid ?: return
         val storageRef = FirebaseManager.getFirebaseStorage().reference
         val imageRef = storageRef.child("Profile/$uid.jpg")
@@ -306,10 +307,9 @@ class CompleteProfileFragment : Fragment() {
 
         imageRef.putBytes(data).await()
         val uri = imageRef.downloadUrl.await() // Get download URL
-
+        val name = binding.etNameCompleteProfile.getText().toString().trim()
         val user = mapOf("name" to name, "profilePhoto" to uri.toString())
         database.getReference("users").child(uid).updateChildren(user).await()
-
+        Log.d("UID", "Hello")
     }
-
 }
