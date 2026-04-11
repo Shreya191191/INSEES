@@ -272,26 +272,6 @@ class CompleteProfileFragment : Fragment() {
         }
     }
 
-//    private fun saveImage(image:Bitmap,context:Context ): Uri {
-//
-//        val imagesFolder = File(context.cacheDir, "images")
-//        var uri: Uri
-//        try{
-//            imagesFolder.mkdir()
-//            val file = File(imagesFolder, "captured_image.jpg")
-//            val stream = FileOutputStream(file)
-//            image.compress(Bitmap.CompressFormat.JPEG , 100, stream)
-//            stream.flush()
-//            stream.close()
-//            uri = FileProvider.getUriForFile(context.applicationContext, "com.example.insees"+".provider", file)
-//        }
-//        catch (e:FileNotFoundException){
-//            e.printStackTrace()
-//        }catch (e: IOException){
-//            e.printStackTrace()
-//        }
-//        return uri
-//    }
 
     private suspend fun saveImage(context: Context, bitmap: Bitmap){
         val uid = auth.currentUser?.uid ?: return
