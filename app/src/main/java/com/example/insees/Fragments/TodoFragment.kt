@@ -1,7 +1,10 @@
 package com.example.insees.Fragments
 
 import android.annotation.SuppressLint
+<<<<<<< HEAD
 import android.os.Build
+=======
+>>>>>>> branch3
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,7 +13,10 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+<<<<<<< HEAD
 import androidx.annotation.RequiresApi
+=======
+>>>>>>> branch3
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager

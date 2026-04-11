@@ -1,6 +1,6 @@
 package com.example.insees.Utils
 
-import android.graphics.Bitmap
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,23 +23,20 @@ class HomeViewModel : ViewModel() {
         // Example:
         _loading.value = true
         val currentUser = FirebaseManager.getFirebaseAuth().currentUser
+
         currentUser?.let { user ->
             val databaseRef = FirebaseManager.getFirebaseDatabase().reference
             val userRef = databaseRef.child("users").child(user.uid)
             userRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val name = dataSnapshot.child("name").getValue(String::class.java)
-                    name?.let {
-                        _userName.value = "Hello $it"
-                        _loading.value = false
-                    }
-                    val photo = dataSnapshot.child("profile_photo").getValue(String::class.java)
-                    photo?.let {
-                        _profilePhoto.value = it
-                    }
+
+                    _userName.value = name?.let { "Hello $name" } ?: "Hello!"
+                    _loading.value = false
                 }
                 override fun onCancelled(error: DatabaseError) {
-
+                    _loading.value = false
+                    Log.e("HomeViewModel", "Failed to fetch user data: ${error.message}")
                 }
             })
         }

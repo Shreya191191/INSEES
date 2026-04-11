@@ -7,7 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.net.Uri
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -18,17 +18,17 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
-import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.insees.Utils.FirebaseManager
 import com.example.insees.databinding.FragmentCompleteProfileBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.lang.ref.WeakReference
 
@@ -41,6 +41,10 @@ class CompleteProfileFragment : Fragment() {
     private lateinit var galleryLauncher: ActivityResultLauncher<String>
     private lateinit var database: FirebaseDatabase
     private var profilePhoto: String = ""
+    private lateinit var name: String
+    private lateinit var result: Bitmap
+    private lateinit var email: String
+    private lateinit var password: String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,11 +58,12 @@ class CompleteProfileFragment : Fragment() {
         binding = FragmentCompleteProfileBinding.inflate(inflater, container, false)
         auth = FirebaseManager.getFirebaseAuth()
         database = FirebaseManager.getFirebaseDatabase()
-
+        binding.progressBar.visibility = View.GONE
+        binding.scrollViewCompleteProfile.visibility = View.VISIBLE
         requestPermissions()
 
-        val email = requireArguments().getString("email")!!
-        val password = requireArguments().getString("password")!!
+        email = requireArguments().getString("email")!!
+        password = requireArguments().getString("password")!!
 
         initActivityResultLaunchers()
 
@@ -70,84 +75,94 @@ class CompleteProfileFragment : Fragment() {
             galleryLauncher.launch("image/*")
         }
 
+        //ankitk_ug_22@ei.nits.ac.in
+        //123456
+
         binding.btnNextCompleteProfile.setOnClickListener {
-            signUp(email, password)
+            binding.btnNextCompleteProfile.isEnabled = false
+
+            binding.progressBar.visibility = View.VISIBLE
+            binding.scrollViewCompleteProfile.isClickable = false
+            binding.scrollViewCompleteProfile.isFocusable = false
+            lifecycleScope.launch {
+                signUp(email, password)
+                binding.progressBar.visibility = View.GONE
+                binding.scrollViewCompleteProfile.isClickable = true
+                binding.scrollViewCompleteProfile.isFocusable = true
+            }
+
+            binding.btnNextCompleteProfile.isEnabled = true
         }
 
-        binding.closeImage.setOnClickListener{
+        binding.closeImage.setOnClickListener {
             profilePhoto = ""
             binding.profilePhoto.visibility = View.INVISIBLE
             binding.profileLayout.visibility = View.VISIBLE
-            binding.closeImage.visibility  = View.INVISIBLE
+            binding.closeImage.visibility = View.INVISIBLE
         }
 
         return binding.root
     }
 
-    private fun signUp(email: String, password:String){
-        if(validateField()) {
-            auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener{task->
-                if(task.isSuccessful){
+    private suspend fun signUp(email: String, password: String) {
+        if (!::result.isInitialized) {
+            Toast.makeText(context, "Please upload a profile photo", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (!validateField()) {
+            Toast.makeText(context, "Enter Your Name", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-                    val name = binding.etNameCompleteProfile.text.toString()
+        try {
+            auth.createUserWithEmailAndPassword(email, password).await()
+            name = binding.etNameCompleteProfile.text.toString()
 
-                    val uid = auth.currentUser?.uid.toString()
+            // Wait for image upload
+            saveImage(requireContext(), this.result) // make this a suspend function too
 
-                    val user = hashMapOf(
-                        "name" to name,
-                        "profile_photo" to profilePhoto
-                    )
+            // Then send verification link
+            sendLink()
 
-                    val databaseRef = database.getReference("users")
-                    databaseRef.child(uid).setValue(user)
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), e.localizedMessage, Toast.LENGTH_LONG).show()
+        }
+    }
 
-                    auth.currentUser?.sendEmailVerification()?.addOnSuccessListener {
-                        Toast.makeText(requireContext(), "Please Verify Your Email", Toast.LENGTH_SHORT).show()
-                        navController.navigateUp()
-                    }
-                        ?.addOnFailureListener {
-                            Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
-                        }
-//                    val intent = Intent(context, HomeActivity::class.java)
-//                    startActivity(intent)
-//                    navController.navigate(R.id.action_completeProfileFragment_to_loginFragment)
-                }
-
-            }.addOnFailureListener { exception->
-                Toast.makeText(requireContext(), exception.localizedMessage, Toast.LENGTH_LONG).show()
-//            parentFragmentManager.beginTransaction()
-//                .replace(R.id.nav_host_fragment, LoginFragment())
-//                .commit()
-                navController.navigateUp()
-            }
+    private suspend fun sendLink() {
+        try {
+            auth.currentUser?.sendEmailVerification()?.await()
+            Toast.makeText(requireContext(), "Please verify your email", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), "Failed to send verification email: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun initActivityResultLaunchers() {
         cameraLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == Activity.RESULT_OK) {
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
+                if (res.resultCode == Activity.RESULT_OK) {
                     val selectedImageBitmap =
-                        result.data?.extras?.get("data") as Bitmap
-
+                        res.data?.extras?.get("data") as Bitmap
+                    result = selectedImageBitmap
                     binding.closeImage.visibility = View.VISIBLE
 
                     binding.profileLayout.visibility = View.INVISIBLE
 
-                    // Handle the captured image bitmap
                     binding.profilePhoto.apply {
-                        visibility= View.VISIBLE
+                        visibility = View.VISIBLE
 
-                        val result  = WeakReference(Bitmap.createScaledBitmap(selectedImageBitmap,
-                            selectedImageBitmap.height, selectedImageBitmap.width, false).copy(
-                            Bitmap.Config.RGB_565, true
-                        )).get()
+                        val result = WeakReference(
+                            Bitmap.createScaledBitmap(
+                                selectedImageBitmap,
+                                selectedImageBitmap.height, selectedImageBitmap.width, false
+                            ).copy(
+                                Bitmap.Config.RGB_565, true
+                            )
+                        ).get()
 
                         setImageBitmap(result)
 
-                        val imageUri = result?.let { saveImage(it, context) }
-
-                        profilePhoto = imageUri.toString()
                     }
                 }
             }
@@ -155,16 +170,27 @@ class CompleteProfileFragment : Fragment() {
 
         galleryLauncher =
             registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-                if(uri != null){
-                    binding.profileLayout.visibility = View.INVISIBLE
-                    binding.profilePhoto.apply {
-                        visibility = View.VISIBLE
-                        setImageURI(uri)
+                if (uri != null) {
+                    try {
+                        val inputStream = requireContext().contentResolver.openInputStream(uri)
+                        result = BitmapFactory.decodeStream(inputStream)
+                        inputStream?.close()
+
+                        binding.profileLayout.visibility = View.INVISIBLE
+                        binding.profilePhoto.apply {
+                            visibility = View.VISIBLE
+                            setImageBitmap(result)
+                        }
+
                         binding.closeImage.visibility = View.VISIBLE
-                        profilePhoto = uri.toString()
+
+                    } catch (e: IOException) {
+                        Toast.makeText(requireContext(), "Failed to load image", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             }
+
     }
 
     @SuppressLint("QueryPermissionsNeeded")
@@ -177,8 +203,8 @@ class CompleteProfileFragment : Fragment() {
 
 
     private fun validateField(): Boolean {
-        if (binding.etNameCompleteProfile.toString() == "") {
-            binding.etNameCompleteProfileLayout.error = "This is required field"
+        if (binding.etNameCompleteProfile.toString().trim() == "") {
+            Toast.makeText(context, "This is required field", Toast.LENGTH_SHORT).show()
             return false
         }
         return true
@@ -197,13 +223,20 @@ class CompleteProfileFragment : Fragment() {
         if (!hasWriteStoragePermissions()) {
             permissionToRequest.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         }
-        if(permissionToRequest.isNotEmpty()){
-            ActivityCompat.requestPermissions(requireContext() as Activity, permissionToRequest.toTypedArray(),0)
+        if (permissionToRequest.isNotEmpty()) {
+            ActivityCompat.requestPermissions(
+                requireContext() as Activity,
+                permissionToRequest.toTypedArray(),
+                0
+            )
         }
     }
 
     private fun hasCameraPermissions() =
-        ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+        ActivityCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
 
     private fun hasReadStoragePermissions() =
         ActivityCompat.checkSelfPermission(
@@ -224,34 +257,52 @@ class CompleteProfileFragment : Fragment() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(grantResults.isNotEmpty() && requestCode==0){
-            for(i in grantResults.indices){
-                if(grantResults[i]== PackageManager.PERMISSION_GRANTED){
+        if (grantResults.isNotEmpty() && requestCode == 0) {
+            for (i in grantResults.indices) {
+                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
                     Log.d("permission", "${permissions[i]} granted")
                 }
             }
         }
     }
 
-    private fun saveImage(image:Bitmap,context:Context ): Uri {
+//    private fun saveImage(image:Bitmap,context:Context ): Uri {
+//
+//        val imagesFolder = File(context.cacheDir, "images")
+//        var uri: Uri
+//        try{
+//            imagesFolder.mkdir()
+//            val file = File(imagesFolder, "captured_image.jpg")
+//            val stream = FileOutputStream(file)
+//            image.compress(Bitmap.CompressFormat.JPEG , 100, stream)
+//            stream.flush()
+//            stream.close()
+//            uri = FileProvider.getUriForFile(context.applicationContext, "com.example.insees"+".provider", file)
+//        }
+//        catch (e:FileNotFoundException){
+//            e.printStackTrace()
+//        }catch (e: IOException){
+//            e.printStackTrace()
+//        }
+//        return uri
+//    }
 
-        val imagesFolder = File(context.cacheDir, "images")
-        lateinit var uri: Uri
-        try{
-            imagesFolder.mkdir()
-            val file = File(imagesFolder, "captured_image.jpg")
-            val stream = FileOutputStream(file)
-            image.compress(Bitmap.CompressFormat.JPEG , 100, stream)
-            stream.flush()
-            stream.close()
-            uri = FileProvider.getUriForFile(context.applicationContext, "com.example.insees"+".provider", file)
-        }
-        catch (e:FileNotFoundException){
-            e.printStackTrace()
-        }catch (e: IOException){
-            e.printStackTrace()
-        }
-        return uri
+    private suspend fun saveImage(context: Context, bitmap: Bitmap){
+        val uid = auth.currentUser?.uid ?: return
+        val storageRef = FirebaseManager.getFirebaseStorage().reference
+        val imageRef = storageRef.child("Profile/$uid.jpg")
+
+        // Convert bitmap to byte array
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data = baos.toByteArray()
+
+        imageRef.putBytes(data).await()
+        val uri = imageRef.downloadUrl.await() // Get download URL
+
+        val user = mapOf("name" to name, "profilePhoto" to uri.toString())
+        database.getReference("users").child(uid).updateChildren(user).await()
+
     }
 
 }

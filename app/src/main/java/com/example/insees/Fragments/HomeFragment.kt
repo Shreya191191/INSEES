@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -37,7 +36,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -50,7 +48,6 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
     private lateinit var navController: NavController
     private lateinit var databaseRef: DatabaseReference
     private lateinit var currentUser: FirebaseUser
-    private lateinit var popUpFragment: PopUpFragment
     private lateinit var homeAdapter: HomeToDoAdapter
     private var tasks: MutableList<ToDoData> = mutableListOf()
     private lateinit var viewModel: HomeViewModel
@@ -82,6 +79,7 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
             binding.tvHello.text = it
         }
 
+<<<<<<< HEAD
         viewModel.profilePhoto.observe(viewLifecycleOwner) {
             if (it != null) {
                 val file = File(it)
@@ -93,6 +91,8 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
             }
         }
 
+=======
+>>>>>>> branch3
         registerEvents()
         initSwipe()
         fetchDatabase()
@@ -155,7 +155,7 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
 
     private fun registerEvents() {
         binding.btnAddTask.setOnClickListener {
-            popUpFragment = PopUpFragment()
+            val popUpFragment = PopUpFragment()
             popUpFragment.setListener(this)
             popUpFragment.show(childFragmentManager, "PopUpFragment")
         }
@@ -169,6 +169,7 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
 
         lifecycleScope.launch {
             val query = databaseRef.child("users").child(currentUser.uid).child("Tasks")
+
             query.addValueEventListener(object : ValueEventListener {
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -235,7 +236,7 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
             } else {
                 Toast.makeText(context, tasks.exception.toString(), Toast.LENGTH_SHORT).show()
             }
-            popUpFragment.dismiss()
+            PopUpFragment().dismiss()
         }
         updateRecyclerViewVisibility()
     }
