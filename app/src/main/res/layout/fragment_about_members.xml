@@ -40,7 +40,7 @@
                 android:id="@+id/insees_image"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:paddingTop="16dp"
+                android:padding="16dp"
                 android:layout_marginTop="15dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/rounded_corners" />
@@ -269,6 +269,7 @@
             </android.widget.GridLayout>
 
             <!-- Second GridLayout -->
+
             <android.widget.GridLayout
                 android:id="@+id/grid_layout2"
                 android:layout_width="match_parent"
@@ -308,7 +309,7 @@
                             android:layout_height="wrap_content"
                             android:text="Hritika Roy"
                             android:textAlignment="center"
-                            android:textColor="#FFFFFF"/>
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -386,8 +387,8 @@
                             android:id="@+id/img_riya"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:scaleType="centerCrop"
                             android:layout_weight="1"
+                            android:scaleType="centerCrop"
                             android:src="@drawable/rounded_corners" />
 
                         <TextView
@@ -502,7 +503,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="30sp"
                             android:text="Bhawna Bharti"
-                            android:textAlignment="center"
+                            android:gravity="center"
                             android:textColor="#FFFFFF"
                             android:textStyle="bold" />
 
@@ -538,7 +539,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="30sp"
                             android:text="Sayanrup Barman"
-                            android:textAlignment="center"
+                            android:gravity="center"
                             android:textColor="#FFFFFF"
                             android:textStyle="bold" />
 
@@ -575,9 +576,9 @@
 
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Ankit Kumar\nBarnwal"
-                            android:textAlignment="center"
+                            android:layout_height="30sp"
+                            android:text="Ankit Kr. Barnwal"
+                            android:gravity="center"
                             android:textColor="#FFFFFF"
                             android:textStyle="bold" />
 
@@ -616,7 +617,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="30sp"
                             android:text="Siddharth Ghosh"
-                            android:textAlignment="center"
+                            android:gravity="center"
                             android:textColor="#FFFFFF"
                             android:textStyle="bold" />
 
@@ -662,7 +663,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="30sp"
                             android:text="Anuj Kumar"
-                            android:textAlignment="center"
+                            android:gravity="center"
                             android:textColor="#FFFFFF"
                             android:textStyle="bold" />
 
@@ -697,7 +698,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="30sp"
                             android:text="Shweta Rabha"
-                            android:textAlignment="center"
+                            android:gravity="center"
                             android:textColor="#FFFFFF"
                             android:textStyle="bold" />
 
@@ -736,7 +737,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="30sp"
                             android:text="Akash Chaudhury"
-                            android:textAlignment="center"
+                            android:gravity="center"
                             android:textColor="#FFFFFF"
                             android:textStyle="bold" />
 
@@ -776,7 +777,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="30sp"
                             android:text="Ankur Gupta"
-                            android:textAlignment="center"
+                            android:gravity="center"
                             android:textColor="#FFFFFF"
                             android:textStyle="bold" />
 
@@ -820,7 +821,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="30sp"
                             android:text="Harish Putti"
-                            android:textAlignment="center"
+                            android:gravity="center"
                             android:textColor="#FFFFFF"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -854,7 +855,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="30sp"
                             android:text="Amipsa Sahu"
-                            android:textAlignment="center"
+                            android:gravity="center"
                             android:textColor="#FFFFFF"
                             android:textStyle="bold" />
 
@@ -892,8 +893,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="30sp"
-                            android:text="Silpangana Sandiliya"
-                            android:textAlignment="center"
+                            android:text="Silpangana Sandilya"
+                            android:gravity="center"
                             android:textColor="#FFFFFF"
                             android:textStyle="bold" />
 

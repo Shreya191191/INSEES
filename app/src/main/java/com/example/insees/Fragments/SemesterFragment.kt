@@ -1,12 +1,13 @@
 package com.example.insees.Fragments
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -40,6 +41,9 @@ class SemesterFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val drive = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse("https://drive.google.com/drive/folders/1w4v7vOivziK7RlLT8tOE0jWsQn1ZbyDx")
+        }
         semesterListView = binding.SemesterList
         val adapter = SemesterAdapter(requireContext(), semesters)
 
@@ -50,7 +54,7 @@ class SemesterFragment : Fragment() {
                 val selectedSemester = semesters[position]
 
                 if (selectedSemester == "Semester 1"|| selectedSemester == "Semester 2"){
-                    Toast.makeText(requireContext(),"Coming Soon!",Toast.LENGTH_SHORT).show()
+                    startActivity(drive)
                 }else {
                     navController.navigate(
                         R.id.action_viewPagerFragment_to_yearFragment,
