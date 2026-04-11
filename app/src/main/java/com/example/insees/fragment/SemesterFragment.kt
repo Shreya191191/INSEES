@@ -15,6 +15,7 @@ import com.example.insees.adapter.SemesterAdapter
 import com.example.insees.R
 import com.example.insees.databinding.FragmentSemesterBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.core.net.toUri
 
 class SemesterFragment : Fragment() {
 
@@ -42,7 +43,8 @@ class SemesterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val drive = Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse("https://drive.google.com/drive/folders/1w4v7vOivziK7RlLT8tOE0jWsQn1ZbyDx")
+            data =
+                "https://drive.google.com/drive/folders/1w4v7vOivziK7RlLT8tOE0jWsQn1ZbyDx".toUri()
         }
         semesterListView = binding.SemesterList
         val adapter = SemesterAdapter(requireContext(), semesters)

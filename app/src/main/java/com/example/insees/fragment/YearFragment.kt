@@ -2,9 +2,9 @@ package com.example.insees.fragment
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +26,7 @@ import java.io.File
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
+import androidx.core.content.edit
 
 class YearFragment : Fragment(){
 
@@ -92,17 +93,29 @@ class YearFragment : Fragment(){
 
             if(cacheYear != null){
 
-                years = cacheYear.substring(1).split("\\s+".toRegex()).toMutableList()
+                years = cacheYear.trim().split("\\s+".toRegex()).toMutableList()
 
             }else {
                 years = getYears()
-                sharedPrefYears.edit().putString(selectedSemester, cacheYears).apply()
+
+                if(years.isNotEmpty())
+                    sharedPrefYears.edit { putString(selectedSemester, cacheYears) }
             }
 
-            val adapter = context?.let { YearAdapter(it, years.toTypedArray()) }
+            val adapter = context?.let { YearAdapter(it, years.toTypedArray(), selectedSemester) }
             subjectListView.adapter = adapter
 
-            updateData(sharedPrefYears)
+            try {
+                val updatedYears = getYears()
+                if (updatedYears.isNotEmpty()) {
+                    val updated = updatedYears.joinToString(" ")
+                    if (updated != cacheYear?.trim()) {
+                        sharedPrefYears.edit { putString(selectedSemester, updated) }
+                    }
+                }
+            } catch (_: Exception) {
+                Log.d("update_year", "Did not update the year")
+            }
         }
     }
 
@@ -126,26 +139,10 @@ class YearFragment : Fragment(){
         }
     }
 
-    private suspend fun updateData(sharedPrefYears: SharedPreferences) {
-        lifecycleScope.launch {
-            val years = getYears()
-            val updatedYears = years.joinToString(separator = " ")
-
-
-            val cacheYears = sharedPrefYears.getString(selectedSemester,null)
-
-            if (cacheYears != "") {
-                if (updatedYears != cacheYears?.substring(1)){
-                    sharedPrefYears.edit().putString(selectedSemester, " $updatedYears").apply()
-                }
-            }
-        }
-    }
-
 
     private fun getDataFromFirebase(selectedYear:String, selectedSemester: String ) {
 
-        storageRef = storageRef.child(selectedYear)
+        val yearRef = storageRef.child(selectedYear)
 
         val sharedPref = requireContext().getSharedPreferences("file_name", Context.MODE_PRIVATE)
 
@@ -164,7 +161,7 @@ class YearFragment : Fragment(){
                 openPdf(file)
             }
         }else{
-            storageRef.listAll()
+            yearRef.listAll()
                 .addOnSuccessListener { listResult ->
 
                     listResult.items.firstOrNull()?.let { fileRef ->
