@@ -1,6 +1,8 @@
 package com.example.insees.Fragments
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +19,8 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.insees.Adapters.HomeToDoAdapter
 import com.example.insees.Dataclasses.ToDoData
 import com.example.insees.R
@@ -36,6 +40,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -79,24 +86,55 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
             binding.tvHello.text = it
         }
 
-<<<<<<< HEAD
-        viewModel.profilePhoto.observe(viewLifecycleOwner) {
-            if (it != null) {
-                val file = File(it)
-                if (file.exists()) {
-                    binding.btnProfile.apply {
-                        setImageURI(it.toUri())
-                    }
-                }
-            }
-        }
+        val uid = auth.currentUser!!.uid
 
-=======
->>>>>>> branch3
+        loadImage("$uid.jpg")
+
         registerEvents()
         initSwipe()
         fetchDatabase()
     }
+
+    private fun loadImage(localProfileName: String) {
+        val localFile = File(requireContext().filesDir, localProfileName)
+        if(localFile.exists()){
+            Glide.with(this)
+                .load(localFile)
+                .placeholder(R.drawable.ic_user_foreground)
+                .diskCacheStrategy(DiskCacheStrategy.ALL) // Enable disk caching
+                .into(binding.btnProfile)
+        }
+        else{
+            viewModel.fetchUserData()
+            viewModel.profilePhoto.observe(viewLifecycleOwner) {
+                if (it != null){
+                    val photoByteArray = viewModel.profilePhoto.value!!.toByteArray()
+                    val resource = BitmapFactory.decodeByteArray(
+                        photoByteArray,
+                        0,
+                        photoByteArray.size
+                    )
+                    binding.btnProfile.setImageBitmap(resource)
+                    lifecycleScope.launch(Dispatchers.IO){
+                        saveImageToLocalFile(resource, localFile)
+                    }
+                }
+                else Toast.makeText(context, "Image Not Found", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun saveImageToLocalFile(bitmap: Bitmap, file: File) {
+        try {
+            FileOutputStream(file).use { out ->
+                bitmap.compress(Bitmap.CompressFormat.PNG, 50, out)
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Toast.makeText(context, "Failed to save image locally", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -109,8 +147,6 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
-
-        viewModel.fetchUserData()
 
         binding.cardViewStudyMaterials.setOnClickListener {
             viewPager.setCurrentItem(1, false)
@@ -236,7 +272,7 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
             } else {
                 Toast.makeText(context, tasks.exception.toString(), Toast.LENGTH_SHORT).show()
             }
-            PopUpFragment().dismiss()
+//            PopUpFragment().dismiss()
         }
         updateRecyclerViewVisibility()
     }
