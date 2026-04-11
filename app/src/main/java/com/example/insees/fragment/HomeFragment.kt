@@ -22,14 +22,14 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.insees.R
 import com.example.insees.activity.HomeActivity
 import com.example.insees.adapter.HomeToDoAdapter
+import com.example.insees.databinding.FragmentHomeBinding
 import com.example.insees.model.ToDoData
-import com.example.insees.R
 import com.example.insees.util.DialogAddBtnClickListener
 import com.example.insees.util.FirebaseManager
 import com.example.insees.util.Swipe
-import com.example.insees.databinding.FragmentHomeBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -60,11 +60,30 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener{
     private lateinit var homeAdapter: HomeToDoAdapter
     private var tasks: MutableList<ToDoData> = mutableListOf()
     private lateinit var viewModel: HomeViewModel
-    private var isDataLoaded = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         init()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val email = auth.currentUser!!.email.toString()
+        viewModel.fetchUserName()
+        viewModel.userName.observe(viewLifecycleOwner) {
+            var firstName = ""
+
+            for(ch in it){
+                if(ch == ' ')
+                    break
+                else
+                    firstName += ch
+            }
+            val message = "Hello $firstName!"
+            binding.tvHello.text = message
+
+            (activity as HomeActivity).updateNameAndEmail(it, email)
+        }
     }
 
     override fun onResume() {
@@ -83,25 +102,6 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener{
         viewPager = requireActivity().findViewById(R.id.viewPager)
         viewPager.currentItem = 0
         setUpViews()
-
-        viewModel.fetchUserName()
-
-        val email = auth.currentUser!!.email.toString()
-
-        viewModel.userName.observe(viewLifecycleOwner) {
-            var firstName = ""
-
-            for(ch in it){
-                if(ch == ' ')
-                    break
-                else
-                    firstName += ch
-            }
-            val message = "Hello $firstName!"
-            binding.tvHello.text = message
-
-            (activity as HomeActivity).updateNameAndEmail(it, email)
-        }
 
         val uid = auth.currentUser!!.uid
 
@@ -216,7 +216,6 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener{
     }
 
     private fun fetchDatabase() {
-        isDataLoaded = true
 
         databaseRef.keepSynced(true)
         currentUser = auth.currentUser!!

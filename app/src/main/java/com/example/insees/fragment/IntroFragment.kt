@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import com.example.insees.R
 import com.example.insees.databinding.FragmentIntroBinding
-import com.google.firebase.auth.FirebaseAuth
+import com.example.insees.util.FirebaseManager
 
 class IntroFragment : Fragment() {
 
@@ -19,8 +19,10 @@ class IntroFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        navController = Navigation.findNavController(view)
-        val auth = FirebaseAuth.getInstance()
+        navController = view.findNavController()
+
+        val auth = FirebaseManager.getFirebaseAuth()
+
         binding.alreadyHaveAccount.setOnClickListener{
             if(auth.currentUser != null && auth.currentUser!!.isEmailVerified)
             {

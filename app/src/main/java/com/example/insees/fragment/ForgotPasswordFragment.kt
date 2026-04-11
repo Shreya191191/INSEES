@@ -1,11 +1,11 @@
 package com.example.insees.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.insees.R
 import com.example.insees.databinding.FragmentForgotPasswordBinding
@@ -19,7 +19,7 @@ class ForgotPasswordFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentForgotPasswordBinding.inflate(inflater, container, false)
         auth = FirebaseAuth.getInstance()
@@ -42,15 +42,15 @@ class ForgotPasswordFragment : Fragment() {
             binding.etEmailForgotpassword.error = "Required"
         }
         else{
-            forgotpassword(email)
+            forgotPassword(email)
         }
 
     }
 
-    private fun forgotpassword(email:String) {
+    private fun forgotPassword(email:String) {
         auth.sendPasswordResetEmail(email)
-            .addOnCompleteListener { Task ->
-                if (Task.isSuccessful) {
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
                     Toast.makeText(context, "Password reset email sent.", Toast.LENGTH_SHORT).show()
                     findNavController().navigate(R.id.action_forgotPasswordFragment_to_loginFragment)
                 }
