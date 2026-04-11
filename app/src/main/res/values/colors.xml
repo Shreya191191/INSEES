@@ -60,4 +60,7 @@
         <item name="mediumGreen">#28A853</item>
         <item name="darkRed">#DF392E</item>
     </array>
+
+    <color name="fab_bg">#6F4BD7</color> <!-- Same as purpleblue -->
+    <color name="fab_icon">#FFFFFF</color> <!-- White icon -->
 </resources>

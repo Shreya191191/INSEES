@@ -12,25 +12,27 @@
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="4dp"
         android:fontFamily="@font/bentham"
-        android:layout_marginHorizontal="15dp"
         android:text="About Us"
         android:textColor="@color/white"
-        android:textSize="30sp"
+        android:textSize="28sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/coco"
-        android:layout_marginStart="15dp"
-        android:text="Eletronics and Instrumentation"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/Branch_Desc"
         android:textColor="@color/white"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
@@ -39,12 +41,12 @@
         android:id="@+id/togglebuttonlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginHorizontal="4dp"
         android:background="@drawable/rounded_button"
         android:backgroundTint="@color/customgreen"
         android:gravity="center"
-        android:layout_marginHorizontal="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/flfragmentaboutus"
+
         app:layout_constraintEnd_toEndOf="@id/flfragmentaboutus"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3"
@@ -52,36 +54,39 @@
 
         <Button
             android:id="@+id/membersbtn"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:backgroundTint="@color/customgreen"
             android:fontFamily="@font/bevietnamprolight"
-            android:text="Professors"
-            android:layout_weight="1"
+            android:text="@string/professors"
             android:textColor="@color/white"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:textStyle="bold"
+
             app:checkedIconTint="@color/white"
             app:icon="@drawable/inseeslogo"
             app:iconTint="@color/white"
-            app:iconSize="30dp"
+            app:iconSize="32dp"
+            app:iconPadding="8dp"
             app:shapeAppearanceOverlay="@style/roundedButtonShape"/>
 
         <Button
             android:id="@+id/developersbtn"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@color/customgreen"
             android:fontFamily="@font/bevietnamprolight"
             android:text="Developers"
             android:textColor="@color/white"
-            app:iconSize="30dp"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             app:checkedIconTint="@color/white"
             app:icon="@drawable/android_logo"
             app:iconTint="@color/white"
+            app:iconSize="32dp"
+            app:iconPadding="8dp"
             app:shapeAppearanceOverlay="@style/roundedButtonShape"/>
 
     </com.google.android.material.button.MaterialButtonToggleGroup>
@@ -90,11 +95,10 @@
         android:id="@+id/flfragmentaboutus"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/togglebuttonlayout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/togglebuttonlayout" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -43,6 +43,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
 //                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 //                )
+
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
         val headerView = navigationView.getHeaderView(0)
 
@@ -55,6 +56,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_home) as NavHostFragment
         navController = navHostFragment.navController
 
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.END)
         navigationView.setNavigationItemSelectedListener(this)
 
     }

@@ -5,19 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    android:padding="8dp"
     tools:context=".fragment.AboutMembersFragment">
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:padding="8dp"
         android:fontFamily="@font/bentham"
-        android:layout_marginStart="20dp"
         android:text="@string/about_insees"
         android:textColor="@color/white"
-        android:textSize="30sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,32 +34,49 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/insees_image"
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:padding="16dp"
-                android:layout_marginTop="15dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/rounded_corners" />
+                android:layout_margin="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:elevation="100dp">
+                <ImageView
+                    android:id="@+id/insees_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/Branch_Desc"
+                    android:padding="2dp"
+                    android:scaleType="centerCrop"
+                    />
+            </com.google.android.material.card.MaterialCardView>
+
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="16dp"
+                android:paddingHorizontal="8dp"
                 android:paddingTop="8dp"
-                android:text="The department was established in the year 2008 and currently offers B.Tech programme in Electronics and Instrumentation Engineering, M.Tech in Instrumentation Engineering and PhD program. The impact of electronics and instrumentation engineering touches almost every area of today’s life. This department with its state-of-the-art laboratories and young and dynamic faculty members is involved in providing quality education and promoting innovative research. The lab facilities include Sensors and Transducers, Analog and Digital Circuits, Measurement, Control and Instrumentation, Power Electronics, Biomedical, Communication, Microprocessor, and Design and Fabrication Labs. Facilities are available for interdisciplinary research activities in the broad domain of signal processing, biomedical engineering, instrumentation, sensors, embedded systems, robotics, control and automation, Communication, and micro/nanoelectronics. High-end Lab facilities have been established with funding from external agencies."
+                android:textAlignment="gravity"
+                android:text="@string/about_dept"
                 android:textColor="@color/white" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="8dp"
+                android:background="@color/lightGrey"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/bevietnamprosemibold"
-                android:paddingStart="16dp"
-                android:paddingTop="16dp"
-                android:text="Professors"
+
+                android:paddingHorizontal="10dp"
+                android:text="@string/professors"
                 android:textColor="@color/white"
-                android:textSize="25dp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
             <!-- First GridLayout -->
@@ -71,6 +86,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:padding="8dp"
+                tools:listitem="@layout/member_item_view"
+                tools:itemCount="4"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 android:scrollbars="vertical" />
 
         </LinearLayout>

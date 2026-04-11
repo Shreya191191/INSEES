@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import com.example.insees.activity.HomeActivity
+import androidx.navigation.findNavController
 import com.example.insees.R
+import com.example.insees.activity.HomeActivity
 import com.example.insees.databinding.FragmentLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 
@@ -22,7 +22,7 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        navController = Navigation.findNavController(view)
+        navController = view.findNavController()
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
