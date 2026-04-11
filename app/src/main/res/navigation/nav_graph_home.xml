@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/todoFragment"
-        android:name="com.example.insees.Fragments.TodoFragment"
+        android:name="com.example.insees.fragment.TodoFragment"
         android:label="fragment_todo"
         tools:layout="@layout/fragment_todo" />
     <fragment
         android:id="@+id/semesterFragment"
-        android:name="com.example.insees.Fragments.SemesterFragment"
+        android:name="com.example.insees.fragment.SemesterFragment"
         android:label="fragment_semester"
         tools:layout="@layout/fragment_semester" >
         <argument
@@ -24,22 +24,22 @@
     </fragment>
     <dialog
         android:id="@+id/popUpFragment"
-        android:name="com.example.insees.Fragments.PopUpFragment"
+        android:name="com.example.insees.fragment.PopUpFragment"
         android:label="fragment_pop_up"
         tools:layout="@layout/fragment_pop_up" />
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.insees.Fragments.HomeFragment"
+        android:name="com.example.insees.fragment.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/inseesAboutInseesFragment"
-        android:name="com.example.insees.Fragments.AboutMembersFragment"
+        android:name="com.example.insees.fragment.AboutMembersFragment"
         android:label="fragment_insees_about_insees"
         tools:layout="@layout/fragment_about_members" />
     <fragment
         android:id="@+id/inseesAboutUsFragment"
-        android:name="com.example.insees.Fragments.InseesAboutUsFragment"
+        android:name="com.example.insees.fragment.InseesAboutUsFragment"
         android:label="fragment_insees_about_us"
         tools:layout="@layout/fragment_insees_about_us" >
         <action
@@ -52,12 +52,12 @@
     </fragment>
     <fragment
         android:id="@+id/aboutMembersFragment"
-        android:name="com.example.insees.Fragments.AboutDevelopersFragment"
+        android:name="com.example.insees.fragment.AboutDevelopersFragment"
         android:label="fragment_about_members"
         tools:layout="@layout/fragment_about_developers" />
     <fragment
         android:id="@+id/yearFragment"
-        android:name="com.example.insees.Fragments.YearFragment"
+        android:name="com.example.insees.fragment.YearFragment"
         android:label="YearFragment" >
         <action
             android:id="@+id/action_yearFragment_to_pdfViewerFragment"
@@ -66,12 +66,12 @@
     </fragment>
     <fragment
         android:id="@+id/pdfViewerFragment"
-        android:name="com.example.insees.Fragments.PdfViewerFragment"
+        android:name="com.example.insees.fragment.PdfViewerFragment"
         android:label="fragment_pdf_viewer"
         tools:layout="@layout/fragment_pdf_viewer" />
     <fragment
         android:id="@+id/viewPagerFragment"
-        android:name="com.example.insees.Fragments.ViewPagerFragment"
+        android:name="com.example.insees.fragment.ViewPagerFragment"
         android:label="fragment_view_pager"
         tools:layout="@layout/fragment_view_pager" >
         <action

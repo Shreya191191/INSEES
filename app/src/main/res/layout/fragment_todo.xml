@@ -7,7 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/black"
-    tools:context=".Fragments.TodoFragment">
+    tools:context=".fragment.TodoFragment">
 
 
     <TextView

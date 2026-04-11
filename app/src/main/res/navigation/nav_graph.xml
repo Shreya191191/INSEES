@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/introFragment"
-        android:name="com.example.insees.Fragments.IntroFragment"
+        android:name="com.example.insees.fragment.IntroFragment"
         android:label="fragment_intro"
         tools:layout="@layout/fragment_intro" >
         <action
@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.example.insees.Fragments.SignUpFragment"
+        android:name="com.example.insees.fragment.SignUpFragment"
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up" >
         <action
@@ -41,7 +41,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.insees.Fragments.LoginFragment"
+        android:name="com.example.insees.fragment.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -53,7 +53,7 @@
     </fragment>
     <fragment
         android:id="@+id/completeProfileFragment"
-        android:name="com.example.insees.Fragments.CompleteProfileFragment"
+        android:name="com.example.insees.fragment.CompleteProfileFragment"
         android:label="fragment_complete_profile"
         tools:layout="@layout/fragment_complete_profile" >
         <action
@@ -62,12 +62,12 @@
     </fragment>
     <activity
         android:id="@+id/homeActivity"
-        android:name="com.example.insees.Activities.HomeActivity"
+        android:name="com.example.insees.activity.HomeActivity"
         android:label="activity_home"
         tools:layout="@layout/activity_home" />
     <fragment
         android:id="@+id/forgotPasswordFragment"
-        android:name="com.example.insees.Fragments.ForgotPasswordFragment"
+        android:name="com.example.insees.fragment.ForgotPasswordFragment"
         android:label="fragment_forgot_password"
         tools:layout="@layout/fragment_forgot_password" >
         <action
