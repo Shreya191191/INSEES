@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -37,7 +36,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -45,12 +43,11 @@ import java.util.Locale
 class HomeFragment : Fragment(), DialogAddBtnClickListener {
 
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var auth:FirebaseAuth
+    private lateinit var auth: FirebaseAuth
     private lateinit var viewPager: ViewPager2
     private lateinit var navController: NavController
     private lateinit var databaseRef: DatabaseReference
     private lateinit var currentUser: FirebaseUser
-    private lateinit var popUpFragment: PopUpFragment
     private lateinit var homeAdapter: HomeToDoAdapter
     private var tasks: MutableList<ToDoData> = mutableListOf()
     private lateinit var viewModel: HomeViewModel
@@ -58,7 +55,6 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         init()
     }
 
@@ -74,11 +70,8 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         navController = findNavController()
-
         viewPager = requireActivity().findViewById(R.id.viewPager)
-
         viewPager.currentItem = 0
         setUpViews()
 
@@ -86,20 +79,8 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
             binding.tvHello.text = it
         }
 
-        viewModel.profilePhoto.observe(viewLifecycleOwner){
-            if(it != null) {
-                val file = File(it)
-                if(file.exists()) {
-                    binding.btnProfile.apply {
-                        setImageURI(it.toUri())
-                    }
-                }
-            }
-        }
-
         registerEvents()
         initSwipe()
-
         fetchDatabase()
     }
 
@@ -107,6 +88,7 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
         super.onDestroyView()
         lifecycleScope.coroutineContext.cancel()
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -117,7 +99,7 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
         viewModel.fetchUserData()
 
         binding.cardViewStudyMaterials.setOnClickListener {
-            viewPager.currentItem = 1
+            viewPager.setCurrentItem(1, false)
         }
 
         binding.btnProfile.setOnClickListener {
@@ -125,15 +107,15 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
         }
 
         binding.cardViewInsees.setOnClickListener {
-            viewPager.currentItem = 3
+            viewPager.setCurrentItem(3, false)
         }
 
         binding.cardViewMembers.setOnClickListener {
-            viewPager.currentItem = 3
+            viewPager.setCurrentItem(3, false)
         }
 
         binding.btnViewAll.setOnClickListener {
-            viewPager.currentItem = 2
+            viewPager.setCurrentItem(2, false)
         }
 
         binding.btnAddTask.setOnClickListener {
@@ -159,7 +141,7 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
 
     private fun registerEvents() {
         binding.btnAddTask.setOnClickListener {
-            popUpFragment = PopUpFragment()
+            val popUpFragment = PopUpFragment()
             popUpFragment.setListener(this)
             popUpFragment.show(childFragmentManager, "PopUpFragment")
         }
@@ -173,6 +155,7 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
 
         lifecycleScope.launch {
             val query = databaseRef.child("users").child(currentUser.uid).child("Tasks")
+
             query.addValueEventListener(object : ValueEventListener {
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -212,9 +195,9 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
         todoDate: String,
         todoDateEt: TextView
     ) {
-        // Validate task date not before current date
-        if (!isDateValid(todoDate)) {
-            Toast.makeText(context, "Please select a date on or after today", Toast.LENGTH_SHORT).show()
+        // Validate task date and time not before current date and time
+        if (!isDateValid(todoDate, todoTime)) {
+            Toast.makeText(context, "Please select a date and time on or after the current date and time", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -239,16 +222,29 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
             } else {
                 Toast.makeText(context, tasks.exception.toString(), Toast.LENGTH_SHORT).show()
             }
-            popUpFragment.dismiss()
+            PopUpFragment().dismiss()
         }
         updateRecyclerViewVisibility()
     }
 
-    private fun isDateValid(todoDate: String): Boolean {
-        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val currentDate = sdf.format(Calendar.getInstance().time)
-        val selectedDate = sdf.format(sdf.parse(todoDate) ?: return false)
-        return selectedDate >= currentDate
+    private fun isDateValid(todoDate: String, todoTime: String): Boolean {
+        val sdfDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val sdfTime = SimpleDateFormat("HH:mm", Locale.getDefault())
+
+        val currentDate = Calendar.getInstance().time
+        val selectedDate = sdfDate.parse(todoDate) ?: return false
+        val selectedTime = sdfTime.parse(todoTime) ?: return false
+
+        // Combine date and time into one datetime object
+        val selectedDateTime = Calendar.getInstance().apply {
+            time = selectedDate
+            val time = Calendar.getInstance()
+            time.time = selectedTime
+            set(Calendar.HOUR_OF_DAY, time.get(Calendar.HOUR_OF_DAY))
+            set(Calendar.MINUTE, time.get(Calendar.MINUTE))
+        }.time
+
+        return selectedDateTime >= currentDate
     }
 
     private fun initSwipe() {
