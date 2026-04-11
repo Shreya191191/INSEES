@@ -3,26 +3,18 @@ package com.example.insees.Fragments
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
-<<<<<<< HEAD
-=======
-import androidx.fragment.app.Fragment
->>>>>>> branch3
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-<<<<<<< HEAD
 import com.example.insees.BottomSheetDialogDevelopers.ShreyaFragment
 import com.example.insees.BottomSheetDialogDevelopers.AishwaryaFragment
-=======
-import com.example.insees.BottomSheetDialogDevelopers.AishwaryaFragment
-import com.example.insees.BottomSheetDialogDevelopers.ShreyaFragment
->>>>>>> branch3
 import com.example.insees.R
 import com.example.insees.databinding.FragmentAboutDevelopersBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -56,13 +48,9 @@ class AboutDevelopersFragment : Fragment() {
         binding.btnAishwarya.setOnClickListener {
             showFragment(AishwaryaFragment(), "AishwaryaFragment")
         }
+
     }
 
-<<<<<<< HEAD
-    }
-
-=======
->>>>>>> branch3
     private fun showFragment(fragment: BottomSheetDialogFragment, tag: String) {
         val fragmentManager = childFragmentManager
         val existingFragment = fragmentManager.findFragmentByTag(tag)
@@ -72,13 +60,8 @@ class AboutDevelopersFragment : Fragment() {
     }
 
     private fun getImages() {
-<<<<<<< HEAD
         loadImage("images/sudip.jpg", binding.shreyaImage, "shreya.jpg")
         loadImage("inseesimages/ankit.png", binding.aishwaryaImage, "aishwarya.png")
-=======
-        loadImage("images/shreya.jpg", binding.shreyaImage, "shreya.jpg")
-        loadImage("images/aishwarya.jpg", binding.aishwaryaImage, "aishwarya.jpg")
->>>>>>> branch3
     }
 
     private fun loadImage(remotePath: String, imageView: ImageView, localFileName: String) {
@@ -123,11 +106,7 @@ class AboutDevelopersFragment : Fragment() {
     private fun saveImageToLocalFile(bitmap: Bitmap, file: File) {
         try {
             FileOutputStream(file).use { out ->
-<<<<<<< HEAD
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
-=======
-                bitmap.compress(Bitmap.CompressFormat.PNG, 50, out)
->>>>>>> branch3
             }
         } catch (e: IOException) {
             e.printStackTrace()

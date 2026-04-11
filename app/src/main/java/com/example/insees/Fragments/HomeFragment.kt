@@ -86,27 +86,10 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
             binding.tvHello.text = it
         }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-        viewModel.profilePhoto.observe(viewLifecycleOwner) {
-            if (it != null) {
-                val file = File(it)
-                if (file.exists()) {
-                    binding.btnProfile.apply {
-                        setImageURI(it.toUri())
-                    }
-                }
-            }
-        }
-
-=======
->>>>>>> branch3
-=======
         val uid = auth.currentUser!!.uid
 
         loadImage("$uid.jpg")
 
->>>>>>> branch3
         registerEvents()
         initSwipe()
         fetchDatabase()
