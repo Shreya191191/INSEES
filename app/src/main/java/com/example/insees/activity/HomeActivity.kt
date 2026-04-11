@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -85,10 +86,21 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.nav_logout -> logout()
+            R.id.nav_rate -> openLink("https://docs.google.com/forms/d/1b2whh2bBEmPiCCT8bDIYj98j8XyJxQpcVVpXwNCtQIE/edit")
+            R.id.nav_share -> openLink("https://drive.google.com/drive/folders/1ONg5sWJHpsvC4LDbbsi9uSGbY8BHAES9")
         }
         drawerLayout.closeDrawer(GravityCompat.END)
         return true
     }
+
+    private fun openLink(link: String) {
+        val gform = Intent(Intent.ACTION_VIEW).apply {
+            data =
+                link.toUri()
+        }
+        startActivity(gform)
+    }
+
     private fun logout() {
         val auth = FirebaseAuth.getInstance()
         auth.signOut()
