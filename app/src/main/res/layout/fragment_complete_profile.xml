@@ -78,6 +78,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:inputType="text"
+                        android:textColor="@color/white"
                         android:background="#00000000"
                         android:padding="4dp"
                         android:ems="15"/>

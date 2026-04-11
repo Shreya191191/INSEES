@@ -108,27 +108,20 @@ class CompleteProfileFragment : Fragment() {
                         ?.addOnFailureListener {
                             Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
                         }
-//                    val intent = Intent(context, HomeActivity::class.java)
-//                    startActivity(intent)
-//                    navController.navigate(R.id.action_completeProfileFragment_to_loginFragment)
                 }
 
             }.addOnFailureListener { exception->
                 Toast.makeText(requireContext(), exception.localizedMessage, Toast.LENGTH_LONG).show()
-//            parentFragmentManager.beginTransaction()
-//                .replace(R.id.nav_host_fragment, LoginFragment())
-//                .commit()
-                navController.navigateUp()
             }
         }
     }
 
     private fun initActivityResultLaunchers() {
         cameraLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == Activity.RESULT_OK) {
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
+                if (res.resultCode == Activity.RESULT_OK) {
                     val selectedImageBitmap =
-                        result.data?.extras?.get("data") as Bitmap
+                        res.data?.extras?.get("data") as Bitmap
 
                     binding.closeImage.visibility = View.VISIBLE
 
@@ -178,7 +171,7 @@ class CompleteProfileFragment : Fragment() {
 
     private fun validateField(): Boolean {
         if (binding.etNameCompleteProfile.toString() == "") {
-            binding.etNameCompleteProfileLayout.error = "This is required field"
+            Toast.makeText(context, "This is required field", Toast.LENGTH_SHORT).show()
             return false
         }
         return true

@@ -1,10 +1,10 @@
 package com.example.insees.Fragments
 
 import android.os.Bundle
-import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -45,29 +45,25 @@ class SignUpFragment : Fragment() {
     }
 
     private fun checkAllFields(): Boolean{
-        val email = binding.etEmailSignup.text.toString()
+        val email = binding.etEmailSignup.text.toString().trim()
         if (email == ""){
-            binding.etEmailSignupLayout.error = "This is required field"
+            Toast.makeText(context, "This is required field", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        val t = email.substring(email.length - 14, email.length)
+
+        if(email.length <= 14 || t != "@ei.nits.ac.in"){
+            Toast.makeText(context, "Please enter a valid institute id", Toast.LENGTH_SHORT).show()
             return false
         }
 
-        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            binding.etEmailSignupLayout.error = "Please enter a valid Email"
-            return false
-        }
-
-        if(binding.etPasswordSignup.text.toString() == ""){
-            binding.etPasswordSignupLayout.error = "This is required field"
-            return false
-        }
-
-        if(binding.etConfirmPassword.text.toString() == ""){
-            binding.etConfirmPasswordLayout.error = "This is required field"
+        if(binding.etPasswordSignup.text.toString() == "" || binding.etConfirmPassword.text.toString() == ""){
+            Toast.makeText(context, "This is required field", Toast.LENGTH_SHORT).show()
             return false
         }
 
         if(binding.etPasswordSignup.text.toString() != binding.etConfirmPassword.text.toString()){
-            binding.etPasswordSignupLayout.error = "Password do not match"
+            Toast.makeText(context, "Both Passwords do not match", Toast.LENGTH_SHORT).show()
             return false
         }
         return true
