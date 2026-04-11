@@ -42,21 +42,22 @@
         <Button
             android:id="@+id/already_have_account"
             android:layout_width="match_parent"
-            android:layout_height="40sp"
+            android:layout_height="48sp"
+            android:layout_marginTop="5sp"
             android:background="@drawable/rounded_button"
             android:text="Already have an account"
-            android:textSize="12sp"
-            android:layout_marginTop="5sp"
-            />
+            android:textColor="@color/white"
+            android:textSize="12sp" />
 
         <Button
             android:id="@+id/new_user"
             android:layout_width="match_parent"
-            android:layout_height="40sp"
+            android:layout_height="48sp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/rounded_button"
             android:text="New User"
-            android:textSize="12sp"
-            android:layout_marginTop="20dp"/>
+            android:textColor="@color/white"
+            android:textSize="12sp" />
 
     </LinearLayout>
 

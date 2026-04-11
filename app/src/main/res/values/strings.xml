@@ -1,15 +1,15 @@
 <resources>
     <string name="app_name">INSEES</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="open_nav">Open Navigation Drawer</string>
+    <string name="close_nav">Close Navigation Drawer</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="insees">INSEES</string>
     <string name="hello_shreya" />
     <string name="good_wishes" />
     <string name="user" />
     <string name="view_all"><![CDATA[View All >]]></string>
     <string name="_9">9</string>
     <string name="my_todo_s">My ToDo\'s</string>
-    <string name="hello">Hello Shreya</string>
+    <string name="hello">Welcome!</string>
     <string name="good_morning">Good Morning</string>
     <string name="study">Study</string>
     <string name="todo">Todo</string>
@@ -22,6 +22,7 @@
     <string name="other_resources">Other Resources</string>
     <string name="study_materials">Study Materials</string>
     <string name="profile">Profile</string>
+    <string name="insees">INSEES</string>
     <string name="members">Members</string>
     <string name="t">TODO</string>
     <string name="log_out">Log Out</string>
@@ -51,4 +52,7 @@
     <string name="what_is_the_task">What is the task?</string>
     <string name="deadline">Deadline</string>
     <string name="name">Name</string>
+    <string name="share">Share</string>
+    <string name="about_us">About Us</string>
+    <string name="rate_us">Rate Us</string>
 </resources>

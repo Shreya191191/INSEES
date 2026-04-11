@@ -35,20 +35,10 @@ class HomeViewModel : ViewModel() {
                 try {
                     // 🔹 Fetch name from Realtime Database
                     val nameSnapshot = databaseRef.child("users").child(uid).get().await()
-                    Log.d("UID", uid)
+//                    Log.d("UID", uid)
                     val name = nameSnapshot.child("name").getValue(String::class.java).toString().trim()
 
-                    Log.d("name", "Name: $name")
-
-                    var firstName = ""
-
-                    for(ch in name){
-                        if(ch == ' ')
-                            break
-                        else
-                            firstName += ch
-                    }
-                    _userName.postValue(name.let{ "Hello $firstName!" })
+                    _userName.postValue(name)
 
                     // 🔹 Fetch profile photo from Storage
                     val photoRef = storageRef.child("Profile/$uid.jpg")
@@ -84,17 +74,9 @@ class HomeViewModel : ViewModel() {
                     Log.d("UID", uid)
                     val name = nameSnapshot.child("name").getValue(String::class.java).toString().trim()
 
-                    Log.d("name", "Name: $name")
+//                    Log.d("name", "Name: $name")
 
-                    var firstName = ""
-
-                    for(ch in name){
-                        if(ch == ' ')
-                            break
-                        else
-                            firstName += ch
-                    }
-                    _userName.postValue(name.let{ "Hello $firstName!" })
+                    _userName.postValue(name)
                 } catch (e: Exception) {
                     Log.e("HomeViewModel", "Error fetching user name: ${e.message}")
                 } finally {

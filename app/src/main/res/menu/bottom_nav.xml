@@ -26,4 +26,5 @@
         android:id="@+id/inseesAboutUsFragment"
         android:title=""
         android:icon="@drawable/baseline_info_24"/>
+
 </menu>

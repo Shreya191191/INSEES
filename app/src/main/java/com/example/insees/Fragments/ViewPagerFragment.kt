@@ -6,6 +6,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.example.insees.Adapters.ViewPagerAdapter
@@ -39,7 +40,7 @@ class ViewPagerFragment : Fragment() {
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                bottomNavigationView.menu.getItem(position).isChecked = true
+                bottomNavigationView.menu[position].isChecked = true
             }
         })
 

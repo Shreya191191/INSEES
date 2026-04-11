@@ -60,8 +60,8 @@ class AboutDevelopersFragment : Fragment() {
     }
 
     private fun getImages() {
-        loadImage("images/sudip.jpg", binding.shreyaImage, "shreya.jpg")
-        loadImage("inseesimages/ankit.png", binding.aishwaryaImage, "aishwarya.png")
+        loadImage("images/shreya.jpg", binding.shreyaImage, "shreya.jpg")
+        loadImage("images/aishwarya.jpg", binding.aishwaryaImage, "aishwarya.png")
     }
 
     private fun loadImage(remotePath: String, imageView: ImageView, localFileName: String) {

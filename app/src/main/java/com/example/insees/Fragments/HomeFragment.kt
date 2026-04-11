@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.insees.Activities.HomeActivity
 import com.example.insees.Adapters.HomeToDoAdapter
 import com.example.insees.Dataclasses.ToDoData
 import com.example.insees.R
@@ -47,13 +48,14 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class HomeFragment : Fragment(), DialogAddBtnClickListener {
+class HomeFragment : Fragment(), DialogAddBtnClickListener{
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var viewPager: ViewPager2
     private lateinit var navController: NavController
     private lateinit var databaseRef: DatabaseReference
+
     private lateinit var currentUser: FirebaseUser
     private lateinit var homeAdapter: HomeToDoAdapter
     private var tasks: MutableList<ToDoData> = mutableListOf()
@@ -82,8 +84,23 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
         viewPager.currentItem = 0
         setUpViews()
 
+        viewModel.fetchUserName()
+
+        val email = auth.currentUser!!.email.toString()
+
         viewModel.userName.observe(viewLifecycleOwner) {
-            binding.tvHello.text = it
+            var firstName = ""
+
+            for(ch in it){
+                if(ch == ' ')
+                    break
+                else
+                    firstName += ch
+            }
+            val message = "Hello $firstName!"
+            binding.tvHello.text = message
+
+            (activity as HomeActivity).updateNameAndEmail(it, email)
         }
 
         val uid = auth.currentUser!!.uid
@@ -103,6 +120,7 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
                 .placeholder(R.drawable.ic_user_foreground)
                 .diskCacheStrategy(DiskCacheStrategy.ALL) // Enable disk caching
                 .into(binding.btnProfile)
+            (activity as HomeActivity).loadCircleImage(localFile)
         }
         else{
             viewModel.fetchUserData()
@@ -153,7 +171,7 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
         }
 
         binding.btnProfile.setOnClickListener {
-            navController.navigate(R.id.action_viewPagerFragment_to_profileFragment)
+            (activity as HomeActivity).toggleDrawer()
         }
 
         binding.cardViewInsees.setOnClickListener {
