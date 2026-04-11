@@ -74,7 +74,7 @@ class LoginFragment : Fragment() {
                             ).show()
                         }
                             ?.addOnFailureListener{
-                                Toast.makeText(requireContext(),it.localizedMessage, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), "Failed to send verification email: ${it.localizedMessage}", Toast.LENGTH_LONG).show()
                             }
                     }
                 }

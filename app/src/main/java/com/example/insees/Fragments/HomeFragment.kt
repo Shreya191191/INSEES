@@ -1,5 +1,6 @@
 package com.example.insees.Fragments
 
+import HomeViewModel
 import android.annotation.SuppressLint
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -24,7 +25,6 @@ import com.example.insees.Dataclasses.ToDoData
 import com.example.insees.R
 import com.example.insees.Utils.DialogAddBtnClickListener
 import com.example.insees.Utils.FirebaseManager
-import com.example.insees.Utils.HomeViewModel
 import com.example.insees.Utils.Swipe
 import com.example.insees.databinding.FragmentHomeBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -238,7 +238,7 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
             } else {
                 Toast.makeText(context, tasks.exception.toString(), Toast.LENGTH_SHORT).show()
             }
-            PopUpFragment().dismiss()
+//            PopUpFragment().dismiss()
         }
         updateRecyclerViewVisibility()
     }

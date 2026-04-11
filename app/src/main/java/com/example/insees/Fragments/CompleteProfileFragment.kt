@@ -35,6 +35,7 @@ import java.lang.ref.WeakReference
 
 class CompleteProfileFragment : Fragment() {
 
+
     private lateinit var binding: FragmentCompleteProfileBinding
     private lateinit var navController: NavController
     private lateinit var auth: FirebaseAuth
@@ -138,9 +139,9 @@ class CompleteProfileFragment : Fragment() {
     private suspend fun sendLink() {
         try {
             auth.currentUser?.sendEmailVerification()?.await()
-            Toast.makeText(requireContext(), "Please verify your email", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Please verify your email", Toast.LENGTH_LONG).show()
         } catch (e: Exception) {
-            Toast.makeText(requireContext(), "Failed to send verification email: ${e.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Failed to send verification email: ${e.message}", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -272,6 +273,26 @@ class CompleteProfileFragment : Fragment() {
         }
     }
 
+//    private fun saveImage(image:Bitmap,context:Context ): Uri {
+//
+//        val imagesFolder = File(context.cacheDir, "images")
+//        var uri: Uri
+//        try{
+//            imagesFolder.mkdir()
+//            val file = File(imagesFolder, "captured_image.jpg")
+//            val stream = FileOutputStream(file)
+//            image.compress(Bitmap.CompressFormat.JPEG , 100, stream)
+//            stream.flush()
+//            stream.close()
+//            uri = FileProvider.getUriForFile(context.applicationContext, "com.example.insees"+".provider", file)
+//        }
+//        catch (e:FileNotFoundException){
+//            e.printStackTrace()
+//        }catch (e: IOException){
+//            e.printStackTrace()
+//        }
+//        return uri
+//    }
 
     private suspend fun saveImage(context: Context, bitmap: Bitmap){
         val uid = auth.currentUser?.uid ?: return
