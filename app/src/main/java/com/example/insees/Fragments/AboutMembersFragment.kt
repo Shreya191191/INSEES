@@ -13,9 +13,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.insees.Adapters.ProfessorAdapter
-import com.example.insees.databinding.FragmentAboutMembersBinding
 import com.example.insees.Dataclasses.Professor
 import com.example.insees.R
+import com.example.insees.databinding.FragmentAboutMembersBinding
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 
@@ -33,32 +33,7 @@ class AboutMembersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-    private fun getImages() {
-        loadImage("inseesimages/inseesgroup.jpg",binding.inseesImage)
-        loadImage("inseesimages/president.png", binding.imgPresident)
-        loadImage("inseesimages/snehagupta.png", binding.imgVicePresident)
-        loadImage("inseesimages/ankitraj.png", binding.imgGenSecretary)
-        loadImage("inseesimages/pranjeet.png", binding.imgPranjeet)
-        loadImage("inseesimages/hritikaroy.png", binding.imgHritika)
-        loadImage("inseesimages/rupantar.png", binding.imgRupantar)
-        loadImage("inseesimages/riya.png", binding.imgRiya)
-        loadImage("inseesimages/khyanmoi.png", binding.imgKhyanmoi)
-        loadImage("inseesimages/bhawnajpg.jpg", binding.imgBhawna)
-        loadImage("inseesimages/sayanrupjpg.jpg", binding.imgSayanrup)
-        loadImage("inseesimages/ankit.png", binding.imgAnkit)
-        loadImage("inseesimages/siddharthjpg.jpg", binding.imgSiddharth)
-        loadImage("inseesimages/anujjpg.jpg", binding.imgAnuj)
-        loadImage("inseesimages/shweta.png", binding.imgShweta)
-        loadImage("inseesimages/akash.png", binding.imgAkash)
-        loadImage("inseesimages/ankur.png", binding.imgAnkur)
-        loadImage("inseesimages/harish.png", binding.imgHarish)
-        loadImage("inseesimages/amipsajpg_11zon.jpg", binding.imgAmipsa)
-        loadImage("inseesimages/silpangana.png", binding.imgSilpangana)
-    }
-
-    private fun loadImage(remotePath: String, imageView: ImageView) {
-        val storageRef = FirebaseStorage.getInstance().reference.child(remotePath)
-
+        val storageRef = FirebaseStorage.getInstance().reference.child("images/Insees.jpg")
         storageRef.downloadUrl.addOnSuccessListener { uri ->
             if (isAdded) {
                 Glide.with(this)

@@ -23,7 +23,7 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:background="@color/background"
         android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -190,7 +190,7 @@
                         android:paddingBottom="24dp">
 
                         <ImageView
-                            android:id="@+id/imageView"
+                            android:id="@+id/profileImage"
                             android:layout_width="90dp"
                             android:layout_height="90dp"
                             android:contentDescription="@string/todo"

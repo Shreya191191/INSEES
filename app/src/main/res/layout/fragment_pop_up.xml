@@ -5,14 +5,15 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:padding="8dp"
     tools:context=".Fragments.PopUpFragment"
-    android:background="#D5353535">
+    android:background="@color/darkGrey">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:padding="10sp"
-        android:orientation="horizontal"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:weightSum="1000"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
@@ -21,14 +22,16 @@
             android:fontFamily="@font/bentham"
             android:textSize="20sp"
             android:textColor="#FFFFFF"
+            android:layout_weight="950"
+            android:layout_gravity="center"
             android:layout_marginStart="10sp"
             android:layout_height="wrap_content"/>
 
         <ImageView
             android:id="@+id/cancelPopUpButton"
-            android:layout_marginStart="250sp"
             android:layout_width="30sp"
             android:layout_height="30sp"
+            android:layout_weight="50"
             android:src="@drawable/baseline_cancel_24"/>
     </LinearLayout>
 
@@ -36,19 +39,27 @@
         android:layout_width="match_parent"
         android:padding="10sp"
         android:layout_marginTop="10sp"
+        android:layout_marginHorizontal="10sp"
         android:orientation="vertical"
         android:layout_height="wrap_content">
 
         <TextView
             android:layout_width="wrap_content"
-            android:text="Name"
+            android:text="@string/title"
             android:textColor="#FFFFFF"
+            android:textStyle="bold"
             android:layout_marginStart="10sp"
             android:fontFamily="@font/muskmedium"
             android:layout_height="wrap_content"/>
 
         <EditText
+            android:autofillHints="Name"
+            android:inputType="textPersonName"
             android:padding="10sp"
+            android:hint="@string/what_is_the_task"
+            android:textColorHint="@color/mediumGrey"
+            android:labelFor="@id/etPopUpTaskName"
+            android:textColor="@color/white"
             android:id="@+id/etPopUpTaskName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -62,24 +73,34 @@
         android:layout_width="match_parent"
         android:padding="10sp"
         android:layout_marginTop="10sp"
+        android:layout_marginHorizontal="10dp"
         android:orientation="vertical"
         android:layout_height="wrap_content">
 
         <TextView
             android:layout_width="wrap_content"
-            android:text="Description"
+            android:text="@string/description"
             android:fontFamily="@font/muskmedium"
             android:textColor="#FFFFFF"
-            android:layout_marginLeft="10sp"
+            android:textStyle="bold"
+            android:layout_marginStart="10sp"
             android:layout_height="wrap_content"/>
 
         <EditText
+            android:autofillHints="Task"
             android:padding="10sp"
+            android:labelFor="@id/etPopUpTaskDesc"
             android:id="@+id/etPopUpTaskDesc"
+            android:inputType="textMultiLine"
+            android:fitsSystemWindows="true"
+            android:textAlignment="viewStart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:background="@drawable/edit_text_border"
             android:minHeight="48dp"
+            android:hint="@string/what_do_you_have_to_do"
+            android:textColorHint="@color/mediumGrey"
             tools:ignore="SpeakableTextPresentCheck" />
 
     </LinearLayout>
@@ -88,15 +109,17 @@
         android:layout_width="match_parent"
         android:padding="10sp"
         android:layout_marginTop="10sp"
+        android:layout_marginHorizontal="6dp"
         android:orientation="vertical"
         android:layout_height="wrap_content">
 
         <TextView
             android:layout_width="wrap_content"
-            android:text="Deadline"
+            android:text="@string/deadline"
             android:fontFamily="@font/muskmedium"
             android:textColor="#FFFFFF"
-            android:layout_marginLeft="10sp"
+            android:textStyle="bold"
+            android:layout_marginStart="10sp"
             android:layout_height="wrap_content"/>
 
 
@@ -109,13 +132,13 @@
                 android:id="@+id/etPopUpTaskTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10sp"
+                android:layout_marginStart="10sp"
                 android:layout_weight="1"
                 android:background="@drawable/edit_text_border"
-                android:drawableEnd="@drawable/baseline_access_time_filled_24"
-                android:hint="Time"
+                android:hint="@string/time"
                 android:padding="10sp"
                 android:textColorHint="#FFFFFF"
+                app:drawableEndCompat="@drawable/baseline_access_time_filled_24"
                 tools:ignore="TouchTargetSizeCheck" />
 
             <TextView
@@ -125,7 +148,7 @@
                 android:layout_marginStart="10sp"
                 android:layout_weight="1"
                 android:background="@drawable/edit_text_border"
-                android:hint="Date"
+                android:hint="@string/date"
                 android:padding="10sp"
                 android:textColorHint="#FFFFFF"
                 tools:ignore="TouchTargetSizeCheck"

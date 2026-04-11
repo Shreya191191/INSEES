@@ -28,12 +28,29 @@ class PopUpFragment : DialogFragment(), DatePickerDialog.OnDateSetListener, Time
         this.listener = listener
     }
 
+<<<<<<< HEAD
     private var day = 0
     private var month = 0
     private var year = 0
     private var hour = 0
     private var minute = 0
 
+=======
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+    }
+
+    private var day = 0
+    private var month = 0
+    private var year = 0
+    private var hour = 0
+    private var minute = 0
+
+>>>>>>> branch3
     private var savedDay = 0
     private var savedMonth = 0
     private var savedYear = 0

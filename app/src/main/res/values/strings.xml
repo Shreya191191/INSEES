@@ -43,4 +43,12 @@
     <string name="about_insees">About the Department</string>
     <string name="logo">Logo</string>
     <string name="john_doe">John Doe</string>
+    <string name="title">Title</string>
+    <string name="time">Time</string>
+    <string name="date">Date</string>
+    <string name="description">Description</string>
+    <string name="what_do_you_have_to_do">What do you have to do?</string>
+    <string name="what_is_the_task">What is the task?</string>
+    <string name="deadline">Deadline</string>
+    <string name="name">Name</string>
 </resources>
