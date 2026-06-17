@@ -78,6 +78,15 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .into(navImageView)
     }
 
+    fun loadCircleImage(imageUrl: String) {
+        Glide.with(this)
+            .load(imageUrl)
+            .placeholder(R.drawable.ic_user_foreground)
+            .error(R.drawable.ic_user_foreground)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .into(navImageView)
+    }
+
     fun updateNameAndEmail(name: String, email: String){
         navName.text = name
         navEmail.text = email

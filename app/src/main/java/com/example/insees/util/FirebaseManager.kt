@@ -8,7 +8,7 @@ import com.google.firebase.storage.storage
 
 object FirebaseManager {
     private val firebaseAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
-    private val firebaseDatabase: FirebaseDatabase by lazy { FirebaseDatabase.getInstance() }
+    private val firebaseDatabase: FirebaseDatabase by lazy { FirebaseDatabase.getInstance() } //
     private val firebaseStorage: FirebaseStorage by lazy { Firebase.storage}
 
     @JvmName("functionOfKotlin")
