@@ -9,7 +9,12 @@
         android:id="@+id/todoFragment"
         android:name="com.example.insees.fragment.TodoFragment"
         android:label="fragment_todo"
-        tools:layout="@layout/fragment_todo" />
+        tools:layout="@layout/fragment_todo" >
+    <action
+        android:id="@+id/action_todoFragment_to_completedTaskFragment"
+        app:destination="@id/completedTaskFragment"/>
+    </fragment>
+
     <fragment
         android:id="@+id/semesterFragment"
         android:name="com.example.insees.fragment.SemesterFragment"
@@ -22,6 +27,7 @@
             android:id="@+id/action_semesterFragment_to_yearFragment"
             app:destination="@id/yearFragment" />
     </fragment>
+
     <dialog
         android:id="@+id/popUpFragment"
         android:name="com.example.insees.fragment.PopUpFragment"
@@ -50,6 +56,7 @@
             android:id="@+id/action_inseesAboutUsFragment_to_aboutMembersFragment"
             app:destination="@id/aboutMembersFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/aboutMembersFragment"
         android:name="com.example.insees.fragment.AboutDevelopersFragment"
@@ -64,6 +71,7 @@
             app:destination="@id/pdfViewerFragment"
             app:popUpTo="@id/yearFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/pdfViewerFragment"
         android:name="com.example.insees.fragment.PdfViewerFragment"
@@ -86,4 +94,8 @@
             app:destination="@id/yearFragment"
             app:popUpTo="@id/viewPagerFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/completedTaskFragment"
+        android:name="com.example.insees.fragment.CompletedTaskFragment"/>
 </navigation>

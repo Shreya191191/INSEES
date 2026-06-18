@@ -110,6 +110,8 @@ class AboutMembersFragment : Fragment() {
                 for (doc in documents) {
                     try {
                         val member = doc.toObject(Professor::class.java)
+//                        Log.d("Professor", "Name = ${member.name}")
+//                        Log.d("Professor", "Image = ${member.image_url}")
                         membersList.add(member)
                     } catch (e: Exception) {
                         Log.e("FirestoreParseError", "Error parsing doc ${doc.id}", e)
