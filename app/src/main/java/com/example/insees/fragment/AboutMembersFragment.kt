@@ -33,13 +33,19 @@ class AboutMembersFragment : Fragment() {
     private lateinit var binding: FragmentAboutMembersBinding
     private val db = FirebaseFirestore.getInstance()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentAboutMembersBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         loadImage(
@@ -110,24 +116,34 @@ class AboutMembersFragment : Fragment() {
                 for (doc in documents) {
                     try {
                         val member = doc.toObject(Professor::class.java)
-//                        Log.d("Professor", "Name = ${member.name}")
-//                        Log.d("Professor", "Image = ${member.image_url}")
                         membersList.add(member)
-                    } catch (e: Exception) {
+                    }
+                    catch (e: Exception) {
                         Log.e("FirestoreParseError", "Error parsing doc ${doc.id}", e)
                     }
                 }
                 if (membersList.isNotEmpty()) {
                     binding.recyclerView.adapter = ProfessorAdapter(membersList) { member ->
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(member.website_url))
+                        val intent = Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse(member.website_url)
+                        )
                         startActivity(intent)
                     }
                 } else {
-                    Toast.makeText(context, "No members found", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        "No members found",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             .addOnFailureListener { e ->
-                Toast.makeText(context, "Failed: ${e.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    "Failed: ${e.message}",
+                    Toast.LENGTH_LONG
+                ).show()
                 Log.e("FirestoreError", "Error loading data", e)
             }
     }
@@ -137,7 +153,11 @@ class AboutMembersFragment : Fragment() {
         try {
 
             FileOutputStream(file).use { out ->
-                bitmap.compress(Bitmap.CompressFormat.PNG, 50, out)
+                bitmap.compress(
+                    Bitmap.CompressFormat.PNG,
+                    50,
+                    out
+                )
             }
 
         } catch (e: IOException) {
