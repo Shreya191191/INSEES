@@ -24,6 +24,7 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.example.insees.util.FirebaseManager
 import com.example.insees.databinding.FragmentCompleteProfileBinding
+import com.example.insees.network.CloudinaryRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.cancel
@@ -50,18 +51,6 @@ class CompleteProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = view.findNavController()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        lifecycleScope.coroutineContext.cancel()
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentCompleteProfileBinding.inflate(inflater, container, false)
         auth = FirebaseManager.getFirebaseAuth()
         database = FirebaseManager.getFirebaseDatabase()
 
@@ -82,9 +71,6 @@ class CompleteProfileFragment : Fragment() {
         binding.uploadImage.setOnClickListener {
             galleryLauncher.launch("image/*")
         }
-
-        //ankitk_ug_22@ei.nits.ac.in
-        //123456
 
         binding.btnNextCompleteProfile.setOnClickListener {
             binding.btnNextCompleteProfile.isEnabled = false
@@ -108,7 +94,18 @@ class CompleteProfileFragment : Fragment() {
             binding.profileLayout.visibility = View.VISIBLE
             binding.closeImage.visibility = View.INVISIBLE
         }
+    }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        lifecycleScope.coroutineContext.cancel()
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentCompleteProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -124,13 +121,10 @@ class CompleteProfileFragment : Fragment() {
 
         try {
             auth.createUserWithEmailAndPassword(email, password).await()
-
             // Wait for image upload
             saveImage(this.result) // make this a suspend function too
-
             // Then send verification link
             sendLink()
-
         } catch (e: Exception) {
             Toast.makeText(requireContext(), e.localizedMessage, Toast.LENGTH_LONG).show()
         }
@@ -139,9 +133,18 @@ class CompleteProfileFragment : Fragment() {
     private suspend fun sendLink() {
         try {
             auth.currentUser?.sendEmailVerification()?.await()
-            Toast.makeText(requireContext(), "Please verify your email", Toast.LENGTH_LONG).show()
-        } catch (e: Exception) {
-            Toast.makeText(requireContext(), "Failed to send verification email: ${e.message}", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                requireContext(),
+                "Please verify your email",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+        catch (e: Exception) {
+            Toast.makeText(
+                requireContext(),
+                "Failed to send verification email: ${e.message}",
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -168,14 +171,10 @@ class CompleteProfileFragment : Fragment() {
                                 Bitmap.Config.RGB_565, true
                             )
                         ).get()
-
                         setImageBitmap(result)
-
                     }
                 }
             }
-
-
         galleryLauncher =
             registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
                 if (uri != null) {
@@ -189,9 +188,7 @@ class CompleteProfileFragment : Fragment() {
                             visibility = View.VISIBLE
                             setImageBitmap(result)
                         }
-
                         binding.closeImage.visibility = View.VISIBLE
-
                     } catch (e: IOException) {
                         Toast.makeText(requireContext(), "Failed to load image", Toast.LENGTH_SHORT)
                             .show()
@@ -274,42 +271,59 @@ class CompleteProfileFragment : Fragment() {
         }
     }
 
-//    private fun saveImage(image:Bitmap,context:Context ): Uri {
+//    This is code for firebase storage
+//    private suspend fun saveImage(bitmap: Bitmap){
+//        val uid = auth.currentUser?.uid ?: return
+//        val storageRef = FirebaseManager.getFirebaseStorage().reference
+//        val imageRef = storageRef.child("Profile/$uid.jpg")
 //
-//        val imagesFolder = File(context.cacheDir, "images")
-//        var uri: Uri
-//        try{
-//            imagesFolder.mkdir()
-//            val file = File(imagesFolder, "captured_image.jpg")
-//            val stream = FileOutputStream(file)
-//            image.compress(Bitmap.CompressFormat.JPEG , 100, stream)
-//            stream.flush()
-//            stream.close()
-//            uri = FileProvider.getUriForFile(context.applicationContext, "com.example.insees"+".provider", file)
-//        }
-//        catch (e:FileNotFoundException){
-//            e.printStackTrace()
-//        }catch (e: IOException){
-//            e.printStackTrace()
-//        }
-//        return uri
+//        // Convert bitmap to byte array
+//        val baos = ByteArrayOutputStream()
+//        bitmap.compress(Bitmap.CompressFormat.JPEG, 25, baos)
+//        val data = baos.toByteArray()
+//
+//        imageRef.putBytes(data).await()
+//        val uri = imageRef.downloadUrl.await() // Get download URL
+//        val name = binding.etNameCompleteProfile.getText().toString().trim()
+//        val user = mapOf("name" to name, "profilePhoto" to uri.toString())
+//        database.getReference("users").child(uid).updateChildren(user).await()
+//        Log.d("UID", "Hello")
 //    }
 
-    private suspend fun saveImage(bitmap: Bitmap){
+    private suspend fun saveImage(bitmap: Bitmap) {
         val uid = auth.currentUser?.uid ?: return
-        val storageRef = FirebaseManager.getFirebaseStorage().reference
-        val imageRef = storageRef.child("Profile/$uid.jpg")
-
-        // Convert bitmap to byte array
+        // Bitmap -> ByteArray
         val baos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 25, baos)
         val data = baos.toByteArray()
 
-        imageRef.putBytes(data).await()
-        val uri = imageRef.downloadUrl.await() // Get download URL
-        val name = binding.etNameCompleteProfile.getText().toString().trim()
-        val user = mapOf("name" to name, "profilePhoto" to uri.toString())
-        database.getReference("users").child(uid).updateChildren(user).await()
-        Log.d("UID", "Hello")
+        // Upload to Cloudinary
+        val imageUrl = CloudinaryRepository.uploadImage(
+            requireContext(),
+            data
+        )
+      //  Log.d("UPLOAD", "Returned URL = $url")
+        if (imageUrl == null) {
+            Toast.makeText(
+                requireContext(),
+                "Image upload failed",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+
+        val name = binding.etNameCompleteProfile.text.toString().trim()
+
+        val user = mapOf(
+            "name" to name,
+            "profilePhoto" to imageUrl
+        )
+
+        database.getReference("users")
+            .child(uid)
+            .updateChildren(user)
+            .await()
+
+        Log.d("Cloudinary", imageUrl)
     }
 }

@@ -59,6 +59,14 @@ class PopUpFragment : DialogFragment(), DatePickerDialog.OnDateSetListener, Time
         pickTime()
     }
 
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setLayout(
+            (resources.displayMetrics.widthPixels * 0.9).toInt(),
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+    }
+
     private fun registerEvents() {
         binding.btnPopUpAddTask.setOnClickListener {
             val todoTitle = binding.etPopUpTaskName.text.toString()

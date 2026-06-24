@@ -22,7 +22,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
-        android:name=".FirebaseOffline"
+        android:name=".InseesApplication"
         android:allowBackup="true"
         android:enableOnBackInvokedCallback="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -43,7 +43,9 @@
             <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths"/>
         </provider>
-        <receiver android:name=".util.NotificationReceiver" />
+        <receiver
+            android:name=".util.NotificationReceiver"
+            android:exported="false" />
 
         <activity
             android:name=".activity.HomeActivity"

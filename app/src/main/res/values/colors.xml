@@ -33,6 +33,7 @@
     <color name="darkPurple">#512DA8</color>
     <color name="mediumPurple">#673AB7</color>
     <color name="lightPurple">#9575CD</color>
+    <color name="purple">#8B5CF6</color>
 
     <!-- Orange Shades -->
     <color name="darkOrange">#E64A19</color>
@@ -54,12 +55,18 @@
     <color name="purpleblue">#6F4BD7</color>
     <color name="darkGrey2">#353535</color>
 
+
     <array name="colorResources">
-        <item name="lighttyellow">#E4AD1C</item>
-        <item name="purpleblue">#6F4BD7</item>
-        <item name="mediumGreen">#28A853</item>
-        <item name="darkRed">#DF392E</item>
+        <item>#405341</item>
+        <item>#EF4444</item> <!-- Soft Red -->
+        <item>#06B6D4</item> <!-- Cyan -->
+        <item>#C37D28</item>
+        <item>#8B5CF6</item> <!-- Purple -->
+
+
+
     </array>
+
 
     <color name="fab_bg">#6F4BD7</color> <!-- Same as purpleblue -->
     <color name="fab_icon">#FFFFFF</color> <!-- White icon -->

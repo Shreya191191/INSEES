@@ -1,10 +1,9 @@
 package com.example.insees.fragment
 
 import HomeViewModel
-import android.annotation.SuppressLint
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,11 +31,6 @@ import com.example.insees.util.FirebaseManager
 import com.example.insees.util.Swipe
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
@@ -44,19 +38,15 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
+import com.example.insees.util.TaskManager
 
-class HomeFragment : Fragment(), DialogAddBtnClickListener{
+class HomeFragment : Fragment(), DialogAddBtnClickListener {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var viewPager: ViewPager2
     private lateinit var navController: NavController
-    private lateinit var databaseRef: DatabaseReference
 
-    private lateinit var currentUser: FirebaseUser
     private lateinit var homeAdapter: HomeToDoAdapter
     private var tasks: MutableList<ToDoData> = mutableListOf()
     private lateinit var viewModel: HomeViewModel
@@ -73,8 +63,8 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener{
         viewModel.userName.observe(viewLifecycleOwner) {
             var firstName = ""
 
-            for(ch in it){
-                if(ch == ' ')
+            for (ch in it) {
+                if (ch == ' ')
                     break
                 else
                     firstName += ch
@@ -88,11 +78,11 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener{
 
     override fun onResume() {
         super.onResume()
-        requireActivity().findViewById<BottomNavigationView>(R.id.bvNavBar).visibility = View.VISIBLE
+        requireActivity().findViewById<BottomNavigationView>(R.id.bvNavBar).visibility =
+            View.VISIBLE
     }
 
     private fun init() {
-        databaseRef = FirebaseManager.getFirebaseDatabase().reference
         auth = FirebaseManager.getFirebaseAuth()
     }
 
@@ -114,42 +104,72 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener{
 
     private fun loadImage(localProfileName: String) {
         val localFile = File(requireContext().filesDir, localProfileName)
-        if(localFile.exists()){
+        if (localFile.exists()) {
             Glide.with(this)
                 .load(localFile)
                 .placeholder(R.drawable.ic_user_foreground)
-                .diskCacheStrategy(DiskCacheStrategy.ALL) // Enable disk caching
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(binding.btnProfile)
             (activity as HomeActivity).loadCircleImage(localFile)
-        }
-        else{
+        } else {
             viewModel.fetchUserData()
-            viewModel.profilePhoto.observe(viewLifecycleOwner) {
-                if (it != null){
-                    val photoByteArray = viewModel.profilePhoto.value!!.toByteArray()
-                    val resource = BitmapFactory.decodeByteArray(
-                        photoByteArray,
-                        0,
-                        photoByteArray.size
-                    )
-                    binding.btnProfile.setImageBitmap(resource)
-                    lifecycleScope.launch(Dispatchers.IO){
-                        saveImageToLocalFile(resource, localFile)
+            viewModel.profilePhoto.observe(viewLifecycleOwner) { imageUrl ->
+                lifecycleScope.launch(Dispatchers.IO) {
+                    try {
+                        val bitmap = Glide.with(requireContext())
+                            .asBitmap()
+                            .load(imageUrl)
+                            .submit()
+                            .get()
+                        //local file me save karo
+                        saveImageToLocalFile(bitmap, localFile)
+                        withContext(Dispatchers.Main) {
+                            binding.btnProfile.setImageBitmap(bitmap)
+                            //drawer bhi update karo
+                            (activity as HomeActivity).loadCircleImage(localFile)
+                        }
+                    } catch (e: Exception) {
+                        Log.e("PROFILE", "Image download failed", e)
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(
+                                requireContext(),
+                                "Failed to load profile image",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
-                else Toast.makeText(context, "Image Not Found", Toast.LENGTH_LONG).show()
             }
         }
+
+//        Firebase Storage ke sath
+//        else{
+//            viewModel.fetchUserData()
+//            viewModel.profilePhoto.observe(viewLifecycleOwner) {
+//                if (it != null){
+//                    val photoByteArray = viewModel.profilePhoto.value!!.toByteArray()
+//                    val resource = BitmapFactory.decodeByteArray(
+//                        photoByteArray,
+//                        0,
+//                        photoByteArray.size
+//                    )
+//                    binding.btnProfile.setImageBitmap(resource)
+//                    lifecycleScope.launch(Dispatchers.IO){
+//                        saveImageToLocalFile(resource, localFile)
+//                    }
+//                }
+//                else Toast.makeText(context, "Image Not Found", Toast.LENGTH_LONG).show()
+//            }
+//        }
     }
 
     private fun saveImageToLocalFile(bitmap: Bitmap, file: File) {
         try {
             FileOutputStream(file).use { out ->
-                bitmap.compress(Bitmap.CompressFormat.PNG, 50, out)
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
             }
         } catch (e: IOException) {
-            e.printStackTrace()
-            Toast.makeText(context, "Failed to save image locally", Toast.LENGTH_SHORT).show()
+            Log.e("PROFILE", "Local save failed", e)
         }
     }
 
@@ -185,10 +205,6 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener{
         binding.btnViewAll.setOnClickListener {
             viewPager.setCurrentItem(2, false)
         }
-
-        binding.btnAddTask.setOnClickListener {
-            navController.navigate(R.id.action_viewPagerFragment_to_popUpFragment)
-        }
         return binding.root
     }
 
@@ -216,42 +232,25 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener{
     }
 
     private fun fetchDatabase() {
-
-        databaseRef.keepSynced(true)
-        currentUser = auth.currentUser!!
-
-        lifecycleScope.launch {
-            val query = databaseRef.child("users").child(currentUser.uid).child("Tasks")
-
-            query.addValueEventListener(object : ValueEventListener {
-                @SuppressLint("NotifyDataSetChanged")
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    tasks.clear()
-                    for (taskSnapshot in snapshot.children) {
-                        val taskTitle = taskSnapshot.child("title").getValue(String::class.java) ?: ""
-                        val taskDesc = taskSnapshot.child("description").getValue(String::class.java) ?: ""
-                        val taskTime = taskSnapshot.child("time").getValue(String::class.java) ?: ""
-                        val taskDate = taskSnapshot.child("date").getValue(String::class.java) ?: ""
-
-                        val todoTask = ToDoData(taskTitle, taskDesc, taskTime, taskDate)
-                        tasks.add(todoTask)
-                    }
-                    tasks.sortWith(compareBy({ it.taskDate }, { it.taskTime }))
-
-                    updateRecyclerViewVisibility()
-                    homeAdapter.notifyDataSetChanged()
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    lifecycleScope.launch(Dispatchers.Main) {
-                        Toast.makeText(requireContext(), "Error in Fetching data", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            })
-        }
+        TaskManager.fetchTasks(
+            "Pending",
+            onResult = {
+                tasks.clear()
+                val upcomingTasks = it.take(2)
+                tasks.addAll(upcomingTasks)
+                updateRecyclerViewVisibility()
+                homeAdapter.notifyDataSetChanged()
+            },
+            onFailure = {
+                Toast.makeText(
+                    context,
+                    it,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        )
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onSaveTask(
         todoTitle: String,
         todoTitleEt: EditText,
@@ -263,79 +262,86 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener{
         todoDateEt: TextView
     ) {
         // Validate task date and time not before current date and time
-        if (!isDateValid(todoDate, todoTime)) {
-            Toast.makeText(context, "Please select a date and time on or after the current date and time", Toast.LENGTH_SHORT).show()
+        if (!TaskManager.isDateTimeValid(todoDate, todoTime)) {
+            Toast.makeText(
+                context,
+                "Please select a valid date and time",
+                Toast.LENGTH_SHORT
+            ).show()
             return
         }
 
-        val task = hashMapOf(
-            "title" to todoTitle,
-            "description" to todoDesc,
-            "time" to todoTime,
-            "date" to todoDate
-        )
-        val database = databaseRef
-            .child("users")
-            .child(currentUser.uid)
-            .child("Tasks")
-
-        database.push().setValue(task).addOnCompleteListener { tasks ->
-            if (tasks.isSuccessful) {
-                Toast.makeText(context, "Todo Saved Successfully", Toast.LENGTH_SHORT).show()
+        TaskManager.saveTask(
+            requireContext(),
+            todoTitle,
+            todoDesc,
+            todoDate,
+            todoTime,
+            onSuccess = {
+                Toast.makeText(
+                    context,
+                    "Todo Saved Successfully",
+                    Toast.LENGTH_SHORT
+                ).show()
                 todoTitleEt.text = null
                 todoDescEt.text = null
                 todoDateEt.text = null
                 todoTimeEt.text = null
-            } else {
-                Toast.makeText(context, tasks.exception.toString(), Toast.LENGTH_SHORT).show()
+                updateRecyclerViewVisibility()
+            },
+            onFailure = {
+                Toast.makeText(
+                    context,
+                    it,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
-//            PopUpFragment().dismiss()
-        }
-        updateRecyclerViewVisibility()
+        )
     }
 
-    private fun isDateValid(todoDate: String, todoTime: String): Boolean {
-        val sdfDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val sdfTime = SimpleDateFormat("HH:mm", Locale.getDefault())
-
-        val currentDate = Calendar.getInstance().time
-        val selectedDate = sdfDate.parse(todoDate) ?: return false
-        val selectedTime = sdfTime.parse(todoTime) ?: return false
-
-        // Combine date and time into one datetime object
-        val selectedDateTime = Calendar.getInstance().apply {
-            time = selectedDate
-            val time = Calendar.getInstance()
-            time.time = selectedTime
-            set(Calendar.HOUR_OF_DAY, time.get(Calendar.HOUR_OF_DAY))
-            set(Calendar.MINUTE, time.get(Calendar.MINUTE))
-        }.time
-
-        return selectedDateTime >= currentDate
-    }
 
     private fun initSwipe() {
         val swipe = object : Swipe() {
-            @SuppressLint("NotifyDataSetChanged")
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.layoutPosition
                 val task = homeAdapter.getItem(position)
                 if (direction == ItemTouchHelper.LEFT) {
-                    lifecycleScope.launch {
-                        onSwiped(task, position)
-                        withContext(Dispatchers.Main) {
-                            Toast.makeText(context, "Task Deleted", Toast.LENGTH_SHORT).show()
-                            homeAdapter.notifyItemRemoved(position)
-                        }
-                    }
+                        TaskManager.completeTask(
+                            task,
+                            onSuccess = {
+                                updateRecyclerViewVisibility()
+                                Toast.makeText(
+                                    context,
+                                    "Task Completed",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            },
+                            onFailure = {
+                                Toast.makeText(
+                                    context,
+                                    it,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        )
                 } else if (direction == ItemTouchHelper.RIGHT) {
-                    lifecycleScope.launch {
-                        onSwiped(task, position)
-                        withContext(Dispatchers.Main) {
-                            Toast.makeText(context, "Task Finished", Toast.LENGTH_SHORT).show()
-                            homeAdapter.notifyItemRemoved(position)
-                        }
-                    }
+                        TaskManager.deleteTask(
+                            task,
+                            onSuccess = {
+                                Toast.makeText(
+                                    context,
+                                    "Task Deleted",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            },
+                            onFailure = {
+                                Toast.makeText(
+                                    context,
+                                    it,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        )
                 }
             }
         }
@@ -343,38 +349,4 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener{
         itemTouchHelper.attachToRecyclerView(binding.rvTodo)
     }
 
-    private fun onSwiped(toDoData: ToDoData, position: Int) {
-        val database = databaseRef
-            .child("users")
-            .child(currentUser.uid)
-            .child("Tasks")
-
-        database
-            .orderByChild("title")
-            .equalTo(toDoData.taskTitle)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    for (taskSnapshot in snapshot.children) {
-                        // Check if the found entry matches the data to be deleted
-                        if (taskSnapshot.child("title").getValue(String::class.java) == toDoData.taskTitle &&
-                            taskSnapshot.child("description").getValue(String::class.java) == toDoData.taskDesc &&
-                            taskSnapshot.child("time").getValue(String::class.java) == toDoData.taskTime &&
-                            taskSnapshot.child("date").getValue(String::class.java) == toDoData.taskDate
-                        ) {
-                            taskSnapshot.ref.removeValue()
-                            tasks.remove(toDoData)
-                            break
-                        }
-                    }
-                    updateRecyclerViewVisibility()
-                    homeAdapter.notifyItemRemoved(position)
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    lifecycleScope.launch(Dispatchers.Main) {
-                        Toast.makeText(requireContext(), "Error in Deleting Task", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            })
-    }
 }

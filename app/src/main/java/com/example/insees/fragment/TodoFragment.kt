@@ -1,8 +1,6 @@
 package com.example.insees.fragment
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,35 +8,24 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.insees.R
 import com.example.insees.adapter.ToDoAdapter
 import com.example.insees.model.ToDoData
 import com.example.insees.util.DialogAddBtnClickListener
-import com.example.insees.util.FirebaseManager
 import com.example.insees.util.Swipe
 import com.example.insees.databinding.FragmentTodoBinding
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
+import com.example.insees.util.TaskManager
 
 class TodoFragment : Fragment(), DialogAddBtnClickListener {
 
     private lateinit var binding: FragmentTodoBinding
-    private lateinit var databaseRef: DatabaseReference
     private lateinit var popUpFragment: PopUpFragment
     private lateinit var adapter: ToDoAdapter
     private lateinit var mList: MutableList<ToDoData>
-    private lateinit var auth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,8 +45,6 @@ class TodoFragment : Fragment(), DialogAddBtnClickListener {
     }
 
     private fun init() {
-        auth = FirebaseManager.getFirebaseAuth()
-        databaseRef = FirebaseManager.getFirebaseDatabase().reference
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         mList = mutableListOf()
@@ -68,40 +53,40 @@ class TodoFragment : Fragment(), DialogAddBtnClickListener {
     }
 
     private fun getDataFromFirebase() {
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            val database = databaseRef
-                .child("users")
-                .child(currentUser.uid)
-                .child("Tasks")
 
-            database.addValueEventListener(object : ValueEventListener {
-                @SuppressLint("NotifyDataSetChanged")
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    mList.clear()
-                    for (taskSnapshot in snapshot.children) {
-                        val taskTitle = taskSnapshot.child("title").getValue(String::class.java) ?: ""
-                        val taskDesc = taskSnapshot.child("description").getValue(String::class.java) ?: ""
-                        val taskTime = taskSnapshot.child("time").getValue(String::class.java) ?: ""
-                        val taskDate = taskSnapshot.child("date").getValue(String::class.java) ?: ""
-
-                        val todoTask = ToDoData(taskTitle, taskDesc, taskTime, taskDate)
-                        mList.add(todoTask)
-                    }
-                    mList.sortWith(compareBy({ it.taskDate }, { it.taskTime }))
-                    adapter.notifyDataSetChanged()
+        TaskManager.fetchTasks(
+            "Pending",
+            onResult = {
+                mList.clear()
+                mList.addAll(it)
+                adapter.notifyDataSetChanged()
+                if (mList.isEmpty()) {
+                    binding.tvNoPendingTasks.visibility = View.VISIBLE
+                    binding.recyclerView.visibility = View.GONE
+                } else {
+                    binding.tvNoPendingTasks.visibility = View.GONE
+                    binding.recyclerView.visibility = View.VISIBLE
                 }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
-                }
-            })
-        } else {
-            Toast.makeText(context, "User not authenticated", Toast.LENGTH_SHORT).show()
-        }
+            },
+            onFailure = {
+                Toast.makeText(
+                    context,
+                    it,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        )
     }
 
     private fun registerEvents() {
+
+
+        binding.tvCompleted.setOnClickListener {
+            requireParentFragment()
+                .findNavController()
+                .navigate(R.id.completedTaskFragment)
+        }
+
         binding.btnTodoAddTask.setOnClickListener {
             popUpFragment = PopUpFragment()
             popUpFragment.setListener(this)
@@ -120,112 +105,94 @@ class TodoFragment : Fragment(), DialogAddBtnClickListener {
         todoDateEt: TextView
     ) {
         // Validate task date and time not before current date and time
-        if (!isDateTimeValid(todoDate, todoTime)) {
-            Toast.makeText(context, "Please select a date and time on or after the current date and time", Toast.LENGTH_SHORT).show()
+        if (!TaskManager.isDateTimeValid(todoDate, todoTime)) {
+            Toast.makeText(
+                context,
+                "Please select a valid date and time",
+                Toast.LENGTH_SHORT
+            ).show()
             return
         }
 
-        val task = hashMapOf(
-            "title" to todoTitle,
-            "description" to todoDesc,
-            "time" to todoTime,
-            "date" to todoDate
-        )
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            val database = databaseRef
-                .child("users")
-                .child(currentUser.uid)
-                .child("Tasks")
-
-            database.push().setValue(task).addOnCompleteListener { tasks ->
-                if (tasks.isSuccessful) {
-                    Toast.makeText(context, "Todo Saved Successfully", Toast.LENGTH_SHORT).show()
-                    todoTitleEt.text = null
-                    todoDescEt.text = null
-                    todoDateEt.text = null
-                    todoTimeEt.text = null
-                } else {
-                    Toast.makeText(context, tasks.exception.toString(), Toast.LENGTH_SHORT).show()
-                }
+        TaskManager.saveTask(
+            requireContext(),
+            todoTitle,
+            todoDesc,
+            todoDate,
+            todoTime,
+            onSuccess = {
+                Toast.makeText(
+                    context,
+                    "Todo Saved Successfully",
+                    Toast.LENGTH_SHORT
+                ).show()
+                todoTitleEt.text = null
+                todoDescEt.text = null
+                todoDateEt.text = null
+                todoTimeEt.text = null
                 popUpFragment.dismiss()
+            },
+            onFailure = {
+                Toast.makeText(
+                    context,
+                    it,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
-        } else {
-            Toast.makeText(context, "User not authenticated", Toast.LENGTH_SHORT).show()
-        }
+        )
     }
 
-    private fun isDateTimeValid(todoDate: String, todoTime: String): Boolean {
-        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-        val currentDate = Calendar.getInstance().time
-        val selectedDateTime = sdf.parse("$todoDate $todoTime") ?: return false
-        if(selectedDateTime<currentDate) return false
-        else return true
-    }
 
-    @OptIn(DelicateCoroutinesApi::class)
     private fun initSwipe() {
         val swipe = object : Swipe() {
-            @SuppressLint("NotifyDataSetChanged")
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            override fun onSwiped(
+                viewHolder: RecyclerView.ViewHolder,
+                direction: Int
+            ){
                 val position = viewHolder.layoutPosition
                 val task = adapter.getItem(position)
                 if (direction == ItemTouchHelper.LEFT) {
-                    GlobalScope.launch {
-                        onSwiped(task)
-                    }
-                    Toast.makeText(context, "Task Deleted", Toast.LENGTH_SHORT).show()
-                } else if (direction == ItemTouchHelper.RIGHT) {
-                    GlobalScope.launch {
-                        onSwiped(task)
-                    }
-                    Toast.makeText(context, "Task Finished", Toast.LENGTH_SHORT).show()
+                    TaskManager.completeTask(
+                        task,
+                        onSuccess = {
+                            Toast.makeText(
+                                context,
+                                "Task Completed",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        },
+                        onFailure = {
+                            Toast.makeText(
+                                context,
+                                it,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    )
                 }
-                adapter.notifyDataSetChanged()
+                else if (direction == ItemTouchHelper.RIGHT) {
+                    TaskManager.deleteTask(
+                        task,
+                        onSuccess = {
+                            Toast.makeText(
+                                context,
+                                "Task Deleted",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        },
+                        onFailure = {
+                            Toast.makeText(
+                                context,
+                                it,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    )
+                }
             }
         }
         val itemTouchHelper = ItemTouchHelper(swipe)
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)
     }
 
-    private fun onSwiped(toDoData: ToDoData) {
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            val database = databaseRef
-                .child("users")
-                .child(currentUser.uid)
-                .child("Tasks")
-
-            database
-                .orderByChild("title")
-                .equalTo(toDoData.taskTitle)
-                .addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        for (taskSnapshot in snapshot.children) {
-                            // Check if the found entry matches the data to be deleted
-                            if (taskSnapshot.child("title").getValue(String::class.java) == toDoData.taskTitle &&
-                                taskSnapshot.child("description").getValue(String::class.java) == toDoData.taskDesc &&
-                                taskSnapshot.child("time").getValue(String::class.java) == toDoData.taskTime &&
-                                taskSnapshot.child("date").getValue(String::class.java) == toDoData.taskDate) {
-                                // Delete the entry
-                                taskSnapshot.ref.removeValue()
-                                    .addOnCompleteListener {
-                                        if (it.isSuccessful) {
-                                            Log.d("Delete", "Deleted")
-                                        } else {
-                                            it.exception?.message?.let { it1 -> Log.d("Failed", it1) }
-                                        }
-                                    }
-                            }
-                        }
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
-                    }
-                })
-        } else {
-            Toast.makeText(context, "User not authenticated", Toast.LENGTH_SHORT).show()
-        }
-    }
 }

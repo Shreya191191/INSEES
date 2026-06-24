@@ -66,11 +66,5 @@ class SemesterFragment : Fragment() {
                 }
             }
 
-//        val callback = object : OnBackPressedCallback(true) {
-//            override fun handleOnBackPressed() {
-//                viewPager.currentItem = 0
-//            }
-//        }
-//        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 }

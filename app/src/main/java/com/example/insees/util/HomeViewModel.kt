@@ -5,11 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.insees.util.FirebaseManager
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.io.ByteArrayOutputStream
 
 class HomeViewModel : ViewModel() {
     private val _loading = MutableLiveData<Boolean>()
@@ -18,9 +16,12 @@ class HomeViewModel : ViewModel() {
     private val _userName = MutableLiveData<String>()
     val userName: LiveData<String> get() = _userName
 
-    private val _profilePhoto = MutableLiveData<ByteArrayOutputStream>()
-    val profilePhoto: LiveData<ByteArrayOutputStream> get() = _profilePhoto
+//    Storage ke sath ye
+//    private val _profilePhoto = MutableLiveData<ByteArrayOutputStream>()
+//    val profilePhoto: LiveData<ByteArrayOutputStream> get() = _profilePhoto
 
+    private val _profilePhoto = MutableLiveData<String>()
+    val profilePhoto: LiveData<String> get() = _profilePhoto
     fun fetchUserData() {
         viewModelScope.launch(Dispatchers.IO) {
             _loading.postValue(true)
@@ -30,7 +31,6 @@ class HomeViewModel : ViewModel() {
             if (user != null) {
                 val uid = user.uid
                 val databaseRef = FirebaseManager.getFirebaseDatabase().reference
-                val storageRef = FirebaseStorage.getInstance().reference
 
                 try {
                     // 🔹 Fetch name from Realtime Database
@@ -40,14 +40,24 @@ class HomeViewModel : ViewModel() {
 
                     _userName.postValue(name)
 
-                    // 🔹 Fetch profile photo from Storage
-                    val photoRef = storageRef.child("Profile/$uid.jpg")
+//                    // 🔹 Fetch profile photo from Storage
+//                    val photoRef = storageRef.child("Profile/$uid.jpg")
+//                    val bytes = photoRef.getBytes(1024 * 1024).await()
+//                    val outputStream = ByteArrayOutputStream()
+//                    outputStream.write(bytes)
+//                    _profilePhoto.postValue(outputStream)
+// 🔹 Fetch profile photo URL from Realtime Database
+                    val photoUrl = nameSnapshot
+                        .child("profilePhoto")
+                        .getValue(String::class.java)
 
-                    val bytes = photoRef.getBytes(1024 * 1024).await()
-
-                    val outputStream = ByteArrayOutputStream()
-                    outputStream.write(bytes)
-                    _profilePhoto.postValue(outputStream)
+                    if (!photoUrl.isNullOrEmpty()) {
+                        Log.d("PROFILE", "Posting URL = $photoUrl")
+                        _profilePhoto.postValue(photoUrl)
+                    }
+                    else {
+                        Log.e("HomeViewModel", "Profile photo URL not found")
+                    }
                 } catch (e: Exception) {
                     Log.e("HomeViewModel", "Error fetching user data: ${e.message}")
                 } finally {
