@@ -265,7 +265,7 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/cardViewMembers"
+                        android:id="@+id/cardViewAttendance"
                         android:layout_width="match_parent"
                         android:layout_height="190dp"
                         android:layout_gravity="center"
@@ -287,20 +287,21 @@
                             android:paddingBottom="24dp">
 
                             <ImageView
-                                android:id="@+id/imageViewMembers"
+                                android:id="@+id/imageViewAttendance"
                                 android:layout_width="70dp"
                                 android:layout_height="70dp"
-                                android:contentDescription="@string/t"
+                                android:contentDescription="Attendance"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/undraw_in_the_office_re_jtgc"
+                                android:src="@drawable/baseline_add_box_24"
+                                app:tint="@color/white"
                                 tools:ignore="ImageContrastCheck" />
 
                             <TextView
-                                android:id="@+id/tvMembers"
+                                android:id="@+id/tvAttendance"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/bevietnamprolight"
-                                android:text="@string/members"
+                                android:text="Attendance"
                                 android:textColor="@color/white"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
