@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.TimePicker
 import android.widget.Toast
@@ -53,6 +54,7 @@ class PopUpFragment : DialogFragment(), DatePickerDialog.OnDateSetListener, Time
         super.onViewCreated(view, savedInstanceState)
 
         init()
+        setupSpinners()
         registerEvents()
         setCurrentDateTime()
         pickDate()
@@ -67,12 +69,28 @@ class PopUpFragment : DialogFragment(), DatePickerDialog.OnDateSetListener, Time
         )
     }
 
+    private fun setupSpinners() {
+        val priorities = arrayOf("Low", "Medium", "High")
+        val priorityAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, priorities)
+        priorityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerPopUpPriority.adapter = priorityAdapter
+        binding.spinnerPopUpPriority.setSelection(0)
+
+        val categories = arrayOf("Other", "Assignment", "Exam", "Lab", "Project")
+        val categoryAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, categories)
+        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerPopUpCategory.adapter = categoryAdapter
+        binding.spinnerPopUpCategory.setSelection(0)
+    }
+
     private fun registerEvents() {
         binding.btnPopUpAddTask.setOnClickListener {
             val todoTitle = binding.etPopUpTaskName.text.toString()
             val todoDesc = binding.etPopUpTaskDesc.text.toString()
             val todoTime = binding.etPopUpTaskTime.text.toString()
             val todoDate = binding.etPopUpTaskDate.text.toString()
+            val priority = binding.spinnerPopUpPriority.selectedItem.toString()
+            val category = binding.spinnerPopUpCategory.selectedItem.toString()
 
             if (todoTitle.isNotEmpty() && todoDesc.isNotEmpty() && todoTime.isNotEmpty() && todoDate.isNotEmpty()) {
                 listener.onSaveTask(
@@ -83,7 +101,9 @@ class PopUpFragment : DialogFragment(), DatePickerDialog.OnDateSetListener, Time
                     todoTime,
                     binding.etPopUpTaskTime,
                     todoDate,
-                    binding.etPopUpTaskDate
+                    binding.etPopUpTaskDate,
+                    priority,
+                    category
                 )
             } else {
                 Toast.makeText(context, "Please complete all the required fields", Toast.LENGTH_SHORT).show()

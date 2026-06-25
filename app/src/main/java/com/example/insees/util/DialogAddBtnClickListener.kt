@@ -12,8 +12,8 @@ interface DialogAddBtnClickListener {
         todoTime: String,
         todoTimeEt: TextView,
         todoDate: String,
-        todoDateEt: TextView
+        todoDateEt: TextView,
+        priority: String,
+        category: String
     )
-
-
 }

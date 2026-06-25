@@ -57,4 +57,39 @@ object ReminderHelper {
             )
         }
     }
+
+    fun scheduleDailyAttendanceReminder(context: Context) {
+        val calendar = java.util.Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            set(java.util.Calendar.HOUR_OF_DAY, 17) // 5:00 PM
+            set(java.util.Calendar.MINUTE, 0)
+            set(java.util.Calendar.SECOND, 0)
+        }
+
+        // If time is in the past, schedule for tomorrow
+        if (calendar.timeInMillis < System.currentTimeMillis()) {
+            calendar.add(java.util.Calendar.DAY_OF_YEAR, 1)
+        }
+
+        val intent = Intent(context, NotificationReceiver::class.java).apply {
+            putExtra("taskTitle", "Attendance Reminder")
+            putExtra("taskDesc", "Have you updated your attendance today? Maintain your 75% target!")
+        }
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            999, // Unique request code for daily attendance
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            AlarmManager.INTERVAL_DAY,
+            pendingIntent
+        )
+    }
 }

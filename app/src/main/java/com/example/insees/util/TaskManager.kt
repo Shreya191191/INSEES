@@ -25,21 +25,25 @@ object TaskManager {
         description: String,
         date: String,
         time: String,
+        priority: String,
+        category: String,
         onSuccess: () -> Unit,
         onFailure: (String) -> Unit
     ) {
-
+        val ref = taskReference().push()
+        val taskId = ref.key ?: ""
         val task = hashMapOf(
+            "id" to taskId,
             "title" to title,
             "description" to description,
             "date" to date,
             "time" to time,
             "status" to "Pending",
-            "createdAt" to System.currentTimeMillis()
+            "createdAt" to System.currentTimeMillis(),
+            "priority" to priority,
+            "category" to category
         )
-        taskReference()
-            .push()
-            .setValue(task)
+        ref.setValue(task)
             .addOnSuccessListener {
                 ReminderHelper.scheduleReminder(
                     context,
@@ -72,6 +76,11 @@ object TaskManager {
 
                     for (taskSnapshot in snapshot.children) {
 
+                        val taskId =
+                            taskSnapshot.child("id")
+                                .getValue(String::class.java)
+                                ?: ""
+
                         val taskTitle =
                             taskSnapshot.child("title")
                                 .getValue(String::class.java)
@@ -102,15 +111,28 @@ object TaskManager {
                                 .getValue(Long::class.java)
                                 ?: 0L
 
+                        val priority =
+                            taskSnapshot.child("priority")
+                                .getValue(String::class.java)
+                                ?: "Low"
+
+                        val category =
+                            taskSnapshot.child("category")
+                                .getValue(String::class.java)
+                                ?: "Other"
+
                         if (taskStatus == status) {
                             list.add(
                                 ToDoData(
+                                    taskId,
                                     taskTitle,
                                     taskDesc,
                                     taskTime,
                                     taskDate,
                                     taskStatus,
-                                    createdAt
+                                    createdAt,
+                                    priority,
+                                    category
                                 )
                             )
                         }
@@ -131,35 +153,17 @@ object TaskManager {
         onSuccess: () -> Unit,
         onFailure: (String) -> Unit
     ) {
-        taskReference()
-            .orderByChild("title")
-            .equalTo(task.taskTitle)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    for (taskSnapshot in snapshot.children) {
-                        if (
-                            taskSnapshot.child("title").getValue(String::class.java) == task.taskTitle &&
-                            taskSnapshot.child("description").getValue(String::class.java) == task.taskDesc &&
-                            taskSnapshot.child("time").getValue(String::class.java) == task.taskTime &&
-                            taskSnapshot.child("date").getValue(String::class.java) == task.taskDate
-                        ) {
-                            taskSnapshot.ref
-                                .child("status")
-                                .setValue("Completed")
-                                .addOnSuccessListener {
-                                    onSuccess()
-                                }
-                                .addOnFailureListener {
-                                    onFailure(it.message ?: "Error")
-                                }
-                            break
-                        }
-                    }
-                }
-                override fun onCancelled(error: DatabaseError) {
-                    onFailure(error.message)
-                }
-            })
+        if (task.taskId.isEmpty()) {
+            onFailure("Task ID is empty")
+            return
+        }
+        taskReference().child(task.taskId).child("status").setValue("Completed")
+            .addOnSuccessListener {
+                onSuccess()
+            }
+            .addOnFailureListener {
+                onFailure(it.message ?: "Error")
+            }
     }
 
     fun deleteTask(
@@ -167,37 +171,17 @@ object TaskManager {
         onSuccess: () -> Unit,
         onFailure: (String) -> Unit
     ) {
-        taskReference()
-            .orderByChild("title")
-            .equalTo(task.taskTitle)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    for (taskSnapshot in snapshot.children) {
-                        if (
-                            taskSnapshot.child("title")
-                                .getValue(String::class.java) == task.taskTitle &&
-                            taskSnapshot.child("description")
-                                .getValue(String::class.java) == task.taskDesc &&
-                            taskSnapshot.child("time")
-                                .getValue(String::class.java) == task.taskTime &&
-                            taskSnapshot.child("date").getValue(String::class.java) == task.taskDate
-                        ) {
-                            taskSnapshot.ref.removeValue()
-                                .addOnSuccessListener {
-                                    onSuccess()
-                                }
-                                .addOnFailureListener {
-                                    onFailure(it.message ?: "Delete Failed")
-                                }
-                            break
-                        }
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    onFailure(error.message)
-                }
-            })
+        if (task.taskId.isEmpty()) {
+            onFailure("Task ID is empty")
+            return
+        }
+        taskReference().child(task.taskId).removeValue()
+            .addOnSuccessListener {
+                onSuccess()
+            }
+            .addOnFailureListener {
+                onFailure(it.message ?: "Delete Failed")
+            }
     }
 
 

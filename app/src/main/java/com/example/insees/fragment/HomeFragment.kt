@@ -1,6 +1,6 @@
 package com.example.insees.fragment
 
-import HomeViewModel
+import com.example.insees.util.HomeViewModel
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
@@ -198,8 +198,10 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
             viewPager.setCurrentItem(3, false)
         }
 
-        binding.cardViewMembers.setOnClickListener {
-            viewPager.setCurrentItem(3, false)
+        binding.cardViewAttendance.setOnClickListener {
+            requireParentFragment()
+                .findNavController()
+                .navigate(R.id.action_viewPagerFragment_to_attendanceFragment)
         }
 
         binding.btnViewAll.setOnClickListener {
@@ -259,7 +261,9 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
         todoTime: String,
         todoTimeEt: TextView,
         todoDate: String,
-        todoDateEt: TextView
+        todoDateEt: TextView,
+        priority: String,
+        category: String
     ) {
         // Validate task date and time not before current date and time
         if (!TaskManager.isDateTimeValid(todoDate, todoTime)) {
@@ -277,6 +281,8 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
             todoDesc,
             todoDate,
             todoTime,
+            priority,
+            category,
             onSuccess = {
                 Toast.makeText(
                     context,
@@ -306,42 +312,42 @@ class HomeFragment : Fragment(), DialogAddBtnClickListener {
                 val position = viewHolder.layoutPosition
                 val task = homeAdapter.getItem(position)
                 if (direction == ItemTouchHelper.LEFT) {
-                        TaskManager.completeTask(
-                            task,
-                            onSuccess = {
-                                updateRecyclerViewVisibility()
-                                Toast.makeText(
-                                    context,
-                                    "Task Completed",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            },
-                            onFailure = {
-                                Toast.makeText(
-                                    context,
-                                    it,
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        )
+                    TaskManager.completeTask(
+                        task,
+                        onSuccess = {
+                            updateRecyclerViewVisibility()
+                            Toast.makeText(
+                                context,
+                                "Task Completed",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        },
+                        onFailure = {
+                            Toast.makeText(
+                                context,
+                                it,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    )
                 } else if (direction == ItemTouchHelper.RIGHT) {
-                        TaskManager.deleteTask(
-                            task,
-                            onSuccess = {
-                                Toast.makeText(
-                                    context,
-                                    "Task Deleted",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            },
-                            onFailure = {
-                                Toast.makeText(
-                                    context,
-                                    it,
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        )
+                    TaskManager.deleteTask(
+                        task,
+                        onSuccess = {
+                            Toast.makeText(
+                                context,
+                                "Task Deleted",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        },
+                        onFailure = {
+                            Toast.makeText(
+                                context,
+                                it,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    )
                 }
             }
         }
