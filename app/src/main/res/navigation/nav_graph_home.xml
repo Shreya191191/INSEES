@@ -9,11 +9,7 @@
         android:id="@+id/todoFragment"
         android:name="com.example.insees.fragment.TodoFragment"
         android:label="fragment_todo"
-        tools:layout="@layout/fragment_todo" >
-    <action
-        android:id="@+id/action_todoFragment_to_completedTaskFragment"
-        app:destination="@id/completedTaskFragment"/>
-    </fragment>
+        tools:layout="@layout/fragment_todo" />
 
     <fragment
         android:id="@+id/semesterFragment"
@@ -93,9 +89,24 @@
             android:id="@+id/action_viewPagerFragment_to_yearFragment"
             app:destination="@id/yearFragment"
             app:popUpTo="@id/viewPagerFragment" />
+        <action
+            android:id="@+id/action_viewPagerFragment_to_attendanceFragment"
+            app:destination="@id/attendanceFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/completedTaskFragment"
-        android:name="com.example.insees.fragment.CompletedTaskFragment"/>
+        android:id="@+id/attendanceFragment"
+        android:name="com.example.insees.fragment.AttendanceFragment"
+        android:label="Attendance Tracker"
+        tools:layout="@layout/fragment_attendance">
+        <action
+            android:id="@+id/action_attendanceFragment_to_timetableFragment"
+            app:destination="@id/timetableFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/timetableFragment"
+        android:name="com.example.insees.fragment.TimetableFragment"
+        android:label="Class Timetable"
+        tools:layout="@layout/fragment_timetable" />
 </navigation>
